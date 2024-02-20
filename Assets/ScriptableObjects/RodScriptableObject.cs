@@ -7,6 +7,7 @@ using UnityEngine;
 public class RodScriptableObject : ScriptableObject
 {
     public float reelSpeed;
+    public float moveSpeed;
     public float rodStrength;
     public float fishingLineLength;
 }

@@ -92,15 +92,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "IncreaseFishingLine",
-                    "type": "Button",
-                    "id": "89c3f1b6-08a4-4a5f-a018-2e4a4421c6cd",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -151,22 +142,11 @@
                 {
                     "name": "",
                     "id": "7744d5f3-6bba-4af9-98ff-70a5ac8daf1d",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Reel In",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "17a5e75b-9092-43c4-b1d8-b94cbe73d0ad",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "IncreaseFishingLine",
+                    "action": "Reel In",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

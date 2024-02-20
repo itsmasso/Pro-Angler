@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6552bfc06fa1714997d734701760f50, type: 3}
-  m_Name: StarterFishingRod
+  m_Script: {fileID: 11500000, guid: 0d03f0b532887ac4cbdaf87a07ed28bf, type: 3}
+  m_Name: TestFish
   m_EditorClassIdentifier: 
-  reelSpeed: 7
-  moveSpeed: 4
-  rodStrength: 0
-  fishingLineLength: 25
+  fishPrefab: {fileID: 795547356258513691, guid: 00330dcf844c2f843b66b675927c48e7, type: 3}
+  speed: 5
+  strength: 0

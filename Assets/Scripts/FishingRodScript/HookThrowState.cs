@@ -14,7 +14,7 @@ public class HookThrowState : HookBaseState
     public override void EnterState(FishingRodBaseScript hook)
     {
         //resetting fish counts
-        hook.followingFishCount = 0; 
+        hook.followingFishCount = 0;
         hook.caughtFishCount = 0;
 
         //initializing variables (constructor kinda)
@@ -31,8 +31,8 @@ public class HookThrowState : HookBaseState
         //setting gravity to 0 so that hook stays in place until thrown;
         hookRb.gravityScale = 0;
 
-        //setting trajectory line back to 2 to make it visible
-        hook.lineRenderer.positionCount = 2;
+        //setting trajectory line back to 0 to make it not visible
+        hook.lineRenderer.positionCount = 0;
 
         hook.CallReelStateEvent(false); //calling this event to set all bools in fish on reelstate to false so fish doesn't ignore hook
     }
@@ -49,6 +49,8 @@ public class HookThrowState : HookBaseState
         {
             if (Input.GetMouseButtonDown(0))
             {
+                //setting trajectory line back to 2 to make it visible
+                hook.lineRenderer.positionCount = 2;
                 startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
 

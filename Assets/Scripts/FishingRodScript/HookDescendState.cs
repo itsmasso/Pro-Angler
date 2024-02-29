@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class HookDescendState : HookBaseState
 {
     private Vector2 targetPosition;
@@ -26,7 +27,8 @@ public class HookDescendState : HookBaseState
 
     public override void UpdateState(FishingRodBaseScript hook)
     {
-        if(hookTransform.position.y <= hook.fishingRodPoint.position.y - hook.rodScriptableObj.fishingLineLength)
+        RaycastHit2D hit = Physics2D.CircleCast(hookTransform.position, hook.hookRadius, hookTransform.position.normalized, 0, hook.fishLayer);
+        if(hookTransform.position.y <= hook.fishingRodPoint.position.y - hook.rodScriptableObj.fishingLineLength || hit.collider != null)
         {
             hook.SwitchState(hook.hookReelState);
         }

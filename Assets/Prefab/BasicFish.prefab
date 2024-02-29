@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8239363835962658802}
   - component: {fileID: 9181186488322499277}
   - component: {fileID: 4776345064723133365}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BasicFish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 64849415678543170}
   - component: {fileID: 4889585333505724825}
   - component: {fileID: 6153507552515439167}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

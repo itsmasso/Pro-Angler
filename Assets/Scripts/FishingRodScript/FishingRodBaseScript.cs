@@ -9,9 +9,16 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 {
     public static event Action<bool> onReelState; //event to signal others that fishing rod is currently reeling in 
     public static event Action onDestroyCaughtFish;//destroy caught fish objects
+    public static event Action onReplenishFish;
 
     public int followingFishCount;
     public int caughtFishCount;
+    public LayerMask fishLayer;
+    public float hookRadius = 0.5f;
+
+    [Header("Reeling Properties")]
+    public float slowDownRate = 0.97f;
+    public float timeBeforeReel = 1.5f;
 
     public float descendSpeed; //how fast hook descends in the water
     public Vector2 direction;
@@ -69,6 +76,11 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public void CallReelStateEvent(bool isReelState)
     {
         onReelState?.Invoke(isReelState);
+    }
+
+    public void CallReplenishFishEvent()
+    {
+        onReplenishFish?.Invoke();
     }
 
     protected void AddFollowingFish()

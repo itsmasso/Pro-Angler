@@ -471,7 +471,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bec3d8980a85d704f8c11a74549e16cf, type: 3}
   m_Color: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -752,7 +752,7 @@ Transform:
   m_GameObject: {fileID: 1208994229}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.48, y: 4.75, z: 0}
+  m_LocalPosition: {x: -20.56, y: 5.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -774,6 +774,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followingFishCount: 0
   caughtFishCount: 0
+  fishLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  hookRadius: 0.2
+  slowDownRate: 0.97
+  timeBeforeReel: 1.5
   descendSpeed: 5
   direction: {x: 0, y: 0}
   rodScriptableObj: {fileID: 11400000, guid: 3080d5730cdca04488cb55455ddfc455, type: 2}
@@ -959,7 +965,7 @@ Transform:
   m_GameObject: {fileID: 1799081333}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.371053, y: 4.637491, z: -19.965088}
+  m_LocalPosition: {x: -19.451054, y: 5.3674912, z: -19.965088}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -977,7 +983,7 @@ GameObject:
   - component: {fileID: 1878025115}
   - component: {fileID: 1878025116}
   m_Layer: 0
-  m_Name: Boat
+  m_Name: Dock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -992,7 +998,7 @@ Transform:
   m_GameObject: {fileID: 1878025114}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.762, y: 3.8, z: 9.964449}
+  m_LocalPosition: {x: -24.03, y: 3.8, z: 9.964449}
   m_LocalScale: {x: 4.2559, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1137,7 +1143,7 @@ Transform:
   m_GameObject: {fileID: 2044124888}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.371053, y: 4.637491, z: -19.965088}
+  m_LocalPosition: {x: -19.451054, y: 5.3674912, z: -19.965088}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

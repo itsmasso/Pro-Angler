@@ -26,11 +26,14 @@ public abstract class FishBaseScript : MonoBehaviour
     public List<Vector2> wayPoints = new List<Vector2>();
     private int currentIndex;
     [SerializeField] protected FishScriptableObject fishScriptableObj;
+
+    //flags for calling things once
     private bool calledEnterEvent = false; //bool to ensure we call event once
     private bool calledExitEvent = false; //bool to ensure we call event once
     private bool callCaughtEvent = false; //call once
     private bool onReelState = false; //checking to see if fishing rod is in its reeling state
     private bool isCaught = false;
+
     void Start()
     {
         FishingRodBaseScript.onReelState += CheckReelState;

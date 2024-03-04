@@ -85,7 +85,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Reel In",
+                    "name": "FishMechanic_Hit",
                     "type": "Button",
                     "id": "f157326c-80c7-41d2-ae13-7ac0385dedb7",
                     "expectedControlType": "Button",
@@ -105,17 +105,6 @@
                     "action": "Movement",
                     "isComposite": true,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "down",
-                    "id": "7b90e0ea-a53a-4429-814c-1018d9fbd504",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "left",
@@ -140,13 +129,24 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "down",
+                    "id": "032551e0-190d-4bb4-b2a0-bfec49ff75f1",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
                     "id": "7744d5f3-6bba-4af9-98ff-70a5ac8daf1d",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Reel In",
+                    "action": "FishMechanic_Hit",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

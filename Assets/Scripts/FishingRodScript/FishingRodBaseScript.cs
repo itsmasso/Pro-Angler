@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public static event Action<bool> onReelState; //event to signal others that fishing rod is currently reeling in 
     public static event Action onDestroyCaughtFish;//destroy caught fish objects
     public static event Action onReplenishFish;
+    public static event Action onFishEscape;
 
     public int followingFishCount;
     public int caughtFishCount;
@@ -19,6 +21,9 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     [Header("Reeling Properties")]
     public float slowDownRate = 0.97f;
     public float timeBeforeReel = 1.5f;
+    public GameObject fishingMechanicsScreen;
+    public float currentMechanicChance;
+    public Transform mechanicBoundaryLine;
 
     public float descendSpeed; //how fast hook descends in the water
     public Vector2 direction;
@@ -43,34 +48,63 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public HookThrowState hookThrowState = new HookThrowState();
     public HookDescendState hookDescendState = new HookDescendState();
     public HookReelState hookReelState = new HookReelState();
+    public HookMechanicState hookMechanicState = new HookMechanicState();
 
     void Start()
     {
+        
         baitHolder = hook.GetComponent<BaitHolder>();
         baitHolder.currentBait = BaitType.Bait1;
 
         FishBaseScript.onFollowingHook += AddFollowingFish;
         FishBaseScript.onExitHook += SubtractFollowingFish;
         FishBaseScript.onCaught += AddCaughtFish;
+        FishingMechanicScript.onFinishedMechanic += FishMechanicCooldown;
         currentState = hookThrowState;
-        currentState.EnterState(this);      
+        currentState.EnterState(this);
+        fishingMechanicsScreen.SetActive(false);
     }
 
+    //TODO: keep adjusting these rates
+    public void FishMechanicCooldown(float score)
+    {
+        if (score <= 0)
+        {
+            //TODO: call event to scatter fish
+            caughtFishCount = 0;
+            followingFishCount = 0;
+            onFishEscape?.Invoke();
+            currentMechanicChance = 0;
+            SwitchState(hookReelState);
+        }
+        else if (score < 0.33)
+        {
+            //possibly do calculations to determine how long the cooldown is
+            currentMechanicChance = score * 1.5f;
+            SwitchState(hookReelState);
+        }
+        else if (score >= 0.33 && score < 0.66)
+        {
+            currentMechanicChance = score * 0.5f;
+            SwitchState(hookReelState);
+
+        }
+        else if (score >= 0.66 && score < 1)
+        {
+            currentMechanicChance = score * 0.3f;
+            SwitchState(hookReelState);
+        }
+        else if (score >= 1)
+        {
+            currentMechanicChance = 0f;
+            SwitchState(hookReelState);
+        }
+    }
 
     public void OnHookMove(InputAction.CallbackContext ctx)
     {
         direction = ctx.ReadValue<Vector2>();
         
-    }
-
-    public void OnReelIn(InputAction.CallbackContext ctx)
-    {
-        /*
-        if (ctx.performed)
-            isReeling = true;
-        if (ctx.canceled)
-            isReeling = false;
-        */
     }
 
     public void CallReelStateEvent(bool isReelState)
@@ -127,5 +161,6 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         FishBaseScript.onFollowingHook -= AddFollowingFish;
         FishBaseScript.onExitHook -= SubtractFollowingFish;
         FishBaseScript.onCaught -= AddCaughtFish;
+        FishingMechanicScript.onFinishedMechanic -= FishMechanicCooldown;
     }
 }

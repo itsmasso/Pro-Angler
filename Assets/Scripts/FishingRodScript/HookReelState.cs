@@ -7,17 +7,14 @@ using UnityEngine;
 public class HookReelState : HookBaseState
 {
     private GameObject hookObj;
-    private bool isReelingFish;
-    private float currentDescendSpeed;
-    private float currentMoveSpeed;
     private float timer;
+    private float spawnMechanicInterval = 2f;
+
     public override void EnterState(FishingRodBaseScript hook)
     {
-        timer = 0;
-        isReelingFish = false;
-        currentDescendSpeed = hook.descendSpeed;
-        currentMoveSpeed = hook.rodScriptableObj.moveSpeed;
+        //Debug.Log("reel state");
         hook.CallReelStateEvent(true);
+        hook.fishingMechanicsScreen.SetActive(false);
         hook.hookRb.velocity = Vector2.zero;
         hookObj = hook.hook;
 
@@ -25,39 +22,46 @@ public class HookReelState : HookBaseState
 
     public override void FixedUpdateState(FishingRodBaseScript hook)
     {
-        if (!isReelingFish)
-        {
-            Vector2 targetPosition = hookObj.transform.position + (Vector3)hook.direction * currentMoveSpeed * Time.fixedDeltaTime;
-            targetPosition.y -= currentDescendSpeed * Time.fixedDeltaTime;
-            currentDescendSpeed *= hook.slowDownRate;
-            currentMoveSpeed *= hook.slowDownRate;
-            hook.hookRb.MovePosition(targetPosition);
-        }
+
     }
 
     public override void UpdateState(FishingRodBaseScript hook)
     {
-        timer += Time.deltaTime;
-
         //possibly add a check that automatically reels in anyway after a certain time in the case a bug happens
-        if(timer >= hook.timeBeforeReel)
+        if (hook.caughtFishCount == hook.followingFishCount)
         {
-            if (hook.caughtFishCount == hook.followingFishCount)
-            {
-                isReelingFish = true;
-                hookObj.transform.position = Vector2.MoveTowards(hookObj.transform.position, hook.fishingRodPoint.position, hook.rodScriptableObj.reelSpeed * Time.deltaTime);
-            }
+            hookObj.transform.position = Vector2.MoveTowards(hookObj.transform.position, hook.fishingRodPoint.position, hook.rodScriptableObj.reelSpeed * Time.deltaTime);
+        }
 
-            if (Vector2.Distance(hookObj.transform.position, hook.fishingRodPoint.position) <= 0.1f)
+        if (hookObj.transform.position.y <= hook.mechanicBoundaryLine.position.y)
+        {
+            timer += Time.deltaTime;
+            //will try to spawn the mechanic every 2 seconds
+            if (timer >= spawnMechanicInterval)
+            {
+                float rand = Random.value;
+                if (rand < hook.currentMechanicChance)
+                {
+                    hook.SwitchState(hook.hookMechanicState);
+                }
+                timer = 0;
+            }
+        }
+
+        if (Vector2.Distance(hookObj.transform.position, hook.fishingRodPoint.position) <= 0.1f)
+        {
+            if (hook.caughtFishCount != 0)
             {
                 //add fish to collected fish
                 hook.CallReplenishFishEvent();
                 //deleting fish object
                 hook.CallDestroyCaughtFishEvent();
-                hook.SwitchState(hook.hookThrowState);
-
             }
+            hook.SwitchState(hook.hookThrowState);
+
         }
-     
+
+
+
     }
 }

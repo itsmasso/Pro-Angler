@@ -16,6 +16,7 @@ public class HookThrowState : HookBaseState
         //resetting fish counts
         hook.followingFishCount = 0;
         hook.caughtFishCount = 0;
+        hook.currentMechanicChance = 0;
 
         //initializing variables (constructor kinda)
         hookRb = hook.hookRb;
@@ -35,6 +36,7 @@ public class HookThrowState : HookBaseState
         hook.lineRenderer.positionCount = 0;
 
         hook.CallReelStateEvent(false); //calling this event to set all bools in fish on reelstate to false so fish doesn't ignore hook
+        
     }
 
     public override void FixedUpdateState(FishingRodBaseScript hook)

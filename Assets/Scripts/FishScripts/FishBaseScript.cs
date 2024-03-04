@@ -38,6 +38,7 @@ public abstract class FishBaseScript : MonoBehaviour
     {
         FishingRodBaseScript.onReelState += CheckReelState;
         FishingRodBaseScript.onDestroyCaughtFish += DestroyFish;
+        FishingRodBaseScript.onFishEscape += Escape;
         currentState = FishState.Patrolling;
         if (wayPoints.Count > 0)
         {
@@ -66,6 +67,14 @@ public abstract class FishBaseScript : MonoBehaviour
         }
     }
 
+    private void Escape()
+    {
+        //make fish run away
+        currentState = FishState.Patrolling;
+        isCaught = false;
+        callCaughtEvent = false;
+    }
+
     void Update()
     {
         RaycastHit2D hit = Physics2D.CircleCast(transform.position, hookDetectionRadius, transform.position.normalized, 0, hookLayer);     
@@ -74,27 +83,27 @@ public abstract class FishBaseScript : MonoBehaviour
         {
             case FishState.Patrolling:
                 if (hit.collider != null && hit.collider.gameObject.GetComponent<BaitHolder>().currentBait == fishScriptableObj.baitNeeded && !onReelState)
-                {
-                    currentState = FishState.Chasing;
+                {                
                     if (!calledEnterEvent)
                     {
                         onFollowingHook?.Invoke();
                         calledExitEvent = false;
                         calledEnterEvent = true;
                     }
+                    currentState = FishState.Chasing;
                 }
                 FishMovement();
                 break;
             case FishState.Chasing:
                 if (hit.collider == null)
-                {
-                    currentState = FishState.Patrolling;
+                {                  
                     if (!calledExitEvent)
                     {
                         onExitHook?.Invoke();
                         calledEnterEvent = false;
                         calledExitEvent = true;
                     }
+                    currentState = FishState.Patrolling;
                 }
                 else
                 {
@@ -139,6 +148,7 @@ public abstract class FishBaseScript : MonoBehaviour
     {
         FishingRodBaseScript.onReelState -= CheckReelState;
         FishingRodBaseScript.onDestroyCaughtFish -= DestroyFish;
+        FishingRodBaseScript.onFishEscape -= Escape;
     }
 
 

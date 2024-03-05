@@ -10,7 +10,6 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 {
     public static event Action<bool> onReelState; //event to signal others that fishing rod is currently reeling in 
     public static event Action onDestroyCaughtFish;//destroy caught fish objects
-    public static event Action onReplenishFish;
     public static event Action onFishEscape;
 
     public int followingFishCount;
@@ -43,6 +42,8 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public float throwForce = 1.5f;
     public float trajectoryTimeStep = 0.05f; //determining the time interval between consecutive points along the trajectory line
     public int numPoints = 15; // Number of points in the trajectory line
+    public Vector2 mousePosition;
+    public float maxThrowRadius = 4;
 
     public HookBaseState currentState;
     public HookThrowState hookThrowState = new HookThrowState();
@@ -91,7 +92,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         }
         else if (score >= 0.66 && score < 1)
         {
-            currentMechanicChance = score * 0.3f;
+            currentMechanicChance = score * 0.4f;
             SwitchState(hookReelState);
         }
         else if (score >= 1)
@@ -101,6 +102,12 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         }
     }
 
+    public void OnMousePosition(InputAction.CallbackContext ctx)
+    {
+        mousePosition = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
+       
+
+    }
     public void OnHookMove(InputAction.CallbackContext ctx)
     {
         direction = ctx.ReadValue<Vector2>();
@@ -110,11 +117,6 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public void CallReelStateEvent(bool isReelState)
     {
         onReelState?.Invoke(isReelState);
-    }
-
-    public void CallReplenishFishEvent()
-    {
-        onReplenishFish?.Invoke();
     }
 
     protected void AddFollowingFish()

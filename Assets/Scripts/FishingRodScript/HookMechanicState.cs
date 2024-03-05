@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class HookMechanicState : HookBaseState
 {
-    private int followingFish;
+    private float slowedReelSpeed = 0.75f;
     public override void EnterState(FishingRodBaseScript hook)
     {
         hook.CallReelStateEvent(true);
-        followingFish = hook.followingFishCount;
-        if(followingFish == 0)
+        hook.hookRb.velocity = Vector2.zero;
+        if(hook.followingFishCount == 0 && hook.caughtFishCount == 0)
         {
             hook.SwitchState(hook.hookReelState);
         }
@@ -26,11 +26,11 @@ public class HookMechanicState : HookBaseState
 
     public override void FixedUpdateState(FishingRodBaseScript hook)
     {
-        hook.hookRb.velocity = Vector2.zero;
+        
     }
 
     public override void UpdateState(FishingRodBaseScript hook)
     {
-       
+        hook.hook.transform.position = Vector2.MoveTowards(hook.hook.transform.position, hook.fishingRodPoint.position, slowedReelSpeed * Time.deltaTime);
     }
 }

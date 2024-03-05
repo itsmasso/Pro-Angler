@@ -8,9 +8,10 @@ public class HookThrowState : HookBaseState
     private float throwForce;
     private float trajectoryTimeStep; //determining the time interval between consecutive points along the trajectory line
     private int numPoints; // Number of points in the trajectory line
-    private Vector2 velocity, startMousePos, currentMousePos;
+    private Vector2 velocity, startMousePos;
     private float waterLinePointY;
     private bool hookThrown;
+    private bool canThrow;
     public override void EnterState(FishingRodBaseScript hook)
     {
         //resetting fish counts
@@ -28,6 +29,7 @@ public class HookThrowState : HookBaseState
         //setting booleans and setting rigidbody to dynamic
         hookThrown = false;
         hookRb.isKinematic = false;
+        canThrow = false;
 
         //setting gravity to 0 so that hook stays in place until thrown;
         hookRb.gravityScale = 0;
@@ -49,28 +51,47 @@ public class HookThrowState : HookBaseState
         //change this code to use player input system later
         if (!hookThrown)
         {
-            if (Input.GetMouseButtonDown(0))
+            if(Input.GetMouseButtonDown(0) && Vector2.Distance(hook.mousePosition, hook.hook.transform.position) <= 0.5f)
             {
-                //setting trajectory line back to 2 to make it visible
-                hook.lineRenderer.positionCount = 2;
-                startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                canThrow = true;
             }
 
-            if (Input.GetMouseButton(0))
+            if (canThrow)
             {
-                currentMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                velocity = (startMousePos - currentMousePos) * throwForce;
+                if (Input.GetMouseButtonDown(0))
+                {
+                    //setting trajectory line back to 2 to make it visible
+                    hook.lineRenderer.positionCount = 2;
+                    startMousePos = hook.mousePosition;
+                }
+
+                if (Input.GetMouseButton(0))
+                {
+                                                       
+                    float dragDistance = Vector3.Distance(startMousePos, hook.mousePosition);
+                    if (dragDistance > hook.maxThrowRadius)
+                    {
+                        // Calculate the direction from startMousePos to hookMousePos
+                        Vector2 direction = (hook.mousePosition - startMousePos).normalized;
+
+                        // Clamp the hookMousePos to maxDragDistance from startMousePos
+                        hook.mousePosition = startMousePos + direction * hook.maxThrowRadius;
+                    }
+                    velocity = (startMousePos - hook.mousePosition) * throwForce;
+                }
+
+                if (Input.GetMouseButtonUp(0))
+                {
+                    hookRb.gravityScale = 1;
+                    hookRb.velocity = velocity;
+                    hook.lineRenderer.positionCount = 0;
+                    hookThrown = true;
+                    canThrow = false;
+                }
             }
 
-            if (Input.GetMouseButtonUp(0))
-            {
-                hookRb.gravityScale = 1;
-                hookRb.velocity = velocity;
-                hook.lineRenderer.positionCount = 0;
-                hookThrown = true;
-            }
 
-           //calculating trajectory
+            //calculating trajectory
             Vector3[] positions = new Vector3[numPoints];
             for (int i = 0; i < numPoints; i++)
             {

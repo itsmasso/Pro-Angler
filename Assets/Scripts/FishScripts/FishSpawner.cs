@@ -7,7 +7,7 @@ public class FishSpawner : MonoBehaviour
 {
     [SerializeField] private List<FishScriptableObject> fishList = new List<FishScriptableObject>();
     [SerializeField] protected int maxFishCount;
-    public int currentFishCount;
+
     //use event to subtract fish count when fish caught
 
     [SerializeField] private float spacing = 25f; //spacing is the radius around a point
@@ -18,17 +18,14 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private float minAngle, maxAngle;
 
     [SerializeField] private float wayPointSpacing = 15f;
+
+    private float timer;
+    private float checkInterval = 0.1f;
     void Start()
     {
-        FishingRodBaseScript.onReplenishFish += AddFishToPool;
-        FishingRodBaseScript.onDestroyCaughtFish += SubtractFishCount;
         InitialSpawn();
     }
 
-    private void SubtractFishCount()
-    {
-        currentFishCount--;
-    }
 
     private void InitialSpawn()
     {
@@ -41,13 +38,12 @@ public class FishSpawner : MonoBehaviour
 
         }
         maxFishCount = currentSpawnedFishes.Count;
-        currentFishCount = maxFishCount;
     }
 
     private void SpawnFish(Vector2 spawnPosition)
     {
         GameObject newFish = Instantiate(fishList[Random.Range(0, fishList.Count)].fishPrefab, spawnPosition, Quaternion.identity);
-        currentFishCount++;
+ 
         newFish.SetActive(false);
         List<Vector2> fishWayPoints = PoissonDiscSampling.GeneratePoints(wayPointSpacing, regionSize, rejectionSamples);
         
@@ -62,33 +58,43 @@ public class FishSpawner : MonoBehaviour
 
     }
 
-    //event that destroys fish calls this function when you finish reeling
-    private void AddFishToPool()
+    private void AddFish()
     {
-        Invoke("AddingFish", 0.5f);
+        
+        // Generate random x and y coordinates within the specified range
+        float randomX = Random.Range(-regionSize.x / 2, regionSize.x / 2);
+        float randomY = Random.Range(-regionSize.y / 2, regionSize.y / 2);
+
+        // Create a Vector2 representing the random position
+        Vector2 spawnPosition = new Vector2(transform.position.x + randomX, transform.position.y + randomY);
+
+        // Spawn the object at the random position
+        SpawnFish(spawnPosition);
     }
 
-    private void AddingFish()
+    private void Update()
     {
-        for (int i = 0; i < maxFishCount - currentFishCount; i++)
+        //disclaimer: if this makes things slow, change it up
+        timer += Time.deltaTime;
+        if(timer >= checkInterval)
         {
-            //Debug.Log("Added fish");
-            // Generate random x and y coordinates within the specified range
-            float randomX = Random.Range(-regionSize.x / 2, regionSize.x / 2);
-            float randomY = Random.Range(-regionSize.y / 2, regionSize.y / 2);
-
-            // Create a Vector2 representing the random position
-            Vector2 spawnPosition = new Vector2(transform.position.x + randomX, transform.position.y + randomY);
-
-            // Spawn the object at the random position
-            SpawnFish(spawnPosition);
+            //deleting null objects in list after destroying them          
+            if(currentSpawnedFishes.Exists(item => item == null))
+            {
+                currentSpawnedFishes.RemoveAll(item => item == null);
+            }
+            if (currentSpawnedFishes.Count < maxFishCount)
+            {
+                AddFish();
+            }
+            timer = 0;
         }
+        
     }
 
     private void OnDestroy()
     {
-        FishingRodBaseScript.onDestroyCaughtFish -= SubtractFishCount;
-        FishingRodBaseScript.onReplenishFish -= AddFishToPool;
+
     }
 
 }

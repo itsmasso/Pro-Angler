@@ -28,10 +28,20 @@ public class HookReelState : HookBaseState
     public override void UpdateState(FishingRodBaseScript hook)
     {
         //possibly add a check that automatically reels in anyway after a certain time in the case a bug happens
-        if (hook.caughtFishCount == hook.followingFishCount)
+        float reelSpeed; //influence this speed by weight of how many fish there are too
+        if (hook.currentMechanicChance == 0)
         {
-            hookObj.transform.position = Vector2.MoveTowards(hookObj.transform.position, hook.fishingRodPoint.position, hook.rodScriptableObj.reelSpeed * Time.deltaTime);
+            //if we end up not reeling any fish or we ended up getting a perfect reel score
+            reelSpeed = hook.rodScriptableObj.reelSpeed * 2;
         }
+        else
+        {
+            reelSpeed = hook.rodScriptableObj.reelSpeed;
+        }
+
+        hookObj.transform.position = Vector2.MoveTowards(hookObj.transform.position, hook.fishingRodPoint.position, reelSpeed * Time.deltaTime);
+
+
 
         if (hookObj.transform.position.y <= hook.mechanicBoundaryLine.position.y)
         {
@@ -52,8 +62,6 @@ public class HookReelState : HookBaseState
         {
             if (hook.caughtFishCount != 0)
             {
-                //add fish to collected fish
-                hook.CallReplenishFishEvent();
                 //deleting fish object
                 hook.CallDestroyCaughtFishEvent();
             }

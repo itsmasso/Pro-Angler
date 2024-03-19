@@ -13,53 +13,62 @@ public class HookDescendState : HookBaseState
     private float currentDescendSpeed;
     private float currentMoveSpeed;
     private float timer;
-    public override void EnterState(FishingRodBaseScript hook)
+    public override void EnterState(FishingRodBaseScript rod)
     {
         timer = 0;
         reachedHookLimit = false;
-        currentDescendSpeed = hook.descendSpeed;
-        currentMoveSpeed = hook.rodScriptableObj.moveSpeed;
-        hookRb = hook.hookRb;
-        hookTransform = hook.hook.transform;
+        currentDescendSpeed = rod.descendSpeed;
+        currentMoveSpeed = rod.rodScriptableObj.moveSpeed;
+        hookRb = rod.hookRb;
+        hookTransform = rod.hook.transform;
         hookRb.isKinematic = true;
+
+        List<Transform> points = new List<Transform>();
+        points.Add(rod.fishingRodPoint);
+        points.Add(rod.fishingLineConnectorPoint);
+        points.Add(rod.fishingLineAttatchmentPoint);
+        rod.SetUpFishingLine(points);
 
     }
 
-    public override void FixedUpdateState(FishingRodBaseScript hook)
+    public override void FixedUpdateState(FishingRodBaseScript rod)
     {
        
         if (reachedHookLimit)
         {
-            Vector2 targetPosition = hook.hook.transform.position + (Vector3)hook.direction * currentMoveSpeed * Time.fixedDeltaTime;
+            Vector2 targetPosition = rod.hook.transform.position + (Vector3)rod.direction * currentMoveSpeed * Time.fixedDeltaTime;
             targetPosition.y -= currentDescendSpeed * Time.fixedDeltaTime;
-            currentDescendSpeed *= hook.slowDownRate;
-            currentMoveSpeed *= hook.slowDownRate;
-            hook.hookRb.MovePosition(targetPosition);
+            currentDescendSpeed *= rod.slowDownRate;
+            currentMoveSpeed *= rod.slowDownRate;
+            rod.hookRb.MovePosition(targetPosition);
         }
         else
         {
-            targetPosition = hookTransform.position + (Vector3)hook.direction * hook.rodScriptableObj.moveSpeed * Time.fixedDeltaTime;
-            targetPosition.y -= hook.descendSpeed * Time.fixedDeltaTime;
-            targetPosition = new Vector2(Mathf.Clamp(targetPosition.x, hook.minXBounds, hook.maxXBounds),
-                Mathf.Clamp(targetPosition.y, hook.fishingRodPoint.position.y - hook.rodScriptableObj.fishingLineLength, hook.fishingRodPoint.position.y));
+            targetPosition = hookTransform.position + (Vector3)rod.direction * rod.rodScriptableObj.moveSpeed * Time.fixedDeltaTime;
+            targetPosition.y -= rod.descendSpeed * Time.fixedDeltaTime;
+            targetPosition = new Vector2(Mathf.Clamp(targetPosition.x, rod.minXBounds, rod.maxXBounds), //subtract 1 to provide some buffer 
+                Mathf.Clamp(targetPosition.y, rod.fishingRodPoint.position.y - rod.rodScriptableObj.fishingLineLength - 1, rod.fishingRodPoint.position.y));
             hookRb.MovePosition(targetPosition);
         }
     }
 
-    public override void UpdateState(FishingRodBaseScript hook)
+    public override void UpdateState(FishingRodBaseScript rod)
     {
-        RaycastHit2D hit = Physics2D.CircleCast(hookTransform.position, hook.hookRadius, hookTransform.position.normalized, 0, hook.fishLayer);
-        if(hookTransform.position.y <= hook.fishingRodPoint.position.y - hook.rodScriptableObj.fishingLineLength || hit.collider != null)
+        rod.fishingLineConnectorPoint.position = new Vector2(rod.hook.transform.position.x, rod.waterLinePointY);
+
+        RaycastHit2D hit = Physics2D.CircleCast(hookTransform.position, rod.hookRadius, hookTransform.position.normalized, 0, rod.fishLayer);
+        if(hookTransform.position.y <= rod.fishingRodPoint.position.y - rod.rodScriptableObj.fishingLineLength || hit.collider != null)
         {
             reachedHookLimit = true;
         }
 
+        
         if (reachedHookLimit)
         {
             timer += Time.deltaTime;
-            if(timer >= hook.timeBeforeReel)
+            if(timer >= rod.timeBeforeReel || rod.fishCaught)
             {
-                hook.SwitchState(hook.hookMechanicState);
+                rod.SwitchState(rod.hookMechanicState);
             }
             
         }

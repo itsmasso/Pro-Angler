@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: TestFish
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 00330dcf844c2f843b66b675927c48e7, type: 3}
-  speed: 5
-  strength: 0
+  fishName: 
+  speed: 4
+  strength: 2
+  weight: 2
+  baitNeeded: 0

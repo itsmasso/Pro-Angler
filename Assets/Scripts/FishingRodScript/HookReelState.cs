@@ -1,6 +1,8 @@
+using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -9,63 +11,57 @@ public class HookReelState : HookBaseState
     private GameObject hookObj;
     private float timer;
     private float spawnMechanicInterval = 2f;
+    private bool pointAtMiddle;
 
-    public override void EnterState(FishingRodBaseScript hook)
+    public override void EnterState(FishingRodBaseScript rod)
     {
         //Debug.Log("reel state");
-        hook.CallReelStateEvent(true);
-        hook.fishingMechanicsScreen.SetActive(false);
-        hook.hookRb.velocity = Vector2.zero;
-        hookObj = hook.hook;
+        pointAtMiddle = false;
+        rod.CallReelStateEvent(true);
+        rod.fishingMechanicsScreen.SetActive(false);
+        rod.hookRb.velocity = Vector2.zero;
+        hookObj = rod.hook;
+
 
     }
 
-    public override void FixedUpdateState(FishingRodBaseScript hook)
+    public override void FixedUpdateState(FishingRodBaseScript rod)
     {
 
     }
 
-    public override void UpdateState(FishingRodBaseScript hook)
+    public override void UpdateState(FishingRodBaseScript rod)
     {
-        //possibly add a check that automatically reels in anyway after a certain time in the case a bug happens
-        float reelSpeed; //influence this speed by weight of how many fish there are too
-        if (hook.currentMechanicChance == 0)
+      
+        float reelSpeed; 
+        reelSpeed = rod.rodScriptableObj.reelSpeed * 2;
+
+        Vector3 direction = rod.fishingLineAttatchmentPoint.position - rod.fishingRodPoint.position;
+        Vector2 middlePointPosition = rod.fishingRodPoint.position + direction / 2f;
+        rod.fishingLineConnectorPoint.position = Vector2.MoveTowards(rod.fishingLineConnectorPoint.position, middlePointPosition, rod.rodScriptableObj.reelSpeed * 2 * Time.deltaTime);
+
+        if(Vector2.Distance(rod.fishingLineConnectorPoint.position, middlePointPosition) <= 0.1f && !pointAtMiddle)
         {
-            //if we end up not reeling any fish or we ended up getting a perfect reel score
-            reelSpeed = hook.rodScriptableObj.reelSpeed * 2;
+            List<Transform> points = new List<Transform>();
+            points.Add(rod.fishingRodPoint);
+            points.Add(rod.fishingLineAttatchmentPoint);
+            rod.SetUpFishingLine(points);
+            pointAtMiddle = true;
         }
-        else
+        
+        float adjustedReelSpeed = Mathf.Clamp(reelSpeed / (rod.hookWeight / rod.referenceWeight), 0.5f, reelSpeed); 
+        //Debug.Log(adjustedReelSpeed);
+        hookObj.transform.position = Vector2.MoveTowards(hookObj.transform.position, new Vector3(rod.fishingRodPoint.position.x, rod.fishingRodPoint.position.y - rod.fishingRodPointOffset, 0), adjustedReelSpeed * Time.deltaTime);
+
+
+        if (Vector2.Distance(hookObj.transform.position, new Vector2(rod.fishingRodPoint.position.x, rod.fishingRodPoint.position.y - rod.fishingRodPointOffset)) <= 0.1f)
         {
-            reelSpeed = hook.rodScriptableObj.reelSpeed;
-        }
-
-        hookObj.transform.position = Vector2.MoveTowards(hookObj.transform.position, hook.fishingRodPoint.position, reelSpeed * Time.deltaTime);
-
-
-
-        if (hookObj.transform.position.y <= hook.mechanicBoundaryLine.position.y)
-        {
-            timer += Time.deltaTime;
-            //will try to spawn the mechanic every 2 seconds
-            if (timer >= spawnMechanicInterval)
-            {
-                float rand = Random.value;
-                if (rand < hook.currentMechanicChance)
-                {
-                    hook.SwitchState(hook.hookMechanicState);
-                }
-                timer = 0;
-            }
-        }
-
-        if (Vector2.Distance(hookObj.transform.position, hook.fishingRodPoint.position) <= 0.1f)
-        {
-            if (hook.caughtFishCount != 0)
+            if (rod.fishCaught)
             {
                 //deleting fish object
-                hook.CallDestroyCaughtFishEvent();
+                rod.CallDestroyCaughtFishEvent();
             }
-            hook.SwitchState(hook.hookThrowState);
+            rod.SwitchState(rod.hookThrowState);
 
         }
 

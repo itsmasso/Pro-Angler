@@ -12,19 +12,19 @@ public class HookThrowState : HookBaseState
     private float waterLinePointY;
     private bool hookThrown;
     private bool canThrow;
-    public override void EnterState(FishingRodBaseScript hook)
+    public override void EnterState(FishingRodBaseScript rod)
     {
         //resetting fish counts
-        hook.followingFishCount = 0;
-        hook.caughtFishCount = 0;
-        hook.currentMechanicChance = 0;
+        rod.fishCaught = false;
+        rod.currentFishStrength = 0;
+        rod.hookWeight = 0;
 
-        //initializing variables (constructor kinda)
-        hookRb = hook.hookRb;
-        throwForce = hook.throwForce;
-        trajectoryTimeStep = hook.trajectoryTimeStep;
-        numPoints = hook.numPoints;
-        waterLinePointY = hook.waterLinePointY;
+    //initializing variables (constructor kinda)
+    hookRb = rod.hookRb;
+        throwForce = rod.throwForce;
+        trajectoryTimeStep = rod.trajectoryTimeStep;
+        numPoints = rod.numPoints;
+        waterLinePointY = rod.waterLinePointY;
 
         //setting booleans and setting rigidbody to dynamic
         hookThrown = false;
@@ -34,24 +34,30 @@ public class HookThrowState : HookBaseState
         //setting gravity to 0 so that hook stays in place until thrown;
         hookRb.gravityScale = 0;
 
-        //setting trajectory line back to 0 to make it not visible
-        hook.lineRenderer.positionCount = 0;
+        //resetting line renderers
+        rod.trajectoryLine.positionCount = 0;
+        List<Transform> points = new List<Transform>();
+        points.Add(rod.fishingRodPoint);
+        points.Add(rod.fishingLineAttatchmentPoint);
+        rod.SetUpFishingLine(points);
 
-        hook.CallReelStateEvent(false); //calling this event to set all bools in fish on reelstate to false so fish doesn't ignore hook
+        rod.CallReelStateEvent(false); //calling this event to set all bools in fish on reelstate to false so fish doesn't ignore hook
         
     }
 
-    public override void FixedUpdateState(FishingRodBaseScript hook)
+    public override void FixedUpdateState(FishingRodBaseScript rod)
     {
         
     }
 
-    public override void UpdateState(FishingRodBaseScript hook)
+    public override void UpdateState(FishingRodBaseScript rod)
     {
+        
+        
         //change this code to use player input system later
         if (!hookThrown)
         {
-            if(Input.GetMouseButtonDown(0) && Vector2.Distance(hook.mousePosition, hook.hook.transform.position) <= 0.5f)
+            if(Input.GetMouseButtonDown(0) && Vector2.Distance(rod.mousePosition, rod.hook.transform.position) <= 0.5f)
             {
                 canThrow = true;
             }
@@ -61,30 +67,30 @@ public class HookThrowState : HookBaseState
                 if (Input.GetMouseButtonDown(0))
                 {
                     //setting trajectory line back to 2 to make it visible
-                    hook.lineRenderer.positionCount = 2;
-                    startMousePos = hook.mousePosition;
+                    rod.trajectoryLine.positionCount = 2;
+                    startMousePos = rod.mousePosition;
                 }
 
                 if (Input.GetMouseButton(0))
                 {
                                                        
-                    float dragDistance = Vector3.Distance(startMousePos, hook.mousePosition);
-                    if (dragDistance > hook.maxThrowRadius)
+                    float dragDistance = Vector3.Distance(startMousePos, rod.mousePosition);
+                    if (dragDistance > rod.maxThrowRadius)
                     {
                         // Calculate the direction from startMousePos to hookMousePos
-                        Vector2 direction = (hook.mousePosition - startMousePos).normalized;
+                        Vector2 direction = (rod.mousePosition - startMousePos).normalized;
 
                         // Clamp the hookMousePos to maxDragDistance from startMousePos
-                        hook.mousePosition = startMousePos + direction * hook.maxThrowRadius;
+                        rod.mousePosition = startMousePos + direction * rod.maxThrowRadius;
                     }
-                    velocity = (startMousePos - hook.mousePosition) * throwForce;
+                    velocity = (startMousePos - rod.mousePosition) * throwForce;
                 }
 
                 if (Input.GetMouseButtonUp(0))
                 {
                     hookRb.gravityScale = 1;
                     hookRb.velocity = velocity;
-                    hook.lineRenderer.positionCount = 0;
+                    rod.trajectoryLine.positionCount = 0;
                     hookThrown = true;
                     canThrow = false;
                 }
@@ -96,17 +102,17 @@ public class HookThrowState : HookBaseState
             for (int i = 0; i < numPoints; i++)
             {
                 float t = i * trajectoryTimeStep;
-                Vector3 pos = (Vector2)hook.fishingRodPoint.position + velocity * t + 0.5f * Physics2D.gravity * t * t;
+                Vector3 pos = (Vector2)rod.hook.transform.position + velocity * t + 0.5f * Physics2D.gravity * t * t;
                 positions[i] = pos;
             }
 
-            hook.lineRenderer.SetPositions(positions);
+            rod.trajectoryLine.SetPositions(positions);
         }
 
-        if (hook.hook.transform.position.y < waterLinePointY)
+        if (rod.hook.transform.position.y < waterLinePointY)
         {
-            velocity = Vector2.zero;
-            hook.SwitchState(hook.hookDescendState);
+            velocity = Vector2.zero; //causing bug?
+            rod.SwitchState(rod.hookDescendState);
         }
     }
 }

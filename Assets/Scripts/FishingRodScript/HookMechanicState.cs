@@ -5,32 +5,58 @@ using UnityEngine;
 public class HookMechanicState : HookBaseState
 {
     private float slowedReelSpeed = 0.75f;
-    public override void EnterState(FishingRodBaseScript hook)
+    private bool pointAtMiddle;
+    //private float hitIndicatorSpeedFactor = 10f;
+    private float numOfBarsScaler = 1.5f;
+    private BarFishingMechanics fishingMechanicScript;
+    //private HookIndicatorScript hookIndicator;
+    public override void EnterState(FishingRodBaseScript rod)
     {
-        hook.CallReelStateEvent(true);
-        hook.hookRb.velocity = Vector2.zero;
-        if(hook.followingFishCount == 0 && hook.caughtFishCount == 0)
+        pointAtMiddle = false;
+        fishingMechanicScript = rod.fishingMechanicsScreen.GetComponent<BarFishingMechanics>();
+        //hookIndicator = rod.fishingMechanicsScreen.GetComponent<FishingMechanicScript>().hookIndicator.GetComponent<HookIndicatorScript>();
+        rod.CallReelStateEvent(true);
+        rod.hookRb.velocity = Vector2.zero;
+        if(!rod.fishCaught)
         {
-            hook.SwitchState(hook.hookReelState);
+            rod.SwitchState(rod.hookReelState);
         }
         else
-        {
-            hook.fishingMechanicsScreen.SetActive(true);
+        {       
+            //TODO: make mechanic scale
+            rod.fishingMechanicsScreen.SetActive(true);
         }
 
-        
+        List<Transform> points = new List<Transform>();
+        points.Add(rod.fishingRodPoint);
+        points.Add(rod.fishingLineConnectorPoint);
+        points.Add(rod.fishingLineAttatchmentPoint);
+        rod.SetUpFishingLine(points);
 
     }
 
 
 
-    public override void FixedUpdateState(FishingRodBaseScript hook)
+    public override void FixedUpdateState(FishingRodBaseScript rod)
     {
         
     }
 
-    public override void UpdateState(FishingRodBaseScript hook)
+    public override void UpdateState(FishingRodBaseScript rod)
     {
-        hook.hook.transform.position = Vector2.MoveTowards(hook.hook.transform.position, hook.fishingRodPoint.position, slowedReelSpeed * Time.deltaTime);
+        Vector3 direction = rod.fishingLineAttatchmentPoint.position - rod.fishingRodPoint.position;
+        Vector2 middlePointPosition = rod.fishingRodPoint.position + direction / 2f;
+        rod.fishingLineConnectorPoint.position = Vector2.MoveTowards(rod.fishingLineConnectorPoint.position, middlePointPosition, slowedReelSpeed * Time.deltaTime);
+        if (Vector2.Distance(rod.fishingLineConnectorPoint.position, middlePointPosition) <= 0.1f && !pointAtMiddle)
+        {
+            List<Transform> points = new List<Transform>();
+            points.Add(rod.fishingRodPoint);
+            points.Add(rod.fishingLineAttatchmentPoint);
+            rod.SetUpFishingLine(points);
+            pointAtMiddle = true;
+        }
+
+    
+        rod.hook.transform.position = Vector2.MoveTowards(rod.hook.transform.position, rod.fishingRodPoint.position, slowedReelSpeed * Time.deltaTime);
     }
 }

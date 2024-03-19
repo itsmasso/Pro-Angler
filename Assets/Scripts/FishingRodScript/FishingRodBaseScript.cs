@@ -4,47 +4,66 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.Rendering.Universal;
 
 public abstract class FishingRodBaseScript : MonoBehaviour
 {
+    //events
     public static event Action<bool> onReelState; //event to signal others that fishing rod is currently reeling in 
     public static event Action onDestroyCaughtFish;//destroy caught fish objects
     public static event Action onFishEscape;
 
-    public int followingFishCount;
-    public int caughtFishCount;
-    public LayerMask fishLayer;
-    public float hookRadius = 0.5f;
+    [Header("Fishing Line Properties")]
+    public LineRenderer fishingLine;
+    public Transform fishingLineAttatchmentPoint;
+    public Transform fishingLineConnectorPoint; //this point will stop at the water line on contact to create a new line going down
+    public List<Transform> points = new List<Transform>();
 
-    [Header("Reeling Properties")]
-    public float slowDownRate = 0.97f;
-    public float timeBeforeReel = 1.5f;
-    public GameObject fishingMechanicsScreen;
-    public float currentMechanicChance;
-    public Transform mechanicBoundaryLine;
-
-    public float descendSpeed; //how fast hook descends in the water
-    public Vector2 direction;
-    public RodScriptableObject rodScriptableObj;
-    public Rigidbody2D hookRb;
-    public float waterLinePointY;
-    public bool isReeling;
-
-    public GameObject hook;
-    public BaitHolder baitHolder;
-
+    [Header("Fishing Rod Properties")]
     public Transform fishingRodPoint; //point of where the string of the fishing rod is attatched
-    public LineRenderer lineRenderer;
-    public float minXBounds, maxXBounds;
+    public float fishingRodPointOffset = 2f;
+    public BaitHolder baitHolder;
+    public RodScriptableObject rodScriptableObj;
+
+    [Header("Fish Info")]
+    public LayerMask fishLayer;
+    public float currentFishStrength;
+    public float hookWeight;
+    public float referenceWeight = 6f; //number used to scale the proportation between weight and reel speed
+
+    [Header("Hook Properties")]
+    public GameObject hook;
+    public Rigidbody2D hookRb;
+    public float hookRadius = 0.5f;  
 
     [Header("Throwing Properties")]
+    public LineRenderer trajectoryLine;
     public float throwForce = 1.5f;
     public float trajectoryTimeStep = 0.05f; //determining the time interval between consecutive points along the trajectory line
     public int numPoints = 15; // Number of points in the trajectory line
     public Vector2 mousePosition;
     public float maxThrowRadius = 4;
 
+    [Header("Descending Properties")]
+    public float descendSpeed; //how fast hook descends in the water
+    public Vector2 direction;
+
+    [Header("Reeling Properties")]
+    public bool isReeling;
+    public float slowDownRate = 0.97f;
+    public float timeBeforeReel = 1.5f;
+
+    [Header("Mechanic Properties")]
+    public GameObject fishingMechanicsScreen;
+    public Transform mechanicBoundaryLine;
+    public bool fishCaught;
+    
+
+    [Header("Map/Environment Properties")]
+    public float waterLinePointY;
+    public float minXBounds, maxXBounds;
+
+    [Header("State Info")]
     public HookBaseState currentState;
     public HookThrowState hookThrowState = new HookThrowState();
     public HookDescendState hookDescendState = new HookDescendState();
@@ -53,53 +72,34 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     void Start()
     {
-        
+        //SetUpFishingLine(points);
         baitHolder = hook.GetComponent<BaitHolder>();
-        baitHolder.currentBait = BaitType.Bait1;
+        baitHolder.currentBait = BaitType.Tier1Bait;
 
-        FishBaseScript.onFollowingHook += AddFollowingFish;
-        FishBaseScript.onExitHook += SubtractFollowingFish;
-        FishBaseScript.onCaught += AddCaughtFish;
-        FishingMechanicScript.onFinishedMechanic += FishMechanicCooldown;
+        //FishBaseScript.onExitHook += SubtractFollowingFish;
+        FishBaseScript.onCaught += CaughtFish;
+        BarFishingMechanics.onCompletedProgress += OnSuccess;
+        BarFishingMechanics.onFailed += OnFailure;
         currentState = hookThrowState;
         currentState.EnterState(this);
         fishingMechanicsScreen.SetActive(false);
     }
 
-    //TODO: keep adjusting these rates
-    public void FishMechanicCooldown(float score)
+    public void SetUpFishingLine(List<Transform> points)
     {
-        if (score <= 0)
-        {
-            //TODO: call event to scatter fish
-            caughtFishCount = 0;
-            followingFishCount = 0;
-            onFishEscape?.Invoke();
-            currentMechanicChance = 0;
-            SwitchState(hookReelState);
-        }
-        else if (score < 0.33)
-        {
-            //possibly do calculations to determine how long the cooldown is
-            currentMechanicChance = score * 1.5f;
-            SwitchState(hookReelState);
-        }
-        else if (score >= 0.33 && score < 0.66)
-        {
-            currentMechanicChance = score * 0.5f;
-            SwitchState(hookReelState);
+        fishingLine.positionCount = points.Count;
+        this.points = points;
+    }
 
-        }
-        else if (score >= 0.66 && score < 1)
-        {
-            currentMechanicChance = score * 0.4f;
-            SwitchState(hookReelState);
-        }
-        else if (score >= 1)
-        {
-            currentMechanicChance = 0f;
-            SwitchState(hookReelState);
-        }
+    private void OnSuccess()
+    {
+        SwitchState(hookReelState);
+    }
+
+    private void OnFailure()
+    {
+        onFishEscape?.Invoke();
+        SwitchState(hookReelState);
     }
 
     public void OnMousePosition(InputAction.CallbackContext ctx)
@@ -119,22 +119,12 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         onReelState?.Invoke(isReelState);
     }
 
-    protected void AddFollowingFish()
-    {
-        followingFishCount++;
-    }
 
-    protected void SubtractFollowingFish()
+    protected void CaughtFish(float strength, float weight)
     {
-        if(followingFishCount > 0)
-        {
-            followingFishCount--;
-        }
-    }
-
-    protected void AddCaughtFish()
-    {
-        caughtFishCount++;
+        fishCaught = true;
+        currentFishStrength = strength;
+        hookWeight = weight;
     }
 
     public void CallDestroyCaughtFishEvent()
@@ -150,8 +140,12 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     void Update()
     {
+
         currentState.UpdateState(this);
-        
+        for(int i = 0; i < points.Count; i++)
+        {
+            fishingLine.SetPosition(i, points[i].position);
+        }
     }
     protected void FixedUpdate()
     {
@@ -160,9 +154,9 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     protected void OnDestroy()
     {
-        FishBaseScript.onFollowingHook -= AddFollowingFish;
-        FishBaseScript.onExitHook -= SubtractFollowingFish;
-        FishBaseScript.onCaught -= AddCaughtFish;
-        FishingMechanicScript.onFinishedMechanic -= FishMechanicCooldown;
+        //FishBaseScript.onExitHook -= SubtractFollowingFish;
+        FishBaseScript.onCaught -= CaughtFish;
+        BarFishingMechanics.onCompletedProgress -= OnSuccess;
+        BarFishingMechanics.onFailed -= OnFailure;
     }
 }

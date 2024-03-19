@@ -18,6 +18,7 @@ public class FishingMechanicScript : MonoBehaviour
 
     public float barSizeMultiplier;
     [SerializeField] private float barSizeReducer = 0.75f;
+    public HookIndicatorScript hookIndicator;
 
     private Coroutine hitRoutine;
     private bool playerHit;
@@ -27,7 +28,7 @@ public class FishingMechanicScript : MonoBehaviour
     private int previousIndex;
 
     private float numberOfHits;
-    [SerializeField] private float numberOfBarsToHit; //how many bars will be spawned
+    public float numberOfBarsToHit; //how many bars will be spawned
     private int currentBarsSpawned;
     private int missedHitsStreak;
     void Start()

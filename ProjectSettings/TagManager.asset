@@ -8,14 +8,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - FishIndicator
   - Water
   - UI
   - Ground
   - FishWalls
   - Hook
   - Fish
-  - HitIndicator
+  - 
   - 
   - 
   - 
@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Sky
+    uniqueID: 322377659
+    locked: 0
+  - name: Ocean
+    uniqueID: 1777134613
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

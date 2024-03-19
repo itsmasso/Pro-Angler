@@ -5,8 +5,10 @@ using UnityEngine;
 public class HookIndicatorScript : MonoBehaviour
 {
     [SerializeField] private Transform centerPoint;
-    [SerializeField] private float rotationSpeed;
-    private float speedMultplier;
+    //[SerializeField] private float rotationSpeed = 1.5f;
+    public float defaultSpeedMultiplier = 1.5f;
+    [SerializeField] private float speedMultplier;
+    
     [SerializeField] private float radius = 2f; // Distance from the pivot point
     [SerializeField] private float increaseSpeedMultiplier = 0.5f;
     private float angle;
@@ -26,10 +28,10 @@ public class HookIndicatorScript : MonoBehaviour
         //stop moving when mechanic finished
         canStart = false;
         StartCoroutine(DelayedStart());
-        speedMultplier = 1;
+        speedMultplier = defaultSpeedMultiplier;
         reverse = false;
-        time = Mathf.PI/ 4f;
-        angle = time * rotationSpeed;
+        time = Mathf.PI/ 2f;
+        angle = time;
         Vector3 offset = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * radius; //equation for circle (look up in google for better understanding)
         transform.position = centerPoint.position + offset;
 
@@ -60,7 +62,7 @@ public class HookIndicatorScript : MonoBehaviour
             else
                 time -= speedMultplier * Time.deltaTime;
  
-            angle = time * rotationSpeed;
+            angle = time;
             Vector3 offset = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0) * radius; //equation for circle (look up in google for better understanding)
             transform.position = centerPoint.position + offset;
 
@@ -70,7 +72,7 @@ public class HookIndicatorScript : MonoBehaviour
 
     private void OnDisable()
     {
-        speedMultplier = 1;
+        speedMultplier = defaultSpeedMultiplier;
         canStart = false;
     }
 

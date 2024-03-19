@@ -17,9 +17,9 @@ public abstract class FishBaseScript : MonoBehaviour
 {
     public static event Action onFollowingHook;
     public static event Action onExitHook;
-    public static event Action onCaught;
+    public static event Action<float, float> onCaught;
 
-    [SerializeField] protected float fishRadius = 0.5f;
+    [SerializeField] protected float fishRadius = 0.2f;
     [SerializeField] protected float hookDetectionRadius = 3f;
     [SerializeField] protected LayerMask hookLayer;
     private FishState currentState;
@@ -39,6 +39,7 @@ public abstract class FishBaseScript : MonoBehaviour
         FishingRodBaseScript.onReelState += CheckReelState;
         FishingRodBaseScript.onDestroyCaughtFish += DestroyFish;
         FishingRodBaseScript.onFishEscape += Escape;
+        callCaughtEvent = false;
         currentState = FishState.Patrolling;
         if (wayPoints.Count > 0)
         {
@@ -47,6 +48,7 @@ public abstract class FishBaseScript : MonoBehaviour
     }
     private void OnEnable()
     {
+        callCaughtEvent = false;
         currentState = FishState.Patrolling;
         if (wayPoints.Count > 0)
         {
@@ -87,15 +89,16 @@ public abstract class FishBaseScript : MonoBehaviour
                     if (!calledEnterEvent)
                     {
                         onFollowingHook?.Invoke();
+                        currentState = FishState.Chasing;
                         calledExitEvent = false;
                         calledEnterEvent = true;
                     }
-                    currentState = FishState.Chasing;
+                    
                 }
                 FishMovement();
                 break;
             case FishState.Chasing:
-                if (hit.collider == null)
+                if (hit.collider == null || onReelState)
                 {                  
                     if (!calledExitEvent)
                     {
@@ -110,7 +113,7 @@ public abstract class FishBaseScript : MonoBehaviour
                     transform.position = Vector2.MoveTowards(transform.position, hit.collider.gameObject.transform.position, fishScriptableObj.speed * Time.deltaTime);
                 }
                 
-                if(hit.collider != null && Vector2.Distance(transform.position, hit.collider.gameObject.transform.position) <= fishRadius && onReelState)
+                if(hit.collider != null && Vector2.Distance(transform.position, hit.collider.gameObject.transform.position) <= fishRadius /*&& onReelState*/)
                 {
                     currentState = FishState.Caught;
                 }
@@ -118,7 +121,7 @@ public abstract class FishBaseScript : MonoBehaviour
             case FishState.Caught:
                 if (!callCaughtEvent)
                 {
-                    onCaught?.Invoke();
+                    onCaught?.Invoke(fishScriptableObj.strength, fishScriptableObj.weight);
                     callCaughtEvent = true;
                 }
                 isCaught = true;
@@ -131,6 +134,7 @@ public abstract class FishBaseScript : MonoBehaviour
 
     }
 
+    //random waypoint fish movement
     protected virtual void FishMovement()
     {
         if(wayPoints.Count > 0)
@@ -143,6 +147,9 @@ public abstract class FishBaseScript : MonoBehaviour
         }
 
     }
+
+    //side to side fish movement TODO: make certain fish move side to side or using random coordinates
+
 
     private void OnDestroy()
     {

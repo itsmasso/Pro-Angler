@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class HookBaseState 
 {
-    public abstract void EnterState(FishingRodBaseScript hook);
+    public abstract void EnterState(FishingRodBaseScript rod);
 
-    public abstract void UpdateState(FishingRodBaseScript hook);
+    public abstract void UpdateState(FishingRodBaseScript rod);
 
-    public abstract void FixedUpdateState(FishingRodBaseScript hook);
+    public abstract void FixedUpdateState(FishingRodBaseScript rod);
 }

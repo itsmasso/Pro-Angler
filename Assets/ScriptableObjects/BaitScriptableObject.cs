@@ -4,7 +4,10 @@ using UnityEngine;
 
 public enum BaitType
 {
-    Bait1
+    Tier1Bait,
+    Tier2Bait,
+    Tier3Bait,
+    Tier4Bait
 }
 
 [CreateAssetMenu(fileName = "New Bait", menuName = "Bait")]

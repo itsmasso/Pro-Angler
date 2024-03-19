@@ -6,7 +6,9 @@ using UnityEngine;
 public class FishScriptableObject : ScriptableObject
 {
     public GameObject fishPrefab;
+    public string fishName;
     public float speed;
     public float strength;
+    public float weight;
     public BaitType baitNeeded;
 }

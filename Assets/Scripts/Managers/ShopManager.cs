@@ -7,7 +7,7 @@ public class ShopManager : MonoBehaviour
     
     public int money = 300;
     
-    public Upgrade[] upgrades;
+    public UpgradeScriptableObj[] upgrades;
     public Transform shopContent;
     public GameObject itemPrefab;
     
@@ -33,7 +33,7 @@ public class ShopManager : MonoBehaviour
       // Start is called before the first frame update
     private void Start()
     {
-        foreach (Upgrade upgrade in upgrades)
+        foreach (UpgradeScriptableObj upgrade in upgrades)
             {
                 GameObject item = Instantiate(itemPrefab, shopContent);
                 upgrade.itemRef = item;
@@ -52,12 +52,12 @@ public class ShopManager : MonoBehaviour
                             }
                         else if(child.gameObject.name == "Name")
                             {
-                                child.gameObject.GetComponent<Text>().text =upgrade.name.ToString();
+                                child.gameObject.GetComponent<Text>().text =upgrade.upgradeName.ToString();
 
                             }
                         else if (child.gameObject.name == "Image")
                             {
-                                child.gameObject.GetComponent<Image>().sprite = upgrade.image; 
+                                child.gameObject.GetComponent<Image>().sprite = upgrade.upgradeIcon; 
 
                             }
                     }   
@@ -68,7 +68,7 @@ public class ShopManager : MonoBehaviour
             }
                    
     }
-    public void BuyUpgrade(Upgrade upgrade)
+    public void BuyUpgrade(UpgradeScriptableObj upgrade)
         {
             if (money >= upgrade.cost)
                 {
@@ -91,7 +91,8 @@ public class ShopManager : MonoBehaviour
             moneytext.text = "Money: " + money.ToString();
         }
 }
-   
+
+/*
 [System.Serializable]
     public class Upgrade 
         {
@@ -101,3 +102,4 @@ public class ShopManager : MonoBehaviour
             public int quantity;
             [HideInInspector] public GameObject itemRef;
         }  
+        */

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: StarterFishingRod
   m_EditorClassIdentifier: 
   reelSpeed: 7
-  moveSpeed: 3
+  moveSpeed: 4
   rodStrength: 5
   fishingLineLength: 75
+  hookHealth: 100

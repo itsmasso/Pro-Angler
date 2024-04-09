@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - FallingObject
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - FishWalls
   - Hook
   - Fish
-  - 
+  - HookHitBox
   - 
   - 
   - 
@@ -46,4 +47,10 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: OceanFront
+    uniqueID: 3818462805
+    locked: 0
+  - name: UI
+    uniqueID: 248926719
     locked: 0

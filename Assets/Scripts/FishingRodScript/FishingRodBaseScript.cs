@@ -10,7 +10,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 {
     //events
     public static event Action<bool> onReelState; //event to signal others that fishing rod is currently reeling in 
-    public static event Action onDestroyCaughtFish;//destroy caught fish objects
+    public static event Action onFinishCaughtFish;//destroy caught fish objects
     public static event Action onFishEscape;
 
     [Header("Fishing Line Properties")]
@@ -24,6 +24,9 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public float fishingRodPointOffset = 2f;
     public BaitHolder baitHolder;
     public RodScriptableObject rodScriptableObj;
+    public float currentHealth;
+    private float maxHealth;
+    public bool isBroken;
 
     [Header("Fish Info")]
     public LayerMask fishLayer;
@@ -72,9 +75,13 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     void Start()
     {
+        maxHealth = rodScriptableObj.hookHealth;
+        currentHealth = maxHealth;
+
         //SetUpFishingLine(points);
         baitHolder = hook.GetComponent<BaitHolder>();
         baitHolder.currentBait = BaitType.Tier1Bait;
+        isBroken = false;
 
         //FishBaseScript.onExitHook += SubtractFollowingFish;
         FishBaseScript.onCaught += CaughtFish;
@@ -127,9 +134,9 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         hookWeight = weight;
     }
 
-    public void CallDestroyCaughtFishEvent()
+    public void CallOnFinishCaughtFishEvent()
     {
-        onDestroyCaughtFish?.Invoke();
+        onFinishCaughtFish?.Invoke();
     }
 
     public void SwitchState(HookBaseState state)
@@ -138,9 +145,27 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         state.EnterState(this);
     }
 
+    public void DamageHook(int damageAmount)
+    {
+        currentHealth -= damageAmount;
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+        }
+        Debug.Log(currentHealth);
+    }
+
     void Update()
     {
 
+        if(currentHealth <= 0)
+        {
+            isBroken = true;
+        }
+        else
+        {
+            isBroken = false;
+        }
         currentState.UpdateState(this);
         for(int i = 0; i < points.Count; i++)
         {

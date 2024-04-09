@@ -33,6 +33,7 @@ public class HookDescendState : HookBaseState
 
     public override void FixedUpdateState(FishingRodBaseScript rod)
     {
+
        
         if (reachedHookLimit)
         {
@@ -54,6 +55,10 @@ public class HookDescendState : HookBaseState
 
     public override void UpdateState(FishingRodBaseScript rod)
     {
+        if (rod.isBroken)
+        {
+            rod.SwitchState(rod.hookReelState);
+        }
         rod.fishingLineConnectorPoint.position = new Vector2(rod.hook.transform.position.x, rod.waterLinePointY);
 
         RaycastHit2D hit = Physics2D.CircleCast(hookTransform.position, rod.hookRadius, hookTransform.position.normalized, 0, rod.fishLayer);

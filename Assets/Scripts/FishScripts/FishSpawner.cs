@@ -18,6 +18,7 @@ public class FishSpawner : MonoBehaviour
     [SerializeField] private float minAngle, maxAngle;
 
     [SerializeField] private float wayPointSpacing = 15f;
+    [SerializeField] private float moveTypeChance = 0.5f;
 
     private float timer;
     private float checkInterval = 0.1f;
@@ -40,23 +41,39 @@ public class FishSpawner : MonoBehaviour
         maxFishCount = currentSpawnedFishes.Count;
     }
 
+
     private void SpawnFish(Vector2 spawnPosition)
     {
         GameObject newFish = Instantiate(fishList[Random.Range(0, fishList.Count)].fishPrefab, spawnPosition, Quaternion.identity);
  
-        newFish.SetActive(false);
-        List<Vector2> fishWayPoints = PoissonDiscSampling.GeneratePoints(wayPointSpacing, regionSize, rejectionSamples);
-        
-        foreach (Vector2 point in fishWayPoints)
+        //newFish.SetActive(false);
+
+        bool result = Random.value < moveTypeChance;
+        if (result)
         {
-            Vector2 wayPoint = new Vector2(point.x + positionOffset.x, point.y + positionOffset.y);
-            newFish.GetComponent<FishBaseScript>().wayPoints.Add(wayPoint);
+            //Random way points 
+            List<Vector2> fishWayPoints = PoissonDiscSampling.GeneratePoints(wayPointSpacing, regionSize, rejectionSamples);
+            foreach (Vector2 point in fishWayPoints)
+            {
+                Vector2 wayPoint = new Vector2(point.x + positionOffset.x, point.y + positionOffset.y);
+                newFish.GetComponent<FishBaseScript>().wayPoints.Add(wayPoint);
+            }
         }
-        newFish.SetActive(true);
+        else
+        {
+            newFish.GetComponent<FishBaseScript>().wayPoints.Add(new Vector2(-55, newFish.transform.position.y));
+            newFish.GetComponent<FishBaseScript>().wayPoints.Add(new Vector2(55, newFish.transform.position.y));
+        }
+        
+
+        
+
+       // newFish.SetActive(true);
         currentSpawnedFishes.Add(newFish);
         
 
     }
+
 
     private void AddFish()
     {

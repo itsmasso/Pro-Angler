@@ -40,15 +40,11 @@ public class HookReelState : HookBaseState
         Vector2 middlePointPosition = rod.fishingRodPoint.position + direction / 2f;
         rod.fishingLineConnectorPoint.position = Vector2.MoveTowards(rod.fishingLineConnectorPoint.position, middlePointPosition, rod.rodScriptableObj.reelSpeed * 2 * Time.deltaTime);
 
-        if(Vector2.Distance(rod.fishingLineConnectorPoint.position, middlePointPosition) <= 0.1f && !pointAtMiddle)
-        {
-            List<Transform> points = new List<Transform>();
-            points.Add(rod.fishingRodPoint);
-            points.Add(rod.fishingLineAttatchmentPoint);
-            rod.SetUpFishingLine(points);
-            pointAtMiddle = true;
-        }
-        
+        List<Transform> points = new List<Transform>();
+        points.Add(rod.fishingRodPoint);
+        points.Add(rod.fishingLineAttatchmentPoint);
+        rod.SetUpFishingLine(points);
+
         float adjustedReelSpeed = Mathf.Clamp(reelSpeed / (rod.hookWeight / rod.referenceWeight), 0.5f, reelSpeed); 
         //Debug.Log(adjustedReelSpeed);
         hookObj.transform.position = Vector2.MoveTowards(hookObj.transform.position, new Vector3(rod.fishingRodPoint.position.x, rod.fishingRodPoint.position.y - rod.fishingRodPointOffset, 0), adjustedReelSpeed * Time.deltaTime);
@@ -59,7 +55,7 @@ public class HookReelState : HookBaseState
             if (rod.fishCaught)
             {
                 //deleting fish object
-                rod.CallDestroyCaughtFishEvent();
+                rod.CallOnFinishCaughtFishEvent();
             }
             rod.SwitchState(rod.hookThrowState);
 

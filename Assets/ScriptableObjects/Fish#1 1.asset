@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
-  m_Name: New Upgrade
+  m_Script: {fileID: 11500000, guid: af5cb20645081dd44b88b75f6b20cb45, type: 3}
+  m_Name: Fish#1 1
   m_EditorClassIdentifier: 
-  quantity: 0
-  cost: 100
-  upgradeName: Better Rod
-  upgradeIcon: {fileID: 7482667652216324306, guid: 1f2d259ee34bf9440a180d8dba9a3027, type: 3}
-  itemRef: {fileID: 0}
+  bonus: 20
+  FishName: efish
+  FishIcon: {fileID: -2413806693520163455, guid: 8adc46857454c324280bc463dbb12db1, type: 3}
+  itemref: {fileID: 0}

@@ -25,11 +25,21 @@ public abstract class FishBaseScript : MonoBehaviour
     protected FishState currentState;
     public List<Vector2> wayPoints = new List<Vector2>();
     protected Vector2 currentWayPoint;
-    [SerializeField] protected FishScriptableObject fishScriptableObj;
+    public FishScriptableObject fishScriptableObj;
     [SerializeField] protected SpriteRenderer sprite;
     [SerializeField] protected Sprite fishIcon;
     [SerializeField] protected Animator anim;
-    private float speed;
+    [SerializeField] private float speed;
+
+    [Header("Movement")]
+    private Vector2 direction;
+    [SerializeField] private float minCD = 2f, maxCD = 5f;
+    [SerializeField] private float changeDirectionCooldown;
+    [SerializeField] private float rotateSpeed = 3f;
+    public Vector2 minMapBounds, maxMapBounds;
+    private Vector2 targetDirection;
+    private float timer;
+    private bool hasChangedDirection;
 
     //flags for calling things once
     protected bool calledEnterEvent = false; //bool to ensure we call event once
@@ -40,7 +50,8 @@ public abstract class FishBaseScript : MonoBehaviour
     
     protected virtual void Start()
     {
-        if(fishScriptableObj != null)
+        changeDirectionCooldown = UnityEngine.Random.Range(minCD, maxCD);
+        if (fishScriptableObj != null)
         {
             speed = UnityEngine.Random.Range(fishScriptableObj.speed - fishScriptableObj.speed/2, fishScriptableObj.speed + fishScriptableObj.speed/2);
         }
@@ -49,10 +60,12 @@ public abstract class FishBaseScript : MonoBehaviour
         FishingRodBaseScript.onFishEscape += Escape;
         callCaughtEvent = false;
         currentState = FishState.Patrolling;
+        /*
         if (wayPoints.Count > 0)
         {
             currentWayPoint = wayPoints[UnityEngine.Random.Range(0, wayPoints.Count)];
         }
+        */
     }
     /*
     protected virtual void OnEnable()
@@ -89,10 +102,11 @@ public abstract class FishBaseScript : MonoBehaviour
         callCaughtEvent = false;
     }
 
-    protected void RotateSprite(Vector2 target)
+    //not using this method right now
+    protected void RotateSprite()
     {
-        Vector2 direction = (target - (Vector2)transform.position);
 
+        
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         float zRotation = transform.rotation.eulerAngles.z;
@@ -112,6 +126,40 @@ public abstract class FishBaseScript : MonoBehaviour
         }
 
     }
+
+
+    private void HandleEnemyOutOfBounds()
+    {
+        /*
+        if ((transform.position.x < minMapBounds.x && direction.x < 0) || (transform.position.x > maxMapBounds.x && direction.x > 0))
+        {
+            direction = new Vector2(-direction.x, direction.y);
+        }
+
+        if ((transform.position.y < minMapBounds.y && direction.y < 0) || (transform.position.y > maxMapBounds.y && direction.y > 0))
+        {
+            direction = new Vector2(direction.x, -direction.y);
+        }
+        */
+
+        if (transform.position.x <= minMapBounds.x || transform.position.x >= maxMapBounds.x ||
+            transform.position.y <= minMapBounds.y || transform.position.y >= maxMapBounds.y)
+        {
+            if (!hasChangedDirection)
+            {
+                // Change direction
+                direction = -direction;
+                hasChangedDirection = true;
+            }
+        }
+        else
+        {
+            // Reset the flag when the object is not touching the border
+            hasChangedDirection = false;
+        }
+
+    }
+
 
     protected virtual void Update()
     {
@@ -143,9 +191,28 @@ public abstract class FishBaseScript : MonoBehaviour
                     }
                     
                 }
+
+                timer += Time.deltaTime;
+
+                if (timer >= changeDirectionCooldown)
+                {
+                    // Generate a random direction vector
+                    targetDirection = UnityEngine.Random.insideUnitCircle.normalized;                  
+                    changeDirectionCooldown = UnityEngine.Random.Range(minCD, maxCD);
+                    timer = 0;
+
+                }
+
+                direction = Vector3.Lerp(direction, targetDirection, rotateSpeed * Time.deltaTime);
+                direction = direction.normalized;
+
+                HandleEnemyOutOfBounds();
+
+                Vector3 movement = direction * speed * Time.deltaTime;
+                transform.position += movement;
                 
-                RotateSprite(currentWayPoint);
-                FishMovement();
+                RotateSprite();
+        
                 break;
             case FishState.Chasing:
                 
@@ -161,7 +228,9 @@ public abstract class FishBaseScript : MonoBehaviour
                 }
                 else
                 {
-                    RotateSprite(hit.collider.gameObject.transform.position);
+                    RotateSprite();
+      
+                    HandleEnemyOutOfBounds();
                     transform.position = Vector2.MoveTowards(transform.position, hit.collider.gameObject.transform.position, speed * Time.deltaTime);
                 }
                 
@@ -187,10 +256,10 @@ public abstract class FishBaseScript : MonoBehaviour
 
     }
 
-    //random waypoint fish movement
+    //random waypoint fish movement. NOT USING RIGHT NOW
     protected virtual void FishMovement()
     {
-        
+    
         if (wayPoints.Count > 0)
         {
 
@@ -200,8 +269,8 @@ public abstract class FishBaseScript : MonoBehaviour
             {
                 currentWayPoint = wayPoints[UnityEngine.Random.Range(0, wayPoints.Count)];
             }
-
         }
+     
 
     }
 

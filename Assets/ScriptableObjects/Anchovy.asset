@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Anchovy
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 923e474edde31734395b8cce9a5e1087, type: 3}
+  fishIconPopup: {fileID: 0}
   fishName: 
   speed: 4
-  strength: 7
+  strength: 25
   weight: 4
   baitNeeded: 0

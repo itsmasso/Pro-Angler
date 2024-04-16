@@ -13,6 +13,8 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public static event Action onFinishCaughtFish;//destroy caught fish objects
     public static event Action onFishEscape;
 
+    public static event Action<bool> onFishing; //call whenever you begin or finish fishing
+
     [Header("Fishing Line Properties")]
     public LineRenderer fishingLine;
     public Transform fishingLineAttatchmentPoint;
@@ -24,9 +26,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public float fishingRodPointOffset = 2f;
     public BaitHolder baitHolder;
     public RodScriptableObject rodScriptableObj;
-    public float currentHealth;
-    private float maxHealth;
-    public bool isBroken;
+    
 
     [Header("Fish Info")]
     public LayerMask fishLayer;
@@ -60,7 +60,8 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public GameObject fishingMechanicsScreen;
     public Transform mechanicBoundaryLine;
     public bool fishCaught;
-    
+    public float staminaDrainScaler = 0.05f;
+    public float slowedReelSpeed = 4f;
 
     [Header("Map/Environment Properties")]
     public float waterLinePointY;
@@ -68,26 +69,31 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     [Header("State Info")]
     public HookBaseState currentState;
+    public HookIdleState hookIdleState = new HookIdleState();
     public HookThrowState hookThrowState = new HookThrowState();
     public HookDescendState hookDescendState = new HookDescendState();
     public HookReelState hookReelState = new HookReelState();
     public HookMechanicState hookMechanicState = new HookMechanicState();
 
-    void Start()
-    {
-        maxHealth = rodScriptableObj.hookHealth;
-        currentHealth = maxHealth;
+    [Header("Player")]
+    public Transform playerTransform;
+    public PlayerStamina playerStam;
 
+    [Header("UI")]
+    public Transform canFishPosition;
+    public bool pressedInteract;
+    public GameObject interactButtonUI;
+    void Start()
+    {      
         //SetUpFishingLine(points);
         baitHolder = hook.GetComponent<BaitHolder>();
         baitHolder.currentBait = BaitType.Tier1Bait;
-        isBroken = false;
 
         //FishBaseScript.onExitHook += SubtractFollowingFish;
         FishBaseScript.onCaught += CaughtFish;
         BarFishingMechanics.onCompletedProgress += OnSuccess;
         BarFishingMechanics.onFailed += OnFailure;
-        currentState = hookThrowState;
+        currentState = hookIdleState;
         currentState.EnterState(this);
         fishingMechanicsScreen.SetActive(false);
     }
@@ -121,9 +127,26 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         
     }
 
+    public void OnInteract(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            pressedInteract = true;
+        }
+        if (ctx.canceled)
+        {
+            pressedInteract = false;
+        }
+    }
+
     public void CallReelStateEvent(bool isReelState)
     {
         onReelState?.Invoke(isReelState);
+    }
+
+    public void CallStartedFishing(bool isFishing)
+    {
+        onFishing?.Invoke(isFishing);
     }
 
 
@@ -145,27 +168,10 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         state.EnterState(this);
     }
 
-    public void DamageHook(int damageAmount)
-    {
-        currentHealth -= damageAmount;
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-        }
-        Debug.Log(currentHealth);
-    }
 
     void Update()
     {
 
-        if(currentHealth <= 0)
-        {
-            isBroken = true;
-        }
-        else
-        {
-            isBroken = false;
-        }
         currentState.UpdateState(this);
         for(int i = 0; i < points.Count; i++)
         {

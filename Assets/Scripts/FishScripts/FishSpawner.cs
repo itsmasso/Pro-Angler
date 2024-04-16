@@ -19,6 +19,8 @@ public class FishSpawner : MonoBehaviour
 
     [SerializeField] private float wayPointSpacing = 15f;
     [SerializeField] private float moveTypeChance = 0.5f;
+    [SerializeField] private Vector2 minSpawnBounds;
+    [SerializeField] private Vector2 maxSpawnBounds;
 
     private float timer;
     private float checkInterval = 0.1f;
@@ -45,9 +47,8 @@ public class FishSpawner : MonoBehaviour
     private void SpawnFish(Vector2 spawnPosition)
     {
         GameObject newFish = Instantiate(fishList[Random.Range(0, fishList.Count)].fishPrefab, spawnPosition, Quaternion.identity);
- 
-        //newFish.SetActive(false);
 
+        /*
         bool result = Random.value < moveTypeChance;
         if (result)
         {
@@ -65,10 +66,9 @@ public class FishSpawner : MonoBehaviour
             newFish.GetComponent<FishBaseScript>().wayPoints.Add(new Vector2(55, newFish.transform.position.y));
         }
         
-
-        
-
-       // newFish.SetActive(true);
+        */
+        newFish.GetComponent<FishBaseScript>().minMapBounds = minSpawnBounds;
+        newFish.GetComponent<FishBaseScript>().maxMapBounds = maxSpawnBounds;
         currentSpawnedFishes.Add(newFish);
         
 

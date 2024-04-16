@@ -16,6 +16,6 @@ MonoBehaviour:
   fishIconPopup: {fileID: 9064403380695398467, guid: 444eadae69bc45b47832b8eb3d73dba7, type: 3}
   fishName: Herring
   speed: 4
-  strength: 4
+  strength: 25
   weight: 2
   baitNeeded: 0

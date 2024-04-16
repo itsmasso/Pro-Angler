@@ -85,7 +85,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.14953613
+        value: 0.046089172
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -221,7 +221,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.09090996
+        value: 0.03448276
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -328,8 +328,6 @@ MonoBehaviour:
   fishingRodPointOffset: 2
   baitHolder: {fileID: 5966642606415611779}
   rodScriptableObj: {fileID: 11400000, guid: 3080d5730cdca04488cb55455ddfc455, type: 2}
-  currentHealth: 0
-  isBroken: 0
   fishLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -354,8 +352,13 @@ MonoBehaviour:
   mechanicBoundaryLine: {fileID: 0}
   fishCaught: 0
   waterLinePointY: 3.2
-  minXBounds: -25
+  minXBounds: -50
   maxXBounds: 25
+  playerTransform: {fileID: 0}
+  playerStam: {fileID: 0}
+  canFishPosition: {fileID: 0}
+  pressedInteract: 0
+  interactButtonUI: {fileID: 0}
 --- !u!114 &4779735829938493841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,6 +432,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: e6669856-382c-4c55-b7d9-a58cc67e5238
     m_ActionName: HookMovement/Counter[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2151591565708614794}
+        m_TargetAssemblyTypeName: FishingRodBaseScript, Assembly-CSharp
+        m_MethodName: OnInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 06a4c480-66b9-4f67-8b3e-a25c1c89b28d
+    m_ActionName: HookMovement/Interact[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: HookMovement
@@ -514,7 +533,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a7e11c74c8fe4b46b88043d1e32af61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rodScript: {fileID: 2151591565708614794}
 --- !u!1 &6812078602608107744
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,6 +850,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2450875748523977964, guid: d98754437632d5149be394dd9a263145, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2450875748523977964, guid: d98754437632d5149be394dd9a263145, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_ActionId
+      value: 06a4c480-66b9-4f67-8b3e-a25c1c89b28d
+      objectReference: {fileID: 0}
+    - target: {fileID: 2450875748523977964, guid: d98754437632d5149be394dd9a263145, type: 3}
+      propertyPath: m_ActionEvents.Array.data[6].m_ActionName
+      value: HookMovement/Interact[/Keyboard/e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 2450875748523977964, guid: d98754437632d5149be394dd9a263145, type: 3}
       propertyPath: m_ActionEvents.Array.data[5].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -880,6 +910,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3986127739382157463, guid: d98754437632d5149be394dd9a263145, type: 3}
+      propertyPath: fishSpeedScaler
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 3986127739382157463, guid: d98754437632d5149be394dd9a263145, type: 3}
       propertyPath: checkBuffInterval
       value: 4
       objectReference: {fileID: 0}
@@ -890,6 +924,10 @@ PrefabInstance:
     - target: {fileID: 3986127739382157463, guid: d98754437632d5149be394dd9a263145, type: 3}
       propertyPath: baseChanceToActivate
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3986127739382157463, guid: d98754437632d5149be394dd9a263145, type: 3}
+      propertyPath: timeMultiplierScaler
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6784502147256201221, guid: d98754437632d5149be394dd9a263145, type: 3}
       propertyPath: m_AnchorMax.y

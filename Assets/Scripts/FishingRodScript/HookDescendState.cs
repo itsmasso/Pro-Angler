@@ -55,10 +55,8 @@ public class HookDescendState : HookBaseState
 
     public override void UpdateState(FishingRodBaseScript rod)
     {
-        if (rod.isBroken)
-        {
-            rod.SwitchState(rod.hookReelState);
-        }
+        //add way to for a fish to eat bait and get away with it
+
         rod.fishingLineConnectorPoint.position = new Vector2(rod.hook.transform.position.x, rod.waterLinePointY);
 
         RaycastHit2D hit = Physics2D.CircleCast(hookTransform.position, rod.hookRadius, hookTransform.position.normalized, 0, rod.fishLayer);

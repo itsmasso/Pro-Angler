@@ -14,6 +14,8 @@ public class HookThrowState : HookBaseState
     private bool canThrow;
     public override void EnterState(FishingRodBaseScript rod)
     {
+        rod.CallStartedFishing(true);
+
         //resetting fish counts
         rod.fishCaught = false;
         rod.currentFishStrength = 0;
@@ -55,7 +57,7 @@ public class HookThrowState : HookBaseState
         
         
         //change this code to use player input system later
-        if (!hookThrown && !rod.isBroken)
+        if (!hookThrown)
         {
             if(Input.GetMouseButtonDown(0) && Vector2.Distance(rod.mousePosition, rod.hook.transform.position) <= 0.5f)
             {
@@ -93,12 +95,6 @@ public class HookThrowState : HookBaseState
                     rod.trajectoryLine.positionCount = 0;
                     hookThrown = true;
                     canThrow = false;
-                }
-            }else if (rod.isBroken)
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    Debug.Log("Your hook is broken! Please go repair it at the shop");
                 }
             }
 

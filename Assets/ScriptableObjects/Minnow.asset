@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Minnow
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 2a67609fd48a0a34e8e686ab1c921b2f, type: 3}
+  fishIconPopup: {fileID: 0}
   fishName: Minnow
   speed: 4
-  strength: 5
+  strength: 25
   weight: 2
   baitNeeded: 0

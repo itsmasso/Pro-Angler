@@ -2,58 +2,74 @@
 using System;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+
 
 public class BarFishingMechanics : MonoBehaviour
 {
     public static event Action onCompletedProgress;
     public static event Action onFailed;
 
-    [SerializeField] private GameObject fishIndicator;
-    [SerializeField] private GameObject hookIndicator;
-    [SerializeField] private GameObject fishBar;
-    [SerializeField] private Slider progressBarSlider;
+    public FishScriptableObject fishScriptableObject;
+
     private float leftPivot, rightPivot;
 
-    private Vector2 currentDestination;
-    //private bool calledOnce;
+    [Header("Fish Indicator Properties")]   
+    [SerializeField] private GameObject fishBar;
     [SerializeField] private float fishSpeed;
-    private float newTargetSpeed;
-    [SerializeField] private float timeMultiplier;
-    private float buffedTimeMultiplier;
-    private float timer;
+    [SerializeField] private float fishSpeedScaler;
+    [SerializeField] private GameObject fishIndicator;  
+    [SerializeField] private float timeMultiplier; //controls how often fish goes to a new destination. low means more difficult and high means easier
+    [SerializeField] private float timeMultiplierScaler;
+    private float fishSize;
+    [SerializeField] private float fishSizeMultplier;
+    [SerializeField] private float fishSizeScaler = 0.05f;
 
+    private Vector2 currentDestination;
+    private float newTargetSpeed;
+    private float timer;
     private bool holdingSpace;
+    
+
     [Header("Hook Indicator Properties")]
+    [SerializeField] private GameObject hookIndicator;
     [SerializeField] private float hookSize;
     [SerializeField] private float hookPower = 0.5f;
-    private float currentHookPower;
-    public float fishSize;
+    private float currentHookPower;  
     [SerializeField] private float currentSpeed;
     [SerializeField] private float maxSpeed = 10f; // Maximum speed of movement
     [SerializeField] private LayerMask targetLayer;
 
     [Header("Progress Properties")]
+    [SerializeField] private Slider progressBarSlider;
     [SerializeField] private float currentProgress;
     [SerializeField] private float maxProgress;
     [SerializeField] private float progressIncreaseSpeed = 1f;
     [SerializeField] private float progressDecreaseSpeed = 1f;
-
+    public bool gainingProgress;
+    public bool losingProgress;
     [SerializeField] private float timeBeforeFail = 2.5f;
     private float failTimer;
 
     [Header("Buff Properties")]
-    [SerializeField] private float checkBuffInterval;
-    [SerializeField] private float currentChanceToActivate;
-    [SerializeField] private float baseChanceToActivate;
+    //[SerializeField] private float chanceToActivateScaler = 0.5f;
+    //[SerializeField] private float checkBuffInterval;
+    //[SerializeField] private float currentChanceToActivate;
+    //[SerializeField] private float baseChanceToActivate;
+    [SerializeField] private float progressStageToActivate;
+    [SerializeField] private float buffActivateScaler = 1f;
     [SerializeField] private float chanceToDeactivate;
-    [SerializeField] private float buffDuration; //make it a range
+    [SerializeField] private float buffCooldown;
+    //[SerializeField] private float buffDuration; //make it a range
+    private float buffedTimeMultiplier;
     private float buffedSpeed;
-    private float activateTimer;
+    //private float activateTimer;
     private bool buffIsActive;
-    private float buffTimer;
+    private bool onBuffCooldown;
+    //private float buffTimer;
 
     [Header("QTE Properties")]
     [SerializeField] private GameObject QTEobject;
@@ -67,43 +83,127 @@ public class BarFishingMechanics : MonoBehaviour
     private bool currentlyInQTE;
     private bool activateQTE;
 
-    public bool gainingProgress;
-    public bool losingProgress;
+    private float QTEScaler(float strength)
+    {
+        float duration = 1;
+        if(strength >= 0 && strength < 10)
+        {
+            duration = 3f;
+        }else if (strength >= 10 && strength < 20)
+        {
+            duration = 2.25f;
+        }
+        else if (strength >= 20 && strength < 30)
+        {
+            duration = 2f;
+        }
+        else if (strength >= 30 && strength < 40)
+        {
+            duration = 1.75f;
+        }
+        else if (strength >= 40 && strength < 50)
+        {
+            duration = 1.3f;
+        }
+        else if (strength >= 50 && strength < 60)
+        {
+            duration = 1f;
+        }
+        else if (strength >= 60 && strength < 70)
+        {
+            duration = 0.75f;
+        }
+        else if (strength >= 70 && strength < 80)
+        {
+            duration = 0.5f;
+        }
+        else if (strength >= 80 && strength < 90)
+        {
+            duration = 0.3f;
+        }
+        else if(strength >= 90)
+        {
+            duration = 0.25f;
+        }
+        return duration;
+    }
     void Start()
     {
+        //scaling the mechanics according to fish strength
+        if(fishScriptableObject != null)
+        {
+            fishSpeed = fishScriptableObject.strength * fishSpeedScaler;
+            timeMultiplier = (100 - fishScriptableObject.strength) * timeMultiplierScaler;
+            maxProgress = fishScriptableObject.strength / 2;
+            //baseChanceToActivate = fishSciptableObject.strength * chanceToActivateScaler;
+            progressStageToActivate = Mathf.Clamp((100 - fishScriptableObject.strength) * buffActivateScaler, 20f, 75f);
+            QTEduration = QTEScaler(fishScriptableObject.strength);
+            fishSizeMultplier = (100 - fishScriptableObject.strength) * fishSizeScaler;
+        }
+
         currentHookPower = hookPower;
+        //Setting bools
         hitQTE = false;
         currentlyInQTE = false;
+
         QTEobject.SetActive(false);
-        currentChanceToActivate = baseChanceToActivate;
+        //currentChanceToActivate = baseChanceToActivate;
         NewFishDestination();
-        fishSize = fishIndicator.GetComponent<SpriteRenderer>().bounds.size.x;
+
+        //Setting sizes and positions
+        fishSize = fishSizeMultplier;
+        fishIndicator.transform.localScale = new Vector2(fishSize, fishIndicator.transform.localScale.y);
         hookSize = hookIndicator.GetComponent<SpriteRenderer>().bounds.size.x;
         leftPivot = fishBar.transform.localPosition.x - fishBar.GetComponent<SpriteRenderer>().bounds.size.x / 2;
         rightPivot = fishBar.transform.localPosition.x + fishBar.GetComponent<SpriteRenderer>().bounds.size.x / 2;
-        currentProgress = 0;
         hookIndicator.transform.localPosition = Vector2.zero;
         fishIndicator.transform.localPosition = Vector2.zero;
+
+        currentProgress = 0;
+        
     
         //calledOnce = false;
     }
 
     private void OnEnable()
     {
+        //scaling the mechanics according to fish strength
+        if (fishScriptableObject != null)
+        {
+            fishSpeed = fishScriptableObject.strength * fishSpeedScaler;
+            timeMultiplier = (100 - fishScriptableObject.strength) * timeMultiplierScaler;
+            maxProgress = fishScriptableObject.strength / 2;
+            //baseChanceToActivate = fishSciptableObject.strength * chanceToActivateScaler;
+            progressStageToActivate = Mathf.Clamp((100 - fishScriptableObject.strength) * buffActivateScaler, 20f, 75f);
+            QTEduration = QTEScaler(fishScriptableObject.strength);
+            fishSizeMultplier = (100 - fishScriptableObject.strength) * fishSizeScaler;
+        }
+
         currentHookPower = hookPower;
+
+        //Setting bools
+        onBuffCooldown = false;
+        buffIsActive = false;
         hitQTE = false;
         currentlyInQTE = false;
+        onQTEcooldown = false;
         QTEobject.SetActive(false);
-        currentChanceToActivate = baseChanceToActivate;
+        //currentChanceToActivate = baseChanceToActivate;
         NewFishDestination();
-        fishSize = fishIndicator.GetComponent<SpriteRenderer>().bounds.size.x;
+
+        //Setting sizes and positions
+        fishSize = fishSizeMultplier;
+        fishIndicator.transform.localScale = new Vector2(fishSize, fishIndicator.transform.localScale.y);
         hookSize = hookIndicator.GetComponent<SpriteRenderer>().bounds.size.x;
         leftPivot = fishBar.transform.localPosition.x - fishBar.GetComponent<SpriteRenderer>().bounds.size.x / 2;
         rightPivot = fishBar.transform.localPosition.x + fishBar.GetComponent<SpriteRenderer>().bounds.size.x / 2;
+
+        //Resetting numbers
         currentProgress = 0;
         currentSpeed = 0;
         failTimer = 0;
         timer = 0;
+        QTEtimer = 0;
         hookIndicator.transform.localPosition = Vector2.zero;
         fishIndicator.transform.localPosition = Vector2.zero;
     }
@@ -175,7 +275,7 @@ public class BarFishingMechanics : MonoBehaviour
             gainingProgress = true;
             losingProgress = false;
             currentProgress += Time.deltaTime * progressIncreaseSpeed;
-            currentChanceToActivate = Mathf.Clamp(currentChanceToActivate++, baseChanceToActivate, 90f); //adjust if needed
+            //currentChanceToActivate = Mathf.Clamp(currentChanceToActivate++, baseChanceToActivate, 90f); //adjust if needed
             if (currentProgress >= maxProgress)
             {
                 currentProgress = maxProgress;
@@ -189,7 +289,7 @@ public class BarFishingMechanics : MonoBehaviour
             gainingProgress = false;
             losingProgress = true;
             currentProgress -= Time.deltaTime * progressDecreaseSpeed;
-            currentChanceToActivate = Mathf.Clamp(currentChanceToActivate--, baseChanceToActivate, 90f); //adjust if needed
+            //currentChanceToActivate = Mathf.Clamp(currentChanceToActivate--, baseChanceToActivate, 90f); //adjust if needed
             if (currentProgress <= 0)
             {
                 currentProgress = 0;
@@ -217,7 +317,7 @@ public class BarFishingMechanics : MonoBehaviour
 
         }
         float xPos = buffIsActive ? Mathf.Lerp(fishIndicator.transform.localPosition.x, currentDestination.x, buffedSpeed * Time.deltaTime) : Mathf.Lerp(fishIndicator.transform.localPosition.x, currentDestination.x, newTargetSpeed * Time.deltaTime);
-        xPos = Mathf.Clamp(xPos, leftPivot, rightPivot);
+        xPos = Mathf.Clamp(xPos, leftPivot + fishSize/2, rightPivot - fishSize / 2);
         fishIndicator.transform.localPosition = new Vector2(xPos, fishIndicator.transform.localPosition.y);
         
     }
@@ -232,6 +332,7 @@ public class BarFishingMechanics : MonoBehaviour
 
     private void BuffEvent()
     {
+        /*
         buffTimer += Time.deltaTime;
         if(buffTimer >= buffDuration && !currentlyInQTE)
         {
@@ -239,13 +340,21 @@ public class BarFishingMechanics : MonoBehaviour
             buffTimer = 0;
             
         }
+        */
+
+        if (onBuffCooldown && !currentlyInQTE )
+        {
+            buffIsActive = false;
+            //buffTimer = 0;
+
+        }
 
         if (!onQTEcooldown)
         {
             if (!currentlyInQTE)
             {
                 activateQTETimer += Time.deltaTime;
-                if (activateQTETimer >= 2)
+                if (activateQTETimer >= 1) //checking to do QTE every however seconds
                 {
                     float rand = UnityEngine.Random.value;
                     if (rand < startQTEchance)
@@ -273,14 +382,20 @@ public class BarFishingMechanics : MonoBehaviour
             //fail counter
             //figure out correct interaction according to type of fish
             Debug.Log("Failed To Counter");
-            currentProgress -= currentProgress*0.2f; //reducing current progress byt 20%
+            currentProgress -= currentProgress*0.2f; //reducing current progress by 20%
             buffIsActive = true;
-            buffTimer = 0;
+            //buffTimer = 0;
             QTEobject.SetActive(false);
             StartCoroutine(ActivateQTECooldown());
             currentlyInQTE = false;
             activateQTE = false;
             QTEtimer = 0;
+
+            if (currentProgress / maxProgress <= 0.10f) //if current progress is at 10% and you fail counter, you lose fish
+            {
+                onFailed?.Invoke();
+                gameObject.SetActive(false);
+            }
 
         }
         else if (hitQTE && QTEtimer < QTEduration)
@@ -288,7 +403,7 @@ public class BarFishingMechanics : MonoBehaviour
             //successful counter
             //figure out correct interaction according to type of rod
             Debug.Log("Successful Counter");
-            buffTimer = 0;
+            //buffTimer = 0;
             QTEobject.SetActive(false);
             StartCoroutine(ActivateQTECooldown());
             currentlyInQTE = false;
@@ -296,6 +411,7 @@ public class BarFishingMechanics : MonoBehaviour
             if(rand < chanceToDeactivate)
             {
                 buffIsActive = false;
+                StartCoroutine(ActivateBuffCooldown());
             }
             activateQTE = false;
             hitQTE = false;
@@ -306,9 +422,20 @@ public class BarFishingMechanics : MonoBehaviour
     private IEnumerator ActivateQTECooldown()
     {
         onQTEcooldown = true;
+        Debug.Log("cooldown");
         yield return new WaitForSeconds(QTEcooldown);
+        Debug.Log(" off cooldown");
         onQTEcooldown = false;
     }
+
+    private IEnumerator ActivateBuffCooldown()
+    {
+        onBuffCooldown = true;
+        yield return new WaitForSeconds(buffCooldown);
+        onBuffCooldown = false;
+
+    }
+    
     
     void Update()
     {
@@ -317,6 +444,13 @@ public class BarFishingMechanics : MonoBehaviour
         buffedTimeMultiplier = timeMultiplier /2;
         if (!buffIsActive)
         {
+            if((currentProgress/maxProgress * 100) >= progressStageToActivate && !onBuffCooldown)
+            {
+                buffIsActive = true;
+            }
+
+
+            /* CODE FOR ACTIVATING BUFF BASED ON RANDOM CHANCE
             currentChanceToActivate = baseChanceToActivate;
             activateTimer += Time.deltaTime;
             if(activateTimer >= checkBuffInterval)
@@ -324,15 +458,15 @@ public class BarFishingMechanics : MonoBehaviour
                 float rand = UnityEngine.Random.value;
                 if(rand < currentChanceToActivate)
                 {
-                    Debug.Log("buff activated");
                     buffIsActive = true;
                 }
 
             }
+            */
         }
         else
         {
-            activateTimer = 0;
+            //activateTimer = 0;
             BuffEvent();
         }
 

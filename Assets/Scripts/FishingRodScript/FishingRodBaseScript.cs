@@ -61,7 +61,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public Transform mechanicBoundaryLine;
     public bool fishCaught;
     public float staminaDrainScaler = 0.05f;
-    public float slowedReelSpeed = 4f;
+    public float slowedReelSpeed = 3f;
 
     [Header("Map/Environment Properties")]
     public float waterLinePointY;
@@ -83,6 +83,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public Transform canFishPosition;
     public bool pressedInteract;
     public GameObject interactButtonUI;
+    public bool onEatOrKeep;
     void Start()
     {      
         //SetUpFishingLine(points);
@@ -93,9 +94,15 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         FishBaseScript.onCaught += CaughtFish;
         BarFishingMechanics.onCompletedProgress += OnSuccess;
         BarFishingMechanics.onFailed += OnFailure;
+        EatOrKeepDialogue.onEatOrKeepOption += SetOnEatOrKeep;
         currentState = hookIdleState;
         currentState.EnterState(this);
         fishingMechanicsScreen.SetActive(false);
+    }
+
+    private void SetOnEatOrKeep(bool onOption)
+    {
+        onEatOrKeep = onOption;
     }
 
     public void SetUpFishingLine(List<Transform> points)
@@ -129,11 +136,11 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     public void OnInteract(InputAction.CallbackContext ctx)
     {
-        if (ctx.performed)
+        if (ctx.performed && !onEatOrKeep)
         {
             pressedInteract = true;
         }
-        if (ctx.canceled)
+        if (ctx.canceled && !onEatOrKeep)
         {
             pressedInteract = false;
         }
@@ -150,11 +157,11 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     }
 
 
-    protected void CaughtFish(float strength, float weight)
+    protected void CaughtFish(FishScriptableObject fishScriptable)
     {
         fishCaught = true;
-        currentFishStrength = strength;
-        hookWeight = weight;
+        currentFishStrength = fishScriptable.strength;
+        hookWeight = fishScriptable.weight;
     }
 
     public void CallOnFinishCaughtFishEvent()
@@ -189,5 +196,6 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         FishBaseScript.onCaught -= CaughtFish;
         BarFishingMechanics.onCompletedProgress -= OnSuccess;
         BarFishingMechanics.onFailed -= OnFailure;
+        EatOrKeepDialogue.onEatOrKeepOption -= SetOnEatOrKeep;
     }
 }

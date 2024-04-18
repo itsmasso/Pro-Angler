@@ -11,5 +11,7 @@ public class FishScriptableObject : ScriptableObject
     public float speed;
     public float strength;
     public float weight;
+    public int sellValue;
+    public int staminaRestoreAmount;
     public BaitType baitNeeded;
 }

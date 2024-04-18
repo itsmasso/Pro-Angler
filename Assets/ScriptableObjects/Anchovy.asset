@@ -16,6 +16,8 @@ MonoBehaviour:
   fishIconPopup: {fileID: 0}
   fishName: 
   speed: 4
-  strength: 25
+  strength: 10
   weight: 4
+  sellValue: 15
+  staminaRestoreAmount: 25
   baitNeeded: 0

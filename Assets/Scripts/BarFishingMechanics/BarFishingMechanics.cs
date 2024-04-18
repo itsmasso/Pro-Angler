@@ -188,6 +188,7 @@ public class BarFishingMechanics : MonoBehaviour
         currentlyInQTE = false;
         onQTEcooldown = false;
         QTEobject.SetActive(false);
+        activateQTE = false;
         //currentChanceToActivate = baseChanceToActivate;
         NewFishDestination();
 

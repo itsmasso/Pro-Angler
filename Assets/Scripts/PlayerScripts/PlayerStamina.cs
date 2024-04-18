@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class PlayerStamina : MonoBehaviour
         maxStamina = playerScriptable.maxStamina;
         currentStamina = maxStamina;
         outOfStamina = false;
+        EatOrKeepDialogue.onEatFish += RestoreStamina;
     }
 
     public void DrainStamina(float drainAmount)
@@ -30,6 +32,17 @@ public class PlayerStamina : MonoBehaviour
         }
         //Debug.Log(currentStamina);
     }
+
+    private void RestoreStamina(int amount)
+    {
+        currentStamina += amount;
+        if (currentStamina >= maxStamina)
+        {
+            currentStamina = maxStamina;
+        }
+    }
+
+
 
     void Update()
     {
@@ -44,5 +57,9 @@ public class PlayerStamina : MonoBehaviour
 
         staminaBar.value = currentStamina / maxStamina;
         staminaText.text = string.Format("{0} / {1}", (int)Mathf.Round(currentStamina), (int)Mathf.Round(maxStamina));
+    }
+    private void OnDestroy()
+    {
+        EatOrKeepDialogue.onEatFish -= RestoreStamina;
     }
 }

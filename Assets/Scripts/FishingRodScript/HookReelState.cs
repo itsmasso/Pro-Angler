@@ -57,7 +57,10 @@ public class HookReelState : HookBaseState
                 //deleting fish object
                 rod.CallOnFinishCaughtFishEvent();
             }
-            rod.SwitchState(rod.hookIdleState);
+            if (!rod.onEatOrKeep)
+            {
+                rod.SwitchState(rod.hookIdleState);
+            }
 
         }
 

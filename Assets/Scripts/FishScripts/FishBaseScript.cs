@@ -17,7 +17,8 @@ public abstract class FishBaseScript : MonoBehaviour
 {
     public static event Action onFollowingHook;
     public static event Action onExitHook;
-    public static event Action<float, float> onCaught;
+    public static event Action<FishScriptableObject> onCaught;
+    public static event Action<FishScriptableObject> onDestroyFish;
 
     [SerializeField] protected float fishRadius = 0.2f;
     [SerializeField] protected float hookDetectionRadius = 3f;
@@ -40,6 +41,7 @@ public abstract class FishBaseScript : MonoBehaviour
     private Vector2 targetDirection;
     private float timer;
     private bool hasChangedDirection;
+    [SerializeField] private float minAngle = 45f, maxAngle = 145f;
 
     //flags for calling things once
     protected bool calledEnterEvent = false; //bool to ensure we call event once
@@ -88,8 +90,12 @@ public abstract class FishBaseScript : MonoBehaviour
     {
         if (isCaught)
         {
-            GameObject iconPopup = Instantiate(fishScriptableObj.fishIconPopup, transform.position, Quaternion.identity);
-            iconPopup.GetComponent<FishIconPopup>().spriteRenderer.sprite = fishIcon;
+            //TEMPORARILY COMMENT OUT
+            //fish popup animation
+            //GameObject iconPopup = Instantiate(fishScriptableObj.fishIconPopup, transform.position, Quaternion.identity);
+            //iconPopup.GetComponent<FishIconPopup>().spriteRenderer.sprite = fishIcon;
+            onDestroyFish?.Invoke(fishScriptableObj);
+
             Destroy(gameObject);
         }
     }
@@ -197,7 +203,7 @@ public abstract class FishBaseScript : MonoBehaviour
                 if (timer >= changeDirectionCooldown)
                 {
                     // Generate a random direction vector
-                    targetDirection = UnityEngine.Random.insideUnitCircle.normalized;                  
+                    targetDirection = UnityEngine.Random.insideUnitCircle.normalized;
                     changeDirectionCooldown = UnityEngine.Random.Range(minCD, maxCD);
                     timer = 0;
 
@@ -242,7 +248,7 @@ public abstract class FishBaseScript : MonoBehaviour
             case FishState.Caught:
                 if (!callCaughtEvent)
                 {
-                    onCaught?.Invoke(fishScriptableObj.strength, fishScriptableObj.weight);
+                    onCaught?.Invoke(fishScriptableObj);
                     callCaughtEvent = true;
                 }
                 isCaught = true;

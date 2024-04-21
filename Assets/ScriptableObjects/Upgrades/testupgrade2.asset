@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 652dfefde79d3ef47811504c7085327c, type: 3}
-  m_Name: Player
+  m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
+  m_Name: testupgrade2
   m_EditorClassIdentifier: 
-  maxStamina: 100
-  money: 300
+  quantity: 7
+  cost: 34
+  upgradeName: testupgrade2
+  upgradeIcon: {fileID: -1550511956, guid: 8db97a9eb0d06224ba185dac642d31cb, type: 3}
+  itemRef: {fileID: 0}

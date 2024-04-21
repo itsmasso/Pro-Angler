@@ -1,18 +1,19 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class ShopManager : MonoBehaviour
 {
     public static ShopManager instance;
     
-    public int money = 300;
+    //public int totalMoney;
     
     public UpgradeScriptableObj[] upgrades;
     public Transform shopContent;
     public GameObject itemPrefab;
-    
+    [SerializeField] private UI_manager uiManager;
     //reference
-    public Text moneytext;
+    //public TMP_Text moneytext;
     public GameObject ShopUI;
     [SerializeField] private GameObject ShopBackground;
 
@@ -71,9 +72,9 @@ public class ShopManager : MonoBehaviour
     }
     public void BuyUpgrade(UpgradeScriptableObj upgrade)
         {
-            if (money >= upgrade.cost)
+            if ( uiManager.totalMoney >= upgrade.cost)
                 {
-                    money -= upgrade.cost;
+                    uiManager.totalMoney -= upgrade.cost;
                     upgrade.quantity++;
                     upgrade.itemRef.transform.GetChild(0).GetComponent<Text>().
                     text = "Quantity: " + upgrade.quantity.ToString();
@@ -87,10 +88,10 @@ public class ShopManager : MonoBehaviour
             {
                 ShopUI.SetActive(!ShopUI.activeSelf);
             }
-    private void OnGUI()
+    /*private void OnGUI()
         {
-            moneytext.text = "Money: " + money.ToString();
-        }
+             uiManager.totalMoney = "Money: " + uiManager.totalMoney.ToString();
+        }*/
 }
 
 /*

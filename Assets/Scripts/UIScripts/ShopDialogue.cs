@@ -16,10 +16,11 @@ public class ShopDialogue : DialogueBox
     private bool chosenOption;
     [SerializeField] private Vector2 startingPos;
     [SerializeField] private GameObject shopScreen;
-
+    
     public BucketScript bucket;
     [SerializeField] private GameObject shop;
 
+    [SerializeField] private UI_manager uiManager;
 
     protected override void Start()
     {
@@ -118,7 +119,7 @@ public class ShopDialogue : DialogueBox
             else if (chosenOption && currentChooseIndex == 2)
             {
                 shop.SetActive(false);
-
+                uiManager.isTimerRunning = true;
             }
         }
     }

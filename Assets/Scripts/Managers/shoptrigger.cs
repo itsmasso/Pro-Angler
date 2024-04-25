@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine.InputSystem;
 
 public class shoptrigger : MonoBehaviour
-{
+{   [SerializeField] private UI_manager uiManager;
     [SerializeField] private GameObject interactButton;
     private bool isHoveringDoor;
     private bool pressedButton;
@@ -51,6 +51,7 @@ public class shoptrigger : MonoBehaviour
         {
             shopUI.SetActive(true);
             pressedButton = false;
+            uiManager.isTimerRunning = false;
         }
     }
 }

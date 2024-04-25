@@ -86,7 +86,10 @@ public class ShopManager : MonoBehaviour
      
     public void ToggleShop()    
             {
+              
                 ShopUI.SetActive(!ShopUI.activeSelf);
+                uiManager.isTimerRunning = true;
+                
             }
     /*private void OnGUI()
         {

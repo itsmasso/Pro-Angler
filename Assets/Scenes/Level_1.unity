@@ -4965,6 +4965,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0.00002670288
       objectReference: {fileID: 0}
+    - target: {fileID: 4356770713450676415, guid: a2f09f5f6e6053c4cb531ec2ec9bfdd7, type: 3}
+      propertyPath: uiManager
+      value: 
+      objectReference: {fileID: 863262904}
     - target: {fileID: 4987632743431122169, guid: a2f09f5f6e6053c4cb531ec2ec9bfdd7, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4981,6 +4985,14 @@ PrefabInstance:
       propertyPath: bucket
       value: 
       objectReference: {fileID: 210728437}
+    - target: {fileID: 5742188647310924542, guid: a2f09f5f6e6053c4cb531ec2ec9bfdd7, type: 3}
+      propertyPath: uiManager
+      value: 
+      objectReference: {fileID: 863262904}
+    - target: {fileID: 7289144191049231292, guid: a2f09f5f6e6053c4cb531ec2ec9bfdd7, type: 3}
+      propertyPath: uiManager
+      value: 
+      objectReference: {fileID: 863262904}
     - target: {fileID: 9132044312139211012, guid: a2f09f5f6e6053c4cb531ec2ec9bfdd7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -7396,8 +7408,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -1.3553486, y: 18.60045, z: 0}
-    m_Extent: {x: 62.79705, y: 20.33735, z: 0}
+    m_Center: {x: -1.3487988, y: 18.6052, z: 0}
+    m_Extent: {x: 62.790596, y: 20.337301, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -10508,8 +10520,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -3.0877495, y: -18.169249, z: 0}
-    m_Extent: {x: 106.98775, y: 52.51185, z: 0}
+    m_Center: {x: -3.090351, y: -18.158602, z: 0}
+    m_Extent: {x: 106.98515, y: 52.511703, z: 0}
   m_PointLightInnerAngle: 180
   m_PointLightOuterAngle: 180
   m_PointLightInnerRadius: 34.2
@@ -11107,6 +11119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cd79e68604a546408be88332217b7fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiManager: {fileID: 863262904}
   interactButton: {fileID: 218446174}
   shopUI: {fileID: 2134226087}
 --- !u!58 &2114650125

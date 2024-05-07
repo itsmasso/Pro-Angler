@@ -1,8 +1,7 @@
 
 using System;
 using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -14,6 +13,7 @@ public class BarFishingMechanics : MonoBehaviour
     public static event Action onFailed;
 
     public FishScriptableObject fishScriptableObject;
+    public RodScriptableObject rodScriptableObject;
 
     private float leftPivot, rightPivot;
 
@@ -127,18 +127,31 @@ public class BarFishingMechanics : MonoBehaviour
         }
         return duration;
     }
+
+    private void DetermineFishSpeed()
+    {
+        if (rodScriptableObject.canSlow)
+        {
+            fishSpeed = fishScriptableObject.strength * fishSpeedScaler * (1-(rodScriptableObject.percentSlowAmount/100f));
+        }
+        else
+        {
+            fishSpeed = fishScriptableObject.strength * fishSpeedScaler;
+        }
+    }
     void Start()
     {
         //scaling the mechanics according to fish strength
         if(fishScriptableObject != null)
         {
-            fishSpeed = fishScriptableObject.strength * fishSpeedScaler;
-            timeMultiplier = (100 - fishScriptableObject.strength) * timeMultiplierScaler;
-            maxProgress = fishScriptableObject.strength / 2;
+            float strength = Mathf.Clamp((fishScriptableObject.strength - rodScriptableObject.rodStrength), 5, 100);
+            DetermineFishSpeed();
+            timeMultiplier = (100 - strength) * timeMultiplierScaler;
+            maxProgress = strength / 2;
             //baseChanceToActivate = fishSciptableObject.strength * chanceToActivateScaler;
-            progressStageToActivate = Mathf.Clamp((100 - fishScriptableObject.strength) * buffActivateScaler, 20f, 75f);
-            QTEduration = QTEScaler(fishScriptableObject.strength);
-            fishSizeMultplier = (100 - fishScriptableObject.strength) * fishSizeScaler;
+            progressStageToActivate = Mathf.Clamp((100 - strength) * buffActivateScaler, 20f, 75f);
+            QTEduration = QTEScaler(strength);
+            fishSizeMultplier = (100 - strength) * fishSizeScaler;
         }
 
         currentHookPower = hookPower;
@@ -170,13 +183,15 @@ public class BarFishingMechanics : MonoBehaviour
         //scaling the mechanics according to fish strength
         if (fishScriptableObject != null)
         {
-            fishSpeed = fishScriptableObject.strength * fishSpeedScaler;
-            timeMultiplier = (100 - fishScriptableObject.strength) * timeMultiplierScaler;
-            maxProgress = fishScriptableObject.strength / 2;
+            float strength = Mathf.Clamp((fishScriptableObject.strength - rodScriptableObject.rodStrength), 5, 100);
+            DetermineFishSpeed();
+
+            timeMultiplier = (100 - strength) * timeMultiplierScaler;
+            maxProgress = strength / 2;
             //baseChanceToActivate = fishSciptableObject.strength * chanceToActivateScaler;
-            progressStageToActivate = Mathf.Clamp((100 - fishScriptableObject.strength) * buffActivateScaler, 20f, 75f);
-            QTEduration = QTEScaler(fishScriptableObject.strength);
-            fishSizeMultplier = (100 - fishScriptableObject.strength) * fishSizeScaler;
+            progressStageToActivate = Mathf.Clamp((100 - strength) * buffActivateScaler, 20f, 75f);
+            QTEduration = QTEScaler(strength);
+            fishSizeMultplier = (100 - strength) * fishSizeScaler;
         }
 
         currentHookPower = hookPower;
@@ -370,6 +385,14 @@ public class BarFishingMechanics : MonoBehaviour
         }
     }
 
+    private IEnumerator StunHook()
+    {
+        float stunDuration = 3 * (fishScriptableObject.strength / 100);
+        currentHookPower = 0;
+        yield return new WaitForSeconds(stunDuration);
+        currentHookPower = hookPower;
+    }
+
     private void QTE()
     {
         currentlyInQTE = true;
@@ -383,6 +406,10 @@ public class BarFishingMechanics : MonoBehaviour
             //fail counter
             //figure out correct interaction according to type of fish
             Debug.Log("Failed To Counter");
+            if(fishScriptableObject.strength >= 30)
+            {
+                StartCoroutine(StunHook());
+            }
             currentProgress -= currentProgress*0.2f; //reducing current progress by 20%
             buffIsActive = true;
             //buffTimer = 0;
@@ -405,6 +432,10 @@ public class BarFishingMechanics : MonoBehaviour
             //figure out correct interaction according to type of rod
             Debug.Log("Successful Counter");
             //buffTimer = 0;
+            if (rodScriptableObject.canStun)
+            {
+                StartCoroutine(StunFish());
+            }
             QTEobject.SetActive(false);
             StartCoroutine(ActivateQTECooldown());
             currentlyInQTE = false;
@@ -418,6 +449,14 @@ public class BarFishingMechanics : MonoBehaviour
             hitQTE = false;
             QTEtimer = 0;
         }
+    }
+
+    private IEnumerator StunFish()
+    {
+        fishSpeed = 0;
+        yield return new WaitForSeconds(rodScriptableObject.stunDuration);
+        DetermineFishSpeed();
+
     }
 
     private IEnumerator ActivateQTECooldown()
@@ -440,7 +479,14 @@ public class BarFishingMechanics : MonoBehaviour
     
     void Update()
     {
-        
+        if(fishScriptableObject.strength >= 50)
+        {
+            progressDecreaseSpeed = 3 * (fishScriptableObject.strength / 100);
+        }
+        else
+        {
+            progressDecreaseSpeed = 1f;
+        }
         buffedSpeed = newTargetSpeed * 2;
         buffedTimeMultiplier = timeMultiplier /2;
         if (!buffIsActive)

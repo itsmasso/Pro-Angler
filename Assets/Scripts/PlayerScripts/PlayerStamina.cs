@@ -17,10 +17,20 @@ public class PlayerStamina : MonoBehaviour
     [SerializeField] private TMP_Text staminaText;
     void Start()
     {
-        maxStamina = playerScriptable.maxStamina;
+        //add to save system
+        maxStamina = playerScriptable.maxStamina;      
         currentStamina = maxStamina;
+        playerScriptable.currentStamina = currentStamina;
         outOfStamina = false;
         EatOrKeepDialogue.onEatFish += RestoreStamina;
+        EnergyDrinkScript.onIncreaseStaminaCap += IncreaseStaminaCap;
+    }
+
+    private void IncreaseStaminaCap(int increaseAmount)
+    {
+        maxStamina += increaseAmount;
+        currentStamina = maxStamina;
+        //playerScriptable.maxStamina = (int)maxStamina;
     }
 
     public void DrainStamina(float drainAmount)
@@ -30,6 +40,7 @@ public class PlayerStamina : MonoBehaviour
         {
             currentStamina = 0;
         }
+        playerScriptable.currentStamina = currentStamina;
         //Debug.Log(currentStamina);
     }
 
@@ -40,6 +51,7 @@ public class PlayerStamina : MonoBehaviour
         {
             currentStamina = maxStamina;
         }
+        playerScriptable.currentStamina = currentStamina;
     }
 
 
@@ -61,5 +73,6 @@ public class PlayerStamina : MonoBehaviour
     private void OnDestroy()
     {
         EatOrKeepDialogue.onEatFish -= RestoreStamina;
+        EnergyDrinkScript.onIncreaseStaminaCap -= IncreaseStaminaCap;
     }
 }

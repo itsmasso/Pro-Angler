@@ -15,6 +15,8 @@ public class HookThrowState : HookBaseState
     public override void EnterState(FishingRodBaseScript rod)
     {
         rod.CallStartedFishing(true);
+        rod.hookAloneSprite.enabled = true;
+        rod.fishingLineSprite.enabled = false;
 
         //resetting fish counts
         rod.fishCaught = false;
@@ -22,7 +24,7 @@ public class HookThrowState : HookBaseState
         rod.hookWeight = 0;
 
     //initializing variables (constructor kinda)
-    hookRb = rod.hookRb;
+        hookRb = rod.hookRb;
         throwForce = rod.throwForce;
         trajectoryTimeStep = rod.trajectoryTimeStep;
         numPoints = rod.numPoints;
@@ -77,14 +79,17 @@ public class HookThrowState : HookBaseState
                 {
                                                        
                     float dragDistance = Vector3.Distance(startMousePos, rod.mousePosition);
+
                     if (dragDistance > rod.maxThrowRadius)
                     {
                         // Calculate the direction from startMousePos to hookMousePos
                         Vector2 direction = (rod.mousePosition - startMousePos).normalized;
-
+                        
                         // Clamp the hookMousePos to maxDragDistance from startMousePos
                         rod.mousePosition = startMousePos + direction * rod.maxThrowRadius;
+                        
                     }
+                    rod.mousePosition = new Vector2(Mathf.Clamp(rod.mousePosition.x, rod.mousePosition.x, startMousePos.x), rod.mousePosition.y);
                     velocity = (startMousePos - rod.mousePosition) * throwForce;
                 }
 

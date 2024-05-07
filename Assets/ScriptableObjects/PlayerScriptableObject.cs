@@ -6,5 +6,6 @@ using UnityEngine;
 public class PlayerScriptableObject : ScriptableObject
 {
     public int maxStamina;
+    public float currentStamina;
     public int money;
 }

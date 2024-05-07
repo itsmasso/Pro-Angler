@@ -12,7 +12,7 @@ public class HookMechanicState : HookBaseState
     private Vector2 startPosition;
     public override void EnterState(FishingRodBaseScript rod)
     {
-
+        rod.reelEarly = false;
         startPosition = rod.transform.position;
         pointAtMiddle = false;
         fishingMechanicScript = rod.fishingMechanicsScreen.GetComponent<BarFishingMechanics>();
@@ -34,6 +34,7 @@ public class HookMechanicState : HookBaseState
                 fishScriptable = hit.collider.gameObject.GetComponent<FishBaseScript>().fishScriptableObj;
             }
             rod.fishingMechanicsScreen.GetComponent<BarFishingMechanics>().fishScriptableObject = fishScriptable;
+            rod.fishingMechanicsScreen.GetComponent<BarFishingMechanics>().rodScriptableObject = rod.rodScriptableObj;
             rod.fishingMechanicsScreen.SetActive(true);
         }
 

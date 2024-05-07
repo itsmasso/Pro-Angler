@@ -33,7 +33,6 @@ public class HookDescendState : HookBaseState
 
     public override void FixedUpdateState(FishingRodBaseScript rod)
     {
-
        
         if (reachedHookLimit)
         {
@@ -45,8 +44,21 @@ public class HookDescendState : HookBaseState
         }
         else
         {
+
             targetPosition = hookTransform.position + (Vector3)rod.direction * rod.rodScriptableObj.moveSpeed * Time.fixedDeltaTime;
-            targetPosition.y -= rod.descendSpeed * Time.fixedDeltaTime;
+            if (rod.reelEarly)
+            {
+                hookTransform.position = Vector2.MoveTowards(hookTransform.position, new Vector3(rod.fishingRodPoint.position.x, rod.fishingRodPoint.position.y - rod.fishingRodPointOffset, 0), rod.rodScriptableObj.reelSpeed * Time.deltaTime);
+                if (hookTransform.position.y >= rod.waterLinePointY)
+                {
+                    rod.SwitchState(rod.hookMechanicState);
+                }
+            }
+            else
+            {
+                targetPosition.y -= rod.descendSpeed * Time.fixedDeltaTime;
+            }
+            
             targetPosition = new Vector2(Mathf.Clamp(targetPosition.x, rod.minXBounds, rod.maxXBounds), //subtract 1 to provide some buffer 
                 Mathf.Clamp(targetPosition.y, rod.fishingRodPoint.position.y - rod.rodScriptableObj.fishingLineLength - 1, rod.fishingRodPoint.position.y));
             hookRb.MovePosition(targetPosition);
@@ -55,8 +67,7 @@ public class HookDescendState : HookBaseState
 
     public override void UpdateState(FishingRodBaseScript rod)
     {
-        //add way to for a fish to eat bait and get away with it
-
+        
         rod.fishingLineConnectorPoint.position = new Vector2(rod.hook.transform.position.x, rod.waterLinePointY);
 
         RaycastHit2D hit = Physics2D.CircleCast(hookTransform.position, rod.hookRadius, hookTransform.position.normalized, 0, rod.fishLayer);

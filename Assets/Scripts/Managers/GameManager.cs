@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,36 +8,36 @@ public class GameManager : PersistentSingleton<GameManager>
 {
     public int currentScene { get; private set; }
 
-
     private void Start()
     {
         UpdateScene(1);
+        SceneManager.LoadScene("UI Manager", LoadSceneMode.Additive);
+        SceneManager.LoadScene("PlayerScene", LoadSceneMode.Additive);
     }
 
     public void UpdateScene(int newScene)
     {
         currentScene = SceneManager.GetActiveScene().buildIndex;
+
         switch (newScene)
         {
             case 1:
-                MenuLobby();
+                StartingArea();
                 break;
             case 2:
-                Level_1();
                 break;
             default:
                 break;
         }
 
+
+
     }
 
-    public void MenuLobby()
+    private void StartingArea()
     {
         SceneManager.LoadScene(1);
-    }
-
-    private void Level_1()
-    {
-        //TODO
+        
+       
     }
 }

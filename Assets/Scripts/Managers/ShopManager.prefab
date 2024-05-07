@@ -117,7 +117,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6057351266616961689
 Transform:
   m_ObjectHideFlags: 0
@@ -152,6 +152,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4dac3262b22cfb04a87a78baf51a83d3, type: 2}
   - {fileID: 11400000, guid: 4dac3262b22cfb04a87a78baf51a83d3, type: 2}
   shopContent: {fileID: 0}
-  itemPrefab: {fileID: 96472104199828135, guid: 5634a698b7f47ae4ab0c2e32e44c9dcb, type: 3}
-  moneytext: {fileID: 0}
+  itemPrefab: {fileID: 96472104199828135, guid: 8b193edb04b70324f83d67532029ffd5, type: 3}
+  uiManager: {fileID: 0}
   ShopUI: {fileID: 0}

@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   maxStamina: 100
+  currentStamina: 100
+  money: 1000

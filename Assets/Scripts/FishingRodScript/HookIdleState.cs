@@ -7,6 +7,8 @@ public class HookIdleState : HookBaseState
 {
     public override void EnterState(FishingRodBaseScript rod)
     {
+        rod.hookAloneSprite.enabled = false;
+        rod.fishingLineSprite.enabled = true;
         rod.CallStartedFishing(false);
         rod.hookRb.isKinematic = true;
     }
@@ -24,14 +26,18 @@ public class HookIdleState : HookBaseState
             
             if (rod.pressedInteract)
             {
-                if (!rod.playerStam.outOfStamina)
+                if (!rod.playerStam.outOfStamina && !rod.isbucketFull)
                 {
                     rod.interactButtonUI.SetActive(false);
                     rod.SwitchState(rod.hookThrowState);
                 }
-                else
+                else if(rod.playerStam.outOfStamina || (rod.playerStam.outOfStamina && rod.isbucketFull))
                 {
                     Debug.Log("Out of stamina!");
+                }
+                else
+                {
+                    Debug.Log("Bucket is full! Please Sell your fish");
                 }
                 
             }

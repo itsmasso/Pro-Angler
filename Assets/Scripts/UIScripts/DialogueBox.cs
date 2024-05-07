@@ -13,7 +13,6 @@ public abstract class DialogueBox : MonoBehaviour
     protected int index;
     protected virtual void Start()
     {
-        dialogueText.text = string.Empty;
         
     }
 

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
+  m_Name: UnlockApprenticeRod
+  m_EditorClassIdentifier: 
+  cost: 50
+  upgradeName: Apprentice Rod
+  upgradeDescription: 
+  upgradeIcon: {fileID: -70930718, guid: ee8d89c12be84d34a9daf94310544f7d, type: 3}
+  itemRef: {fileID: 0}
+  applyUpgrade: {fileID: 1101213114176847619, guid: 23c319d932eda82449480b101f4de540, type: 3}
+  isUnlocked: 0

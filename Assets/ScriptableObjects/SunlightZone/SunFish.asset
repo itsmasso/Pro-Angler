@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d03f0b532887ac4cbdaf87a07ed28bf, type: 3}
+  m_Name: SunFish
+  m_EditorClassIdentifier: 
+  fishPrefab: {fileID: 795547356258513691, guid: 7a37f22927303d743bec1bc35791f79a, type: 3}
+  fishIconPopup: {fileID: 0}
+  fishName: Sun Fish
+  speed: 5
+  strength: 40
+  weight: 45
+  sellValue: 110
+  staminaRestoreAmount: 50
+  baitsUsed: 2

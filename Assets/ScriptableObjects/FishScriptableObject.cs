@@ -10,8 +10,10 @@ public class FishScriptableObject : ScriptableObject
     public string fishName;
     public float speed;
     public float strength;
-    public float weight;
+    public int weight;
     public int sellValue;
     public int staminaRestoreAmount;
-    public BaitType baitNeeded;
+    //public int tier;
+    public BaitType baitsUsed;
+
 }

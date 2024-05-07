@@ -11,4 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LobbyMenu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/StartingArea.unity
+    guid: 58de13ea57337b049af2de8b0d8543ba
+  - enabled: 1
+    path: Assets/Scenes/PersistScene.unity
+    guid: 6fec4d8db296ed44d87560169889f2a1
+  - enabled: 1
+    path: Assets/Scenes/PlayerScene.unity
+    guid: 9a25710575ebc244196a2558eb397298
   m_configObjects: {}

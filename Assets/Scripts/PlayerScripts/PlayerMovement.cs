@@ -24,10 +24,13 @@ public abstract class PlayerMovement : MonoBehaviour
 
     protected virtual void Start()
     {
+ 
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
     }
 
-    public void OnMove(InputAction.CallbackContext ctx)
+
+    public virtual void OnMove(InputAction.CallbackContext ctx)
     {
         velocity = ctx.ReadValue<Vector2>();
     }
@@ -52,4 +55,6 @@ public abstract class PlayerMovement : MonoBehaviour
     
 
     }
+
+
 }

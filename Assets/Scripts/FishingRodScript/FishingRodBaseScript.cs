@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
+
 using System.Collections.Generic;
-using Unity.VisualScripting;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.Universal;
+
 
 public abstract class FishingRodBaseScript : MonoBehaviour
 {
@@ -14,6 +14,12 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public static event Action onFishEscape;
 
     public static event Action<bool> onFishing; //call whenever you begin or finish fishing
+    [Header("Animation")]
+    public RuntimeAnimatorController oldRodAnim, sturdyRodAnim, ApprenticeRodAnim, VeteranRodAnim, MasterRodAnim, IcyRodAnim, SuperChargedRodAnim;
+    public Animator currentAnim;
+    public SpriteRenderer hookAloneSprite;
+    public SpriteRenderer fishingLineSprite;
+    
 
     [Header("Fishing Line Properties")]
     public LineRenderer fishingLine;
@@ -23,7 +29,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     [Header("Fishing Rod Properties")]
     public Transform fishingRodPoint; //point of where the string of the fishing rod is attatched
-    public float fishingRodPointOffset = 2f;
+    public float fishingRodPointOffset = 0.2f;
     public BaitHolder baitHolder;
     public RodScriptableObject rodScriptableObj;
     
@@ -55,10 +61,10 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public bool isReeling;
     public float slowDownRate = 0.97f;
     public float timeBeforeReel = 1.5f;
+    public bool reelEarly;
 
     [Header("Mechanic Properties")]
     public GameObject fishingMechanicsScreen;
-    public Transform mechanicBoundaryLine;
     public bool fishCaught;
     public float staminaDrainScaler = 0.05f;
     public float slowedReelSpeed = 3f;
@@ -78,6 +84,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     [Header("Player")]
     public Transform playerTransform;
     public PlayerStamina playerStam;
+    public bool isbucketFull;
 
     [Header("UI")]
     public Transform canFishPosition;
@@ -85,19 +92,59 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public GameObject interactButtonUI;
     public bool onEatOrKeep;
     void Start()
-    {      
+    {
         //SetUpFishingLine(points);
+        
         baitHolder = hook.GetComponent<BaitHolder>();
-        baitHolder.currentBait = BaitType.Tier1Bait;
+        //save system
+        currentAnim.runtimeAnimatorController = oldRodAnim;
+        baitHolder.currentBait = BaitType.Worms;
 
         //FishBaseScript.onExitHook += SubtractFollowingFish;
+        RodSelectionScreen.onChangeRod += ChangeRod;
         FishBaseScript.onCaught += CaughtFish;
         BarFishingMechanics.onCompletedProgress += OnSuccess;
         BarFishingMechanics.onFailed += OnFailure;
         EatOrKeepDialogue.onEatOrKeepOption += SetOnEatOrKeep;
+        BucketScript.onBucketFull += BucketFull;
         currentState = hookIdleState;
         currentState.EnterState(this);
         fishingMechanicsScreen.SetActive(false);
+
+
+        //implement into save system
+        
+    }
+
+    private void ChangeRod(RodScriptableObject rod)
+    {
+        rodScriptableObj = rod;
+        ChooseRodAnimation(rodScriptableObj);
+    }
+
+    private void BucketFull(bool isFull)
+    {
+        if (isFull)
+        {
+            isbucketFull = true;
+        }
+        else
+        {
+            isbucketFull = false;
+        }
+    }
+
+
+    public void OnPressedSpace(InputAction.CallbackContext ctx)
+    {
+        if(currentState == hookDescendState)
+        {
+            if (ctx.performed)
+                reelEarly = true;
+            if (ctx.canceled)
+                reelEarly = false;
+
+        }
     }
 
     private void SetOnEatOrKeep(bool onOption)
@@ -154,6 +201,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public void CallStartedFishing(bool isFishing)
     {
         onFishing?.Invoke(isFishing);
+
     }
 
 
@@ -175,10 +223,39 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         state.EnterState(this);
     }
 
+    private void ChooseRodAnimation(RodScriptableObject rodScriptable)
+    {
+        switch (rodScriptable.name)
+        {
+            case "OldRod":
+                currentAnim.runtimeAnimatorController = oldRodAnim;
+                break;
+            case "SturdyRod":
+                currentAnim.runtimeAnimatorController = sturdyRodAnim;
+                break;
+            case "ApprenticeRod":
+                currentAnim.runtimeAnimatorController = ApprenticeRodAnim;
+                break;
+            case "VeteranRod":
+                currentAnim.runtimeAnimatorController = VeteranRodAnim;
+                break;
+            case "MasterRod":
+                currentAnim.runtimeAnimatorController = MasterRodAnim;
+                break;
+            case "IcyRod":
+                currentAnim.runtimeAnimatorController = IcyRodAnim;
+                break;
+            case "SuperChargedRod":
+                currentAnim.runtimeAnimatorController = SuperChargedRodAnim;
+                break;
+            default:
+                break;
 
+        }
+    }
     void Update()
     {
-
+        
         currentState.UpdateState(this);
         for(int i = 0; i < points.Count; i++)
         {
@@ -193,9 +270,11 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     protected void OnDestroy()
     {
         //FishBaseScript.onExitHook -= SubtractFollowingFish;
+        RodSelectionScreen.onChangeRod -= ChangeRod;
         FishBaseScript.onCaught -= CaughtFish;
         BarFishingMechanics.onCompletedProgress -= OnSuccess;
         BarFishingMechanics.onFailed -= OnFailure;
         EatOrKeepDialogue.onEatOrKeepOption -= SetOnEatOrKeep;
+        BucketScript.onBucketFull -= BucketFull;
     }
 }

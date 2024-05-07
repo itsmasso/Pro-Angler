@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6552bfc06fa1714997d734701760f50, type: 3}
+  m_Name: ApprenticeRod
+  m_EditorClassIdentifier: 
+  rodName: 
+  rodSprite: {fileID: 81176493, guid: 6e656a317d9a09541a1213c0ccaa3428, type: 3}
+  reelSpeed: 7
+  moveSpeed: 6
+  rodStrength: 25
+  fishingLineLength: 120
+  hookHealth: 0
+  canSlow: 1
+  percentSlowAmount: 35
+  canStun: 0
+  stunDuration: 0

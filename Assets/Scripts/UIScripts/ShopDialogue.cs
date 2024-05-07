@@ -1,45 +1,44 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class ShopDialogue : DialogueBox
 {
+    public static event Action onSellFishOption;
+    public event EventHandler<bool> onOpenShopWindow;
+    public static event Action onExitShop;
 
     protected bool onChoosenScreen;
     [SerializeField] protected GameObject chooseScreen;
     protected int currentChooseIndex;
+    [SerializeField] protected int indexBeforeChooseScreen;
     [SerializeField] protected RectTransform chooseIndicator;
     [SerializeField] protected float indicatorMoveAmount = 35f;
     private bool chosenOption;
     [SerializeField] private Vector2 startingPos;
     [SerializeField] private GameObject shopScreen;
 
-    public BucketScript bucket;
-    [SerializeField] private GameObject shop;
+    
+    [SerializeField] private GameObject shopParent;
 
-
+    
     protected override void Start()
     {
         base.Start();
         startingPos = chooseIndicator.anchoredPosition;
         chooseScreen.SetActive(false);
         chosenOption = false;
-        shopScreen.SetActive(false) ;
 
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        shop.SetActive(true);
         onChoosenScreen = false;
         chooseIndicator.anchoredPosition = startingPos;
         chooseScreen.SetActive(false);
         chosenOption = false;
-        shopScreen.SetActive(false);
+        onOpenShopWindow?.Invoke(this, false);
         currentChooseIndex = 0;
     }
     public void OnTextUp(InputAction.CallbackContext ctx)
@@ -88,36 +87,39 @@ public class ShopDialogue : DialogueBox
             dialogueText.text = string.Empty;
             StartCoroutine(TypeLine());
         }
-        else
-        {
-            onChoosenScreen = true;
-            chooseScreen.SetActive(true);
-        }
+
 
     }
 
     protected override void Update()
     {
         base.Update();
+        if (index >= indexBeforeChooseScreen && dialogueText.text == lines[index])
+        {
+            onChoosenScreen = true;
+            chooseScreen.SetActive(true);
+        }
+
         //Debug.Log(currentChooseIndex);
         if (onChoosenScreen)
         {
             if (chosenOption && currentChooseIndex == 0)
             {
-                shopScreen.SetActive(true);
+                onOpenShopWindow?.Invoke(this, true);
                 gameObject.SetActive(false);
 
             }
             else if (chosenOption && currentChooseIndex == 1)
             {
-                bucket.SellFish();
+                onSellFishOption?.Invoke();
                 chosenOption = false;
 
 
             }
             else if (chosenOption && currentChooseIndex == 2)
             {
-                shop.SetActive(false);
+                shopParent.SetActive(false);
+                onExitShop?.Invoke();
 
             }
         }

@@ -13,6 +13,7 @@ public class EatOrKeepDialogue : DialogueBox
 
     protected bool onChoosenScreen;
     [SerializeField] protected GameObject chooseScreen;
+    [SerializeField] protected int indexBeforeChooseScreen;
     protected int currentChooseIndex;
     [SerializeField] protected RectTransform chooseIndicator;
     [SerializeField] protected float indicatorMoveAmount = 35f;
@@ -21,6 +22,7 @@ public class EatOrKeepDialogue : DialogueBox
 
 
     public FishScriptableObject fishScriptable;
+    public FishValue fishValue;
 
     protected override void Start()
     {
@@ -73,7 +75,7 @@ public class EatOrKeepDialogue : DialogueBox
             else
             {
                 StopAllCoroutines();
-                dialogueText.text = lines[index];
+                dialogueText.text = lines[index];               
             }
 
         }
@@ -102,6 +104,11 @@ public class EatOrKeepDialogue : DialogueBox
     protected override void Update()
     {
         base.Update();
+        if (index >= indexBeforeChooseScreen && dialogueText.text == lines[index])
+        {
+            onChoosenScreen = true;
+            chooseScreen.SetActive(true);
+        }
 
         if (onChoosenScreen)
         {

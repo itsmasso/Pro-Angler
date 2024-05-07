@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor.Profiling.Memory.Experimental;
+
 using UnityEngine;
 
+public class FishValue
+{
+    public int weight;
+    public int worth;
+
+}
 public enum FishState
 {
     Patrolling,
@@ -18,7 +22,8 @@ public abstract class FishBaseScript : MonoBehaviour
     public static event Action onFollowingHook;
     public static event Action onExitHook;
     public static event Action<FishScriptableObject> onCaught;
-    public static event Action<FishScriptableObject> onDestroyFish;
+    public static event Action<FishScriptableObject, FishValue> onDestroyFish;
+   
 
     [SerializeField] protected float fishRadius = 0.2f;
     [SerializeField] protected float hookDetectionRadius = 3f;
@@ -34,25 +39,38 @@ public abstract class FishBaseScript : MonoBehaviour
 
     [Header("Movement")]
     private Vector2 direction;
-    [SerializeField] private float minCD = 2f, maxCD = 5f;
+    [SerializeField] private float minCD = 3f, maxCD = 5f;
     [SerializeField] private float changeDirectionCooldown;
     [SerializeField] private float rotateSpeed = 3f;
     public Vector2 minMapBounds, maxMapBounds;
     private Vector2 targetDirection;
     private float timer;
     private bool hasChangedDirection;
-    [SerializeField] private float minAngle = 45f, maxAngle = 145f;
-
+    private FishValue valueStats;
     //flags for calling things once
     protected bool calledEnterEvent = false; //bool to ensure we call event once
     protected bool calledExitEvent = false; //bool to ensure we call event once
     protected bool callCaughtEvent = false; //call once
     protected bool onReelState = false; //checking to see if fishing rod is in its reeling state
     protected bool isCaught = false;
-    
+
+    private float EvaluateRandomValue(float randomValue, float minValue, float maxValue)
+    {
+        float center = (minValue + maxValue) * 0.5f;
+        float distance = Mathf.Abs(randomValue - center);
+        float maxDistance = (maxValue - minValue) * 0.5f;
+        return Mathf.Clamp01(1f - distance / maxDistance);
+    }
     protected virtual void Start()
     {
+        float minValue = fishScriptableObj.weight - fishScriptableObj.weight / 0.3f;
+        float maxValue = fishScriptableObj.weight + fishScriptableObj.weight / 0.3f;
+        int randomWeight = Mathf.FloorToInt(UnityEngine.Random.Range(minValue, maxValue));
+        valueStats.weight = randomWeight;
+        valueStats.worth = fishScriptableObj.sellValue * Mathf.FloorToInt(EvaluateRandomValue(randomWeight, minValue, maxValue) * 2f);
+
         changeDirectionCooldown = UnityEngine.Random.Range(minCD, maxCD);
+        targetDirection = UnityEngine.Random.insideUnitCircle.normalized;
         if (fishScriptableObj != null)
         {
             speed = UnityEngine.Random.Range(fishScriptableObj.speed - fishScriptableObj.speed/2, fishScriptableObj.speed + fishScriptableObj.speed/2);
@@ -81,6 +99,8 @@ public abstract class FishBaseScript : MonoBehaviour
         }
     }
     */
+
+
     protected void CheckReelState(bool isReelState)
     {
         onReelState = isReelState;
@@ -94,7 +114,7 @@ public abstract class FishBaseScript : MonoBehaviour
             //fish popup animation
             //GameObject iconPopup = Instantiate(fishScriptableObj.fishIconPopup, transform.position, Quaternion.identity);
             //iconPopup.GetComponent<FishIconPopup>().spriteRenderer.sprite = fishIcon;
-            onDestroyFish?.Invoke(fishScriptableObj);
+            onDestroyFish?.Invoke(fishScriptableObj, valueStats);
 
             Destroy(gameObject);
         }
@@ -154,7 +174,9 @@ public abstract class FishBaseScript : MonoBehaviour
             if (!hasChangedDirection)
             {
                 // Change direction
+
                 direction = -direction;
+                
                 hasChangedDirection = true;
             }
         }
@@ -174,11 +196,11 @@ public abstract class FishBaseScript : MonoBehaviour
         {
             if (currentState == FishState.Caught)
             {
-                anim.SetBool("IsCaught", true);
+                //anim.SetBool("IsCaught", true);
             }
             else
             {
-                anim.SetBool("IsCaught", false);
+                //anim.SetBool("IsCaught", false);
             }
         }
             
@@ -186,7 +208,7 @@ public abstract class FishBaseScript : MonoBehaviour
         switch (currentState)
         {
             case FishState.Patrolling:
-                if (hit.collider != null && hit.collider.gameObject.GetComponent<BaitHolder>().currentBait == fishScriptableObj.baitNeeded && !onReelState)
+                if (hit.collider != null && (hit.collider.gameObject.GetComponent<BaitHolder>().currentBait == fishScriptableObj.baitsUsed || hit.collider.gameObject.GetComponent<BaitHolder>().currentBait == BaitType.OmniBait) && !onReelState)
                 {                
                     if (!calledEnterEvent)
                     {
@@ -204,16 +226,18 @@ public abstract class FishBaseScript : MonoBehaviour
                 {
                     // Generate a random direction vector
                     targetDirection = UnityEngine.Random.insideUnitCircle.normalized;
-                    changeDirectionCooldown = UnityEngine.Random.Range(minCD, maxCD);
+                    //changeDirectionCooldown = UnityEngine.Random.Range(minCD, maxCD);
                     timer = 0;
 
                 }
 
+                //turning directions
                 direction = Vector3.Lerp(direction, targetDirection, rotateSpeed * Time.deltaTime);
                 direction = direction.normalized;
 
                 HandleEnemyOutOfBounds();
 
+                //random movement
                 Vector3 movement = direction * speed * Time.deltaTime;
                 transform.position += movement;
                 
@@ -234,10 +258,14 @@ public abstract class FishBaseScript : MonoBehaviour
                 }
                 else
                 {
-                    RotateSprite();
+                    
       
                     HandleEnemyOutOfBounds();
                     transform.position = Vector2.MoveTowards(transform.position, hit.collider.gameObject.transform.position, speed * Time.deltaTime);
+                    targetDirection = hit.collider.gameObject.transform.position - transform.position;
+                    direction = Vector3.Lerp(direction, targetDirection, rotateSpeed * Time.deltaTime);
+                    direction = direction.normalized;
+                    RotateSprite();
                 }
                 
                 if(hit.collider != null && Vector2.Distance(transform.position, hit.collider.gameObject.transform.position) <= fishRadius /*&& onReelState*/)

@@ -5,13 +5,15 @@ using UnityEngine;
 public class DialogueManager : MonoBehaviour
 {
     [SerializeField] private GameObject eatOrKeep;
+    [SerializeField] private GameObject fishingResults;
 
-
-    public void ActivateEatOrKeepOption(FishScriptableObject fishScriptable)
+    public void ActivateEatOrKeepOption(FishScriptableObject fishScriptable, FishValue valueStats)
     {
         eatOrKeep.GetComponent<EatOrKeepDialogue>().fishScriptable = fishScriptable;
+        eatOrKeep.GetComponent<EatOrKeepDialogue>().fishValue = valueStats;
         //Debug.Log(fishScriptable != null);
         eatOrKeep.SetActive(true);
+        //fishingResults
     }
     void Start()
     {

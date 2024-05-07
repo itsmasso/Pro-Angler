@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.InputSystem;
+using System;
 
 public class shoptrigger : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class shoptrigger : MonoBehaviour
     private bool isHoveringDoor;
     private bool pressedButton;
     [SerializeField] private GameObject shopUI;
+    public static event Action onShopEnter;
     void Start()
     {
         interactButton.SetActive(false);
@@ -33,7 +35,7 @@ public class shoptrigger : MonoBehaviour
             if (other.CompareTag("Player"))    
             {
                  interactButton.SetActive(true);
-            isHoveringDoor = true;
+                isHoveringDoor = true;
             }
     }
     private void OnTriggerExit2D(Collider2D other)
@@ -50,6 +52,7 @@ public class shoptrigger : MonoBehaviour
         if(isHoveringDoor && pressedButton)
         {
             shopUI.SetActive(true);
+            onShopEnter?.Invoke();
             pressedButton = false;
         }
     }

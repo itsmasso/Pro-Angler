@@ -1,106 +1,171 @@
 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+
 public class ShopManager : MonoBehaviour
 {
-    public static ShopManager instance;
-    
-    public int money = 300;
-    
-    public UpgradeScriptableObj[] upgrades;
-    public Transform shopContent;
-    public GameObject itemPrefab;
-    
-    //reference
-    public Text moneytext;
-    public GameObject ShopUI;
-    [SerializeField] private GameObject ShopBackground;
+    public static event Action<UpgradeScriptableObj> onBuyUpgrade;
 
-        private void Awake()
-            {
-                if (instance == null)
-                    {
-                        instance = this;
-                    }
-                else 
-                    {
-                        Destroy(gameObject);
-                    }
-                DontDestroyOnLoad(gameObject);
-            }
-        
-       
+    [Header("Bait Upgrades")]
+    [SerializeField] private UpgradeScriptableObj[] baitUpgrades;
+    [SerializeField] private Transform shopContentBait;
+    [SerializeField] private GameObject baitTab;
+
+    [Header("Bucket Upgrades")]
+    [SerializeField] private UpgradeScriptableObj[] bucketUpgrades;
+    [SerializeField] private Transform shopContentBucket;
+    [SerializeField] private GameObject bucketTab;
+
+    [Header("Stamina Upgrades")]
+    [SerializeField] private UpgradeScriptableObj[] staminaUpgrades;
+    [SerializeField] private Transform shopContentStamina;
+    [SerializeField] private GameObject staminaTab;
+
+    [Header("Rod Upgrades")]
+    [SerializeField] private UpgradeScriptableObj[] rodUpgrades;
+    [SerializeField] private Transform shopContentRod;
+    [SerializeField] private GameObject rodTab;
+
+    [Header("Mod Upgrades")]
+    [SerializeField] private UpgradeScriptableObj[] modUpgrades;
+    [SerializeField] private Transform shopContentMods;
+    [SerializeField] private GameObject modsTab;
+
+    [Header("References")]
+    [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private GameObject shopWindow;
+    [SerializeField] private GameObject shopDialogue;
     
-      // Start is called before the first frame update
-    private void Start()
+    private void HandleShopContent(UpgradeScriptableObj[] upgrades, Transform shopContent)
     {
         foreach (UpgradeScriptableObj upgrade in upgrades)
-            {
-                GameObject item = Instantiate(itemPrefab, shopContent);
-                upgrade.itemRef = item;
-                
-                foreach (Transform child in item.transform)
-                    {
-                        if (child.gameObject.name == "Quantity" )
-                            {
-                                child.gameObject.GetComponent<Text>().text = "Quantity " + upgrade.quantity.ToString();
+        {
+            GameObject item = Instantiate(itemPrefab, shopContent);
+            upgrade.itemRef = item;
+            if(upgrade.upgradeIcon != null)
+                item.GetComponent<ShopItemScript>().ChangeUpgradeSprite(upgrade.upgradeIcon);
+            item.GetComponent<ShopItemScript>().ChangeName(upgrade.upgradeName);
+            item.GetComponent<ShopItemScript>().ChangeCost(upgrade.cost);
 
-                            }
-                        else if(child.gameObject.name == "Cost")
-                            {
-                                child.gameObject.GetComponent<Text>().text = "$" + upgrade.cost.ToString();
 
-                            }
-                        else if(child.gameObject.name == "Name")
-                            {
-                                child.gameObject.GetComponent<Text>().text =upgrade.upgradeName.ToString();
+            item.GetComponent<Button>().onClick.AddListener(() => {               
+                BuyUpgrade(upgrade);
 
-                            }
-                        else if (child.gameObject.name == "Image")
-                            {
-                                child.gameObject.GetComponent<Image>().sprite = upgrade.upgradeIcon; 
+            });
 
-                            }
-                    }   
-                    item.GetComponent<Button>().onClick.AddListener(() => {
-                        BuyUpgrade(upgrade);
-                    });
-                    
-            }
-                   
+        }
+    }
+
+    private void Start()
+    {
+        shopDialogue.GetComponent<ShopDialogue>().onOpenShopWindow += ToggleShop;
+        MoneyHandler.onUpdateMoney += CheckPrices;
+        MoneyHandler.onTransact += ApplyUpgrades;
+        HandleShopContent(baitUpgrades, shopContentBait);
+        HandleShopContent(bucketUpgrades, shopContentBucket);
+        HandleShopContent(staminaUpgrades, shopContentStamina);
+        HandleShopContent(rodUpgrades, shopContentRod);
+
     }
     public void BuyUpgrade(UpgradeScriptableObj upgrade)
+    {
+        if (!upgrade.isUnlocked)
         {
-            if (money >= upgrade.cost)
-                {
-                    money -= upgrade.cost;
-                    upgrade.quantity++;
-                    upgrade.itemRef.transform.GetChild(0).GetComponent<Text>().
-                    text = "Quantity: " + upgrade.quantity.ToString();
-
-                    
-                }
-
+            onBuyUpgrade?.Invoke(upgrade);
         }
-     
-    public void ToggleShop()    
+
+
+    }
+
+    private void ApplyUpgrades(UpgradeScriptableObj upgrade)
+    {
+        Instantiate(upgrade.applyUpgrade);
+        upgrade.itemRef.GetComponent<ShopItemScript>().UnlockOverlay();
+        upgrade.itemRef.GetComponent<Button>().interactable = false;
+        //add to save system
+        upgrade.isUnlocked = true;
+    }
+
+
+
+    public void OpenRodTab()
+    {
+        baitTab.SetActive(false);
+        rodTab.SetActive(true);
+        staminaTab.SetActive(false);
+        bucketTab.SetActive(false);
+    }
+    public void OpenBaitTab()
+    {
+        baitTab.SetActive(true);
+        rodTab.SetActive(false);
+        staminaTab.SetActive(false);
+        bucketTab.SetActive(false);
+
+    }
+
+    public void OpenBucketTab()
+    {
+        baitTab.SetActive(false);
+        rodTab.SetActive(false);
+        staminaTab.SetActive(false);
+        bucketTab.SetActive(true);
+    }
+
+    public void OpenStaminaTab()
+    {
+        baitTab.SetActive(false);
+        rodTab.SetActive(false);
+        staminaTab.SetActive(true);
+        bucketTab.SetActive(false);
+    }
+    public void ToggleShop(object sender, bool canOpen)    
+    {
+        OpenRodTab();
+        shopDialogue.SetActive(!canOpen);
+        shopWindow.SetActive(canOpen);
+    }
+
+    public void CloseShopWindow()
+    {
+        shopDialogue.SetActive(true);
+        shopWindow.SetActive(false);
+    }
+
+    //update items to reflect if you have enough money or not
+    private void CheckPrices(int totalMoney)
+    {
+        CheckUpgradeButtons(totalMoney, baitUpgrades);
+        CheckUpgradeButtons(totalMoney, rodUpgrades);
+        CheckUpgradeButtons(totalMoney, bucketUpgrades);
+        CheckUpgradeButtons(totalMoney, staminaUpgrades);
+    }
+
+    private void CheckUpgradeButtons(int _totalMoney, UpgradeScriptableObj[] upgrades )
+    {
+        foreach (UpgradeScriptableObj upgrade in upgrades)
+        {
+            if (_totalMoney <= upgrade.cost)
             {
-                ShopUI.SetActive(!ShopUI.activeSelf);
+                upgrade.itemRef.GetComponent<Button>().interactable = false;
             }
-    private void OnGUI()
-        {
-            moneytext.text = "Money: " + money.ToString();
+            else
+            {
+                upgrade.itemRef.GetComponent<Button>().interactable = true;
+            }
+
         }
+    }
+
+    private void OnDestroy()
+    {
+        if(shopDialogue != null)
+            shopDialogue.GetComponent<ShopDialogue>().onOpenShopWindow -= ToggleShop;
+        MoneyHandler.onUpdateMoney -= CheckPrices;
+        MoneyHandler.onTransact -= ApplyUpgrades;
+    }
 }
 
-/*
-[System.Serializable]
-    public class Upgrade 
-        {
-            public string name;
-            public int cost;
-            public Sprite image;
-            public int quantity;
-            [HideInInspector] public GameObject itemRef;
-        }  
-        */

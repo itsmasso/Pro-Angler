@@ -55,7 +55,7 @@ MonoBehaviour:
   fishScriptableObj: {fileID: 11400000, guid: 5c53719114eecd04484035e631285f45, type: 2}
   sprite: {fileID: 4889585333505724825}
   fishIcon: {fileID: 21300000, guid: 75487079ea806c34e8e67415a5ac528c, type: 3}
-  anim: {fileID: 0}
+  anim: {fileID: 22257122864308089}
   speed: 0
   minCD: 3
   maxCD: 5
@@ -63,8 +63,6 @@ MonoBehaviour:
   rotateSpeed: 3
   minMapBounds: {x: 0, y: 0}
   maxMapBounds: {x: 0, y: 0}
-  minAngle: -45
-  maxAngle: 45
 --- !u!58 &4776345064723133365
 CircleCollider2D:
   m_ObjectHideFlags: 0

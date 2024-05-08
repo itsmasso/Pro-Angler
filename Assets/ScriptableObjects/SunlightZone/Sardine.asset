@@ -17,7 +17,7 @@ MonoBehaviour:
   fishName: Sardine
   speed: 4
   strength: 10
-  weight: 2
+  weight: 4
   sellValue: 15
   staminaRestoreAmount: 15
   baitsUsed: 0

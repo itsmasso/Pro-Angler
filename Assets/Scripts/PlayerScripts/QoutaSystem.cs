@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,28 +7,32 @@ using UnityEngine;
 [RequireComponent(typeof(MoneyHandler))]
 public class QoutaSystem : MonoBehaviour
 {
+    public static event Action onContinueToNextDay;
+
     [Header("Qouta System")]
-    [SerializeField] private float currentQouta = 130;
+    [SerializeField] private int currentQouta = 130;
     private MoneyHandler moneyHandler;
-    private float currentProfit;
-    private float nextQoutaIncrease;
-    public int timesFulfilled; //save system
+    private int totalProfit;
+    private int profitMadeToday;
+    private int nextQoutaIncrease;
+    public int timesFulfilled { private set; get; } //save system
     private int remainingDayCounter = 3;
 
     [Header("Text")]
     [SerializeField] private TMP_Text deadlineText;
     [SerializeField] private TMP_Text profitQoutaText;
+    [SerializeField] private GameObject profitSummary;
 
     private void Awake()
     {
-        WorldTime.onResetDay += OnResetDay;
+        WorldTime.onResetDay += DailyReset;
         moneyHandler = GetComponent<MoneyHandler>();
         moneyHandler.onUpdateProfit += UpdateProfitCount;
 
     }
     void Start()
     {
-        
+        profitSummary.SetActive(false);
     }
 
     private void IncreaseQouta()
@@ -39,40 +44,78 @@ public class QoutaSystem : MonoBehaviour
 
     private void UpdateProfitCount(object sender, int sellAmount)
     {
-        currentProfit += sellAmount;
+        totalProfit += sellAmount;
+        profitMadeToday += sellAmount;
     }
 
-    private void OnResetDay()
+    public void Continue()
     {
-        if (currentProfit >= currentQouta)
+        onContinueToNextDay?.Invoke();
+        profitMadeToday = 0;
+        profitSummary.SetActive(false);
+    }
+
+    private void DailyReset()
+    {
+        ProfitSummaryManager profitSumScript = profitSummary.GetComponent<ProfitSummaryManager>();
+        if (totalProfit >= currentQouta)
         {
             //reached qouta, increase qouta
+            profitSumScript.goalCompleted = true;
+            profitSumScript.goalNotCompleted = false;
+            profitSumScript.terminated = false;
 
+            profitSumScript.profitMade = profitMadeToday;
+            profitSumScript.profitNeededLeft = Mathf.Clamp(currentQouta - totalProfit, 0, currentQouta - totalProfit);
+            
             remainingDayCounter = 3;
             timesFulfilled++;
             IncreaseQouta();
-            currentProfit = 0;
+
+            profitSumScript.newProfitGoal = currentQouta;
+            profitSumScript.newDeadline = remainingDayCounter;
+            totalProfit = 0;
+
+            
+            
         }
         else
         {
             remainingDayCounter--;
             if (remainingDayCounter <= 0)
             {
-                //lose
-                Debug.Log("You lost!");
+                profitSumScript.goalCompleted = false;
+                profitSumScript.goalNotCompleted = false;
+                profitSumScript.terminated = true;
+                totalProfit = 0;
+                profitMadeToday = 0;
+
+            }
+            else
+            {
+                profitSumScript.goalCompleted = false;
+                profitSumScript.goalNotCompleted = true;
+                profitSumScript.terminated = false;
+
+                profitSumScript.profitMade = profitMadeToday;
+                profitSumScript.profitNeededLeft = Mathf.Clamp(currentQouta - totalProfit, 0, currentQouta - totalProfit);
+                profitSumScript.daysRemaining = remainingDayCounter;
             }
         }
+
+        profitSummary.SetActive(true);
+        
     }
 
     void Update()
     {
-        profitQoutaText.text = string.Format("${0}/${1}", currentProfit, currentQouta);
+        profitQoutaText.text = string.Format("${0}/${1}", totalProfit, currentQouta);
         deadlineText.text = string.Format("{0} days remaining", remainingDayCounter);
     }
 
     private void OnDestroy()
     {
-        WorldTime.onResetDay -= OnResetDay;
+        WorldTime.onResetDay -= DailyReset;
         moneyHandler.onUpdateProfit -= UpdateProfitCount;
     }
 }

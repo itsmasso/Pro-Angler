@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class BucketScript : MonoBehaviour
@@ -11,7 +12,7 @@ public class BucketScript : MonoBehaviour
     [SerializeField] private int defaultBucketSize = 100;
     [SerializeField] private int maxBucketSize;
     [SerializeField] private int bucketTotalValue;
-    [SerializeField] private List<FishScriptableObject> listOfFish = new List<FishScriptableObject>();
+    [SerializeField] private List<FishInfo> listOfFish = new List<FishInfo>();
     public static event Action<int> onSellFish;
     public static event Action<bool> onBucketFull;
 
@@ -46,13 +47,13 @@ public class BucketScript : MonoBehaviour
 
     }
 
-    private void AddCurrentFishToBucket(FishScriptableObject fishScriptable)
+    private void AddCurrentFishToBucket(FishInfo fishInfo)
     {
         if(currentFishWeight < maxBucketSize)
         {
-            listOfFish.Add(fishScriptable);
-            bucketTotalValue += fishScriptable.sellValue;
-            currentFishWeight += fishScriptable.weight;
+            listOfFish.Add(fishInfo);
+            bucketTotalValue += fishInfo.worth;
+            currentFishWeight += fishInfo.weight;
             if (currentFishWeight >= maxBucketSize)
             {
                 onBucketFull?.Invoke(true);
@@ -73,6 +74,17 @@ public class BucketScript : MonoBehaviour
         
         bucketTotalValue = 0;
         currentFishWeight = 0;
+
+        if (currentFishWeight >= maxBucketSize)
+        {
+            onBucketFull?.Invoke(true);
+            ChangeBucketTextColor(true);
+        }
+        else
+        {
+            onBucketFull?.Invoke(false);
+            ChangeBucketTextColor(false);
+        }
     }
     void Update()
     {

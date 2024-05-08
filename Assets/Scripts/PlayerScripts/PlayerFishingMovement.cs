@@ -19,10 +19,22 @@ public class PlayerFishingMovement : PlayerMovement
     {
         base.Start();
         canMove = true;
+        WorldTime.onResetDay += DisableMovement;
+        QoutaSystem.onContinueToNextDay += EnableMovement;
         ScreenManager.onScreenOpened += CanMove;
         positiveReflect = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
         negativeReflect = new Vector2(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
         FishingRodBaseScript.onFishing += CanMove;
+    }
+
+    protected void DisableMovement()
+    {
+        canMove = false;
+    }
+
+    protected void EnableMovement()
+    {
+        canMove = true;
     }
 
     protected void CanMove(bool _canMove)
@@ -78,6 +90,8 @@ public class PlayerFishingMovement : PlayerMovement
 
     private void OnDestroy()
     {
+        QoutaSystem.onContinueToNextDay -= EnableMovement;
+        WorldTime.onResetDay -= DisableMovement;
         FishingRodBaseScript.onFishing -= CanMove;
         ScreenManager.onScreenOpened -= CanMove;
     }

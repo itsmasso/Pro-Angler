@@ -139,44 +139,6 @@ public class BarFishingMechanics : MonoBehaviour
             fishSpeed = fishScriptableObject.strength * fishSpeedScaler;
         }
     }
-    void Start()
-    {
-        //scaling the mechanics according to fish strength
-        if(fishScriptableObject != null)
-        {
-            float strength = Mathf.Clamp((fishScriptableObject.strength - rodScriptableObject.rodStrength), 5, 100);
-            DetermineFishSpeed();
-            timeMultiplier = (100 - strength) * timeMultiplierScaler;
-            maxProgress = strength / 2;
-            //baseChanceToActivate = fishSciptableObject.strength * chanceToActivateScaler;
-            progressStageToActivate = Mathf.Clamp((100 - strength) * buffActivateScaler, 20f, 75f);
-            QTEduration = QTEScaler(strength);
-            fishSizeMultplier = (100 - strength) * fishSizeScaler;
-        }
-
-        currentHookPower = hookPower;
-        //Setting bools
-        hitQTE = false;
-        currentlyInQTE = false;
-
-        QTEobject.SetActive(false);
-        //currentChanceToActivate = baseChanceToActivate;
-        NewFishDestination();
-
-        //Setting sizes and positions
-        fishSize = fishSizeMultplier;
-        fishIndicator.transform.localScale = new Vector2(fishSize, fishIndicator.transform.localScale.y);
-        hookSize = hookIndicator.GetComponent<SpriteRenderer>().bounds.size.x;
-        leftPivot = fishBar.transform.localPosition.x - fishBar.GetComponent<SpriteRenderer>().bounds.size.x / 2;
-        rightPivot = fishBar.transform.localPosition.x + fishBar.GetComponent<SpriteRenderer>().bounds.size.x / 2;
-        hookIndicator.transform.localPosition = Vector2.zero;
-        fishIndicator.transform.localPosition = Vector2.zero;
-
-        currentProgress = 0;
-        
-    
-        //calledOnce = false;
-    }
 
     private void OnEnable()
     {

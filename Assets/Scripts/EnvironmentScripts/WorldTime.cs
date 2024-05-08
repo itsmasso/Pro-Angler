@@ -28,11 +28,12 @@ public class WorldTime : MonoBehaviour
     {
         day = 1;
         intHours = 6;
-        FishingRodBaseScript.onFishing += canResetDay;
+        QoutaSystem.onContinueToNextDay += UnpauseTime;
         shoptrigger.onShopEnter += PauseTime;
         ShopDialogue.onExitShop += UnpauseTime;
         canReset = true;
     }
+
 
     private void PauseTime()
     {
@@ -44,17 +45,6 @@ public class WorldTime : MonoBehaviour
         isTimerRunning = true;
     }
 
-    private void canResetDay(bool isFishing)
-    {
-        if (isFishing)
-        {
-            canReset = false;
-        }
-        else
-        {
-            canReset = true;
-        }
-    }
     private void ScaleTime()
     {
         float scaledTime = Mathf.Repeat(currentTime, totalSecondsInADay) / totalSecondsInADay;
@@ -87,7 +77,6 @@ public class WorldTime : MonoBehaviour
                 day++;
 
                 onResetDay?.Invoke();
-                isTimerRunning = true;
                 currentTime = 0;
 
                 //maybe later if on another island, reset by scene reset instead of event
@@ -113,8 +102,8 @@ public class WorldTime : MonoBehaviour
 
     private void OnDestroy()
     {
-        FishingRodBaseScript.onFishing -= canResetDay;
         shoptrigger.onShopEnter -= PauseTime;
         ShopDialogue.onExitShop -= UnpauseTime;
+        QoutaSystem.onContinueToNextDay -= UnpauseTime;
     }
 }

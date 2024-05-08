@@ -17,7 +17,7 @@ MonoBehaviour:
   fishName: RedSnapper
   speed: 4
   strength: 10
-  weight: 2
+  weight: 10
   sellValue: 30
   staminaRestoreAmount: 15
   baitsUsed: 0

@@ -4,11 +4,13 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class FishValue
+public class FishInfo
 {
     public int weight;
     public int worth;
-
+    public string fishName;
+    public int stamRestored;
+    public Sprite icon;
 }
 public enum FishState
 {
@@ -22,7 +24,7 @@ public abstract class FishBaseScript : MonoBehaviour
     public static event Action onFollowingHook;
     public static event Action onExitHook;
     public static event Action<FishScriptableObject> onCaught;
-    public static event Action<FishScriptableObject, FishValue> onDestroyFish;
+    public static event Action<FishInfo> onDestroyFish;
    
 
     [SerializeField] protected float fishRadius = 0.2f;
@@ -46,7 +48,7 @@ public abstract class FishBaseScript : MonoBehaviour
     private Vector2 targetDirection;
     private float timer;
     private bool hasChangedDirection;
-    private FishValue valueStats;
+
     //flags for calling things once
     protected bool calledEnterEvent = false; //bool to ensure we call event once
     protected bool calledExitEvent = false; //bool to ensure we call event once
@@ -54,20 +56,53 @@ public abstract class FishBaseScript : MonoBehaviour
     protected bool onReelState = false; //checking to see if fishing rod is in its reeling state
     protected bool isCaught = false;
 
+    [Header("Fish Info")]
+    private int weight;
+    private int sellValue;
+    private int stamRestored;
+    private string fullName;
+
     private float EvaluateRandomValue(float randomValue, float minValue, float maxValue)
     {
-        float center = (minValue + maxValue) * 0.5f;
-        float distance = Mathf.Abs(randomValue - center);
-        float maxDistance = (maxValue - minValue) * 0.5f;
-        return Mathf.Clamp01(1f - distance / maxDistance);
+        float score = 1 - ((maxValue - randomValue) / (maxValue - minValue));
+        return Mathf.Clamp(score, 0.1f, 1f);
     }
+
     protected virtual void Start()
     {
-        float minValue = fishScriptableObj.weight - fishScriptableObj.weight / 0.3f;
-        float maxValue = fishScriptableObj.weight + fishScriptableObj.weight / 0.3f;
-        int randomWeight = Mathf.FloorToInt(UnityEngine.Random.Range(minValue, maxValue));
-        valueStats.weight = randomWeight;
-        valueStats.worth = fishScriptableObj.sellValue * Mathf.FloorToInt(EvaluateRandomValue(randomWeight, minValue, maxValue) * 2f);
+        float minValue = fishScriptableObj.weight - fishScriptableObj.weight * 0.4f;
+        float maxValue = fishScriptableObj.weight + fishScriptableObj.weight * 0.4f;
+        float randomWeight = UnityEngine.Random.Range(minValue, maxValue);
+        float evaluatedScore = EvaluateRandomValue(randomWeight, minValue, maxValue);
+
+        //can be small, medium, large, huge depending on weight. divided into four sections
+
+        if (evaluatedScore <= 0.25f)
+        {
+            fullName = string.Format("Small {0}", fishScriptableObj.fishName);
+        }
+        else if (evaluatedScore > 0.25f && evaluatedScore <= 0.5f)
+        {
+            fullName = string.Format("Normal {0}", fishScriptableObj.fishName);
+        }
+        else if (evaluatedScore > 0.5f && evaluatedScore <= 0.75f)
+        {
+            fullName = string.Format("Large {0}", fishScriptableObj.fishName);
+        }
+        else if (evaluatedScore > 0.75f && evaluatedScore <= 1f)
+        {
+            fullName = string.Format("Huge {0}", fishScriptableObj.fishName);
+        }
+        else
+        {
+            //bugged fish
+            fullName = "??? " + fishScriptableObj.fishName;
+        }
+
+        weight = Mathf.FloorToInt(randomWeight);
+        sellValue = Mathf.FloorToInt(fishScriptableObj.sellValue * evaluatedScore * 2f);
+        stamRestored = Mathf.FloorToInt(fishScriptableObj.staminaRestoreAmount * evaluatedScore * 2f);
+        //add icon change
 
         changeDirectionCooldown = UnityEngine.Random.Range(minCD, maxCD);
         targetDirection = UnityEngine.Random.insideUnitCircle.normalized;
@@ -80,12 +115,7 @@ public abstract class FishBaseScript : MonoBehaviour
         FishingRodBaseScript.onFishEscape += Escape;
         callCaughtEvent = false;
         currentState = FishState.Patrolling;
-        /*
-        if (wayPoints.Count > 0)
-        {
-            currentWayPoint = wayPoints[UnityEngine.Random.Range(0, wayPoints.Count)];
-        }
-        */
+
     }
     /*
     protected virtual void OnEnable()
@@ -114,7 +144,12 @@ public abstract class FishBaseScript : MonoBehaviour
             //fish popup animation
             //GameObject iconPopup = Instantiate(fishScriptableObj.fishIconPopup, transform.position, Quaternion.identity);
             //iconPopup.GetComponent<FishIconPopup>().spriteRenderer.sprite = fishIcon;
-            onDestroyFish?.Invoke(fishScriptableObj, valueStats);
+            FishInfo fishInfo = new FishInfo();
+            fishInfo.weight = weight;
+            fishInfo.worth = sellValue;
+            fishInfo.fishName = fullName;
+            fishInfo.stamRestored = stamRestored;
+            onDestroyFish?.Invoke(fishInfo);
 
             Destroy(gameObject);
         }
@@ -156,18 +191,6 @@ public abstract class FishBaseScript : MonoBehaviour
 
     private void HandleEnemyOutOfBounds()
     {
-        /*
-        if ((transform.position.x < minMapBounds.x && direction.x < 0) || (transform.position.x > maxMapBounds.x && direction.x > 0))
-        {
-            direction = new Vector2(-direction.x, direction.y);
-        }
-
-        if ((transform.position.y < minMapBounds.y && direction.y < 0) || (transform.position.y > maxMapBounds.y && direction.y > 0))
-        {
-            direction = new Vector2(direction.x, -direction.y);
-        }
-        */
-
         if (transform.position.x <= minMapBounds.x || transform.position.x >= maxMapBounds.x ||
             transform.position.y <= minMapBounds.y || transform.position.y >= maxMapBounds.y)
         {
@@ -290,23 +313,6 @@ public abstract class FishBaseScript : MonoBehaviour
 
     }
 
-    //random waypoint fish movement. NOT USING RIGHT NOW
-    protected virtual void FishMovement()
-    {
-    
-        if (wayPoints.Count > 0)
-        {
-
-            transform.position = Vector2.MoveTowards(transform.position, currentWayPoint, speed * Time.deltaTime);
-
-            if (Vector2.Distance(transform.position, currentWayPoint) < 0.1f)
-            {
-                currentWayPoint = wayPoints[UnityEngine.Random.Range(0, wayPoints.Count)];
-            }
-        }
-     
-
-    }
 
 
 

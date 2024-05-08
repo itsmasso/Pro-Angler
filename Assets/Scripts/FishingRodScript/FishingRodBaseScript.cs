@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 
 public abstract class FishingRodBaseScript : MonoBehaviour
@@ -86,6 +87,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public PlayerStamina playerStam;
     public bool isbucketFull;
 
+
     [Header("UI")]
     public Transform canFishPosition;
     public bool pressedInteract;
@@ -94,13 +96,15 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     void Start()
     {
         //SetUpFishingLine(points);
-        
+       
         baitHolder = hook.GetComponent<BaitHolder>();
         //save system
         currentAnim.runtimeAnimatorController = oldRodAnim;
         baitHolder.currentBait = BaitType.Worms;
 
         //FishBaseScript.onExitHook += SubtractFollowingFish;
+        WorldTime.onResetDay += DayResetted;
+
         RodSelectionScreen.onChangeRod += ChangeRod;
         FishBaseScript.onCaught += CaughtFish;
         BarFishingMechanics.onCompletedProgress += OnSuccess;
@@ -113,9 +117,13 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
 
         //implement into save system
-        
-    }
 
+    }
+    private void DayResetted()
+    {
+        onFishEscape?.Invoke();
+        hook.transform.position = new Vector2(fishingRodPoint.position.x, fishingRodPoint.position.y - fishingRodPointOffset);
+    }
     private void ChangeRod(RodScriptableObject rod)
     {
         rodScriptableObj = rod;
@@ -276,5 +284,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         BarFishingMechanics.onFailed -= OnFailure;
         EatOrKeepDialogue.onEatOrKeepOption -= SetOnEatOrKeep;
         BucketScript.onBucketFull -= BucketFull;
+        WorldTime.onResetDay -= DayResetted;
+   
     }
 }

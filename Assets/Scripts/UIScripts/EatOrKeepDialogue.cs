@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class EatOrKeepDialogue : DialogueBox
 {
     public static event Action<int> onEatFish;
-    public static event Action<FishScriptableObject> onKeepFish;
+    public static event Action<FishInfo> onKeepFish;
     public static event Action<bool> onEatOrKeepOption;
 
     protected bool onChoosenScreen;
@@ -20,9 +20,7 @@ public class EatOrKeepDialogue : DialogueBox
     private bool chosenOption;
     [SerializeField] private Vector2 startingPos;
 
-
-    public FishScriptableObject fishScriptable;
-    public FishValue fishValue;
+    public FishInfo fishInfo;
 
     protected override void Start()
     {
@@ -37,7 +35,7 @@ public class EatOrKeepDialogue : DialogueBox
     {
         base.OnEnable();
 
-        if(fishScriptable != null)
+        if(fishInfo != null)
         {
             onChoosenScreen = false;
             chooseIndicator.anchoredPosition = startingPos;
@@ -115,7 +113,7 @@ public class EatOrKeepDialogue : DialogueBox
             if(chosenOption && currentChooseIndex == 0)
             {
                 //if choose eat
-                onEatFish?.Invoke(fishScriptable.staminaRestoreAmount);
+                onEatFish?.Invoke(fishInfo.stamRestored);
                 onEatOrKeepOption?.Invoke(false);
                 gameObject.SetActive(false);
 
@@ -123,7 +121,7 @@ public class EatOrKeepDialogue : DialogueBox
             else if (chosenOption && currentChooseIndex == 1)
             {
                 //if choose sell
-                onKeepFish?.Invoke(fishScriptable);
+                onKeepFish?.Invoke(fishInfo);
                 onEatOrKeepOption?.Invoke(false);
                 gameObject.SetActive(false);
             }

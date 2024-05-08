@@ -5,20 +5,19 @@ using UnityEngine;
 public class DialogueManager : MonoBehaviour
 {
     [SerializeField] private GameObject eatOrKeep;
-    [SerializeField] private GameObject fishingResults;
+    [SerializeField] private FishResults fishingResults;
 
-    public void ActivateEatOrKeepOption(FishScriptableObject fishScriptable, FishValue valueStats)
+    public void ActivateEatOrKeepOption(FishInfo _fishInfo)
     {
-        eatOrKeep.GetComponent<EatOrKeepDialogue>().fishScriptable = fishScriptable;
-        eatOrKeep.GetComponent<EatOrKeepDialogue>().fishValue = valueStats;
-        //Debug.Log(fishScriptable != null);
+        eatOrKeep.GetComponent<EatOrKeepDialogue>().fishInfo = _fishInfo;
+        fishingResults.fishInfo = _fishInfo;
         eatOrKeep.SetActive(true);
-        //fishingResults
     }
     void Start()
     {
         FishBaseScript.onDestroyFish += ActivateEatOrKeepOption;
         eatOrKeep.SetActive(false);
+
     }
 
     // Update is called once per frame

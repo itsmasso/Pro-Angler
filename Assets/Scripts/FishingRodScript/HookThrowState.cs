@@ -39,6 +39,7 @@ public class HookThrowState : HookBaseState
         hookRb.gravityScale = 0;
 
         //resetting line renderers
+        velocity = Vector2.zero;
         rod.trajectoryLine.positionCount = 0;
         List<Transform> points = new List<Transform>();
         points.Add(rod.fishingRodPoint);

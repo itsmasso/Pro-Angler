@@ -5,13 +5,25 @@ using UnityEngine;
 
 public class FishResults : MonoBehaviour
 {
-    public TMP_Text fishName;
-    public TMP_Text weightText;
-    public TMP_Text worth;
-    
-    void Start()
+    [SerializeField] private TMP_Text fishName;
+    [SerializeField] private TMP_Text weightText;
+    [SerializeField] private TMP_Text worthText;
+
+    public FishInfo fishInfo;
+    private void OnEnable()
     {
-        
+        if(fishInfo != null)
+        {
+            fishName.text = string.Format("{0}", fishInfo.fishName);
+            weightText.text = string.Format("{0} lbs", fishInfo.weight);
+            worthText.text = string.Format("Worth: ${0}", fishInfo.worth);
+        }
+        else
+        {
+            fishName.text = "???";
+            weightText.text = "???";
+            worthText.text = "???";
+        }
     }
 
     // Update is called once per frame

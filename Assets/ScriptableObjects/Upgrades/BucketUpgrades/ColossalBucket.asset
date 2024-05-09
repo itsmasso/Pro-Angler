@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
   m_Name: ColossalBucket
   m_EditorClassIdentifier: 
-  cost: 50
+  cost: 1100
   upgradeName: Colossal Bucket
   upgradeDescription: 
-  upgradeIcon: {fileID: 0}
+  upgradeIcon: {fileID: 21300000, guid: 26e5ee24b35715f438ff9553fbaf873b, type: 3}
   itemRef: {fileID: 0}
   applyUpgrade: {fileID: 7918534731481765034, guid: 5eebd9af1b604504a9e21d9b919aa505, type: 3}
   isUnlocked: 0

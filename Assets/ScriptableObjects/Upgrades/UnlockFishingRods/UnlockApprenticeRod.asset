@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
   m_Name: UnlockApprenticeRod
   m_EditorClassIdentifier: 
-  cost: 50
+  cost: 100
   upgradeName: Apprentice Rod
   upgradeDescription: 
   upgradeIcon: {fileID: -70930718, guid: ee8d89c12be84d34a9daf94310544f7d, type: 3}

@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6552bfc06fa1714997d734701760f50, type: 3}
   m_Name: SturdyRod
   m_EditorClassIdentifier: 
-  rodName: 
+  rodName: Sturdy Rod
   rodSprite: {fileID: 1265244354, guid: 6e656a317d9a09541a1213c0ccaa3428, type: 3}
-  reelSpeed: 7
-  moveSpeed: 6
-  rodStrength: 15
-  fishingLineLength: 100
-  hookHealth: 100
+  reelSpeed: 5
+  moveSpeed: 5
+  rodStrength: 21
+  fishingLineLength: 115
   canSlow: 0
   percentSlowAmount: 0
   canStun: 0

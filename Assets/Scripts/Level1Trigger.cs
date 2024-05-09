@@ -11,10 +11,18 @@ public class Level1Trigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            collision.transform.position = startPosition.position;
-            onEnterLevel1?.Invoke();
+            TransitionManager.Instance.ApplyCircleTransition();
+            StartCoroutine(Transition(collision));
             //Trigger fade effect
             //delay > circle fade > tp while black > unfade
         }
+    }
+
+    private IEnumerator Transition(Collider2D collision)
+    {
+        yield return new WaitForSeconds(0.75f);
+        onEnterLevel1?.Invoke();
+        collision.transform.position = startPosition.position;
+        
     }
 }

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
   m_Name: GiganticBucket
   m_EditorClassIdentifier: 
-  cost: 50
+  cost: 720
   upgradeName: Gigantic Bucket
   upgradeDescription: 
-  upgradeIcon: {fileID: 0}
+  upgradeIcon: {fileID: 21300000, guid: 26e5ee24b35715f438ff9553fbaf873b, type: 3}
   itemRef: {fileID: 0}
   applyUpgrade: {fileID: 1557054449901586990, guid: 97cd41eca714afb4ab14806699f77f71, type: 3}
   isUnlocked: 0

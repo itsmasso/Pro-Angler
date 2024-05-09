@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 947d7a14b02c6c14087ac85be9ac6361, type: 3}
   fishIconPopup: {fileID: 0}
+  icon: {fileID: 21300000, guid: 727bf4100f49e2a4db0c21fc19f33416, type: 3}
   fishName: Tuna
   speed: 6
-  strength: 30
+  strength: 35
   weight: 15
   sellValue: 60
   staminaRestoreAmount: 20

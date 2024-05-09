@@ -31,12 +31,21 @@ public class ProfitSummaryManager : MonoBehaviour
     [SerializeField] private GameObject termination;
     public bool terminated;
 
+    [SerializeField] private WorldTime worldTimer;
 
+    public void Restart()
+    {
+        GameManager.Instance.UpdateScene(2);
+    }
 
-
+    public void MainMenu()
+    {
+        GameManager.Instance.UpdateScene(1);
+    }
 
     private void OnEnable()
     {
+        dayText.text = string.Format("Day {0}", worldTimer.day);
        if(!goalCompleted && goalNotCompleted && !terminated)
         {
             //goal not completed, but days remaining

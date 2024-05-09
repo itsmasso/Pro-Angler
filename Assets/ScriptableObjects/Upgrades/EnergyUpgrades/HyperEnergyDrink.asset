@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
   m_Name: HyperEnergyDrink
   m_EditorClassIdentifier: 
-  cost: 50
+  cost: 460
   upgradeName: Hyper Energy Drink
   upgradeDescription: 
-  upgradeIcon: {fileID: 0}
+  upgradeIcon: {fileID: 21300000, guid: 27cea2d396b2c7b49b0185a0703d39c2, type: 3}
   itemRef: {fileID: 0}
   applyUpgrade: {fileID: 7128881286564613973, guid: 47fe776e0df73ac46a589bb1a868e0d4, type: 3}
   isUnlocked: 0

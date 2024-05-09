@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: b46f9999835baa149a651663b791756b, type: 3}
   fishIconPopup: {fileID: 0}
+  icon: {fileID: 21300000, guid: 264b8e19d7b96134bb30669f17a7f64e, type: 3}
   fishName: Butterfly Fish
   speed: 6
-  strength: 35
+  strength: 40
   weight: 20
   sellValue: 75
   staminaRestoreAmount: 30

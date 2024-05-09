@@ -10,6 +10,8 @@ public class CamFollow : MonoBehaviour
     public Transform target; // The object the camera will follow
     [SerializeField] private float smoothSpeed = 0.125f; // How quickly the camera catches up to its target
 
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform hook;
 
     [SerializeField] private GameObject level1Confiner;
     [SerializeField] private GameObject lobbyConfiner;
@@ -54,12 +56,12 @@ public class CamFollow : MonoBehaviour
     {
         if (isFishing)
         {
-            target = DataPersistenceManager.Instance.hook.transform;
+            target = hook;
 
         }
         else
         {
-            target = DataPersistenceManager.Instance.fisherMan.transform;
+            target = player;
         }
     }
 
@@ -68,12 +70,14 @@ public class CamFollow : MonoBehaviour
     {
         onLevel1 = true;
         onLobby = false;
+     
     }
 
     private void OnLobby()
     {
         onLevel1 = false;
         onLobby = true;
+      
     }
 
     // Update is called once per frame

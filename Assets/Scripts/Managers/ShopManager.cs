@@ -51,7 +51,7 @@ public class ShopManager : MonoBehaviour
             item.GetComponent<ShopItemScript>().ChangeCost(upgrade.cost);
 
 
-            item.GetComponent<Button>().onClick.AddListener(() => {               
+            item.GetComponentInChildren<Button>().onClick.AddListener(() => {               
                 BuyUpgrade(upgrade);
 
             });
@@ -84,7 +84,7 @@ public class ShopManager : MonoBehaviour
     {
         Instantiate(upgrade.applyUpgrade);
         upgrade.itemRef.GetComponent<ShopItemScript>().UnlockOverlay();
-        upgrade.itemRef.GetComponent<Button>().interactable = false;
+        upgrade.itemRef.GetComponentInChildren<Button>().interactable = false;
         //add to save system
         upgrade.isUnlocked = true;
     }
@@ -150,11 +150,11 @@ public class ShopManager : MonoBehaviour
         {
             if (_totalMoney <= upgrade.cost)
             {
-                upgrade.itemRef.GetComponent<Button>().interactable = false;
+                upgrade.itemRef.GetComponentInChildren<Button>().interactable = false;
             }
             else
             {
-                upgrade.itemRef.GetComponent<Button>().interactable = true;
+                upgrade.itemRef.GetComponentInChildren<Button>().interactable = true;
             }
 
         }

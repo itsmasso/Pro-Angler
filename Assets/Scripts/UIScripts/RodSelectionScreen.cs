@@ -131,7 +131,7 @@ public class RodSelectionScreen : MonoBehaviour
                 //super charged
                 superChargedRodLocked = false;
                 superChargedRod.transform.GetComponent<Button>().interactable = true;
-                superChargedRod.transform.GetChild(0).gameObject.SetActive(false);
+                superChargedRod.transform.GetChild(0).gameObject.SetActive(true);
                 break;
             default:
                 break;

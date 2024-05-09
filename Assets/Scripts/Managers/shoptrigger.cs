@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.InputSystem;
 using System;
 
+
 public class shoptrigger : MonoBehaviour
 {
     [SerializeField] private GameObject interactButton;
@@ -11,6 +12,7 @@ public class shoptrigger : MonoBehaviour
     private bool pressedButton;
     [SerializeField] private GameObject shopUI;
     public static event Action onShopEnter;
+  
     void Start()
     {
         interactButton.SetActive(false);
@@ -51,9 +53,12 @@ public class shoptrigger : MonoBehaviour
     {
         if(isHoveringDoor && pressedButton)
         {
-            shopUI.SetActive(true);
+
             onShopEnter?.Invoke();
+            shopUI.SetActive(true);          
             pressedButton = false;
+    
+
         }
     }
 }

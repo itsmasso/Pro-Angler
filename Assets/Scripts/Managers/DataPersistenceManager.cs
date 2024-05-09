@@ -4,6 +4,5 @@ using UnityEngine;
 
 public class DataPersistenceManager : Singleton<DataPersistenceManager>
 {
-    public GameObject fisherMan;
-    public GameObject hook;
+
 }

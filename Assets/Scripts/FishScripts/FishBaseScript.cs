@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FishInfo
@@ -25,7 +25,9 @@ public abstract class FishBaseScript : MonoBehaviour
     public static event Action onExitHook;
     public static event Action<FishScriptableObject> onCaught;
     public static event Action<FishInfo> onDestroyFish;
-   
+
+    [SerializeField] protected GameObject alertPrefab;
+    private GameObject alert;
 
     [SerializeField] protected float fishRadius = 0.2f;
     [SerializeField] protected float hookDetectionRadius = 3f;
@@ -56,6 +58,7 @@ public abstract class FishBaseScript : MonoBehaviour
     protected bool onReelState = false; //checking to see if fishing rod is in its reeling state
     protected bool isCaught = false;
 
+
     [Header("Fish Info")]
     private int weight;
     private int sellValue;
@@ -70,6 +73,8 @@ public abstract class FishBaseScript : MonoBehaviour
 
     protected virtual void Start()
     {
+        alert = Instantiate(alertPrefab, transform.position, Quaternion.identity);
+        alert.transform.SetParent(gameObject.transform);
         float minValue = fishScriptableObj.weight - fishScriptableObj.weight * 0.4f;
         float maxValue = fishScriptableObj.weight + fishScriptableObj.weight * 0.4f;
         float randomWeight = UnityEngine.Random.Range(minValue, maxValue);
@@ -111,8 +116,9 @@ public abstract class FishBaseScript : MonoBehaviour
             speed = UnityEngine.Random.Range(fishScriptableObj.speed - fishScriptableObj.speed/2, fishScriptableObj.speed + fishScriptableObj.speed/2);
         }
         FishingRodBaseScript.onReelState += CheckReelState;
-        FishingRodBaseScript.onFinishCaughtFish += DestroyFish;
+        FishingRodBaseScript.onFinishCaughtFish += SaveFish;
         FishingRodBaseScript.onFishEscape += Escape;
+        WorldTime.onResetDay += DeleteFish;
         callCaughtEvent = false;
         currentState = FishState.Patrolling;
 
@@ -136,7 +142,13 @@ public abstract class FishBaseScript : MonoBehaviour
         onReelState = isReelState;
     }
 
-    protected void DestroyFish()
+    protected void DeleteFish()
+    {
+        Debug.Log("delete fish");
+        Destroy(gameObject);
+    }
+
+    protected void SaveFish()
     {
         if (isCaught)
         {
@@ -149,10 +161,12 @@ public abstract class FishBaseScript : MonoBehaviour
             fishInfo.worth = sellValue;
             fishInfo.fishName = fullName;
             fishInfo.stamRestored = stamRestored;
+            fishInfo.icon = fishScriptableObj.icon;
             onDestroyFish?.Invoke(fishInfo);
 
             Destroy(gameObject);
         }
+
     }
 
     protected void Escape()
@@ -214,6 +228,22 @@ public abstract class FishBaseScript : MonoBehaviour
 
     protected virtual void Update()
     {
+
+        if(alert != null)
+        {
+            // Calculate the direction from the target to this object
+            Vector2 directionToTarget = transform.position - alert.transform.position;
+
+            // Calculate the angle between the direction to the target and the upward direction (Vector2.up)
+            float angle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;
+
+            // Rotate the object towards the target
+            alert.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            // Orbit around the target
+            alert.transform.RotateAround(transform.position, Vector3.forward, 10f * Time.deltaTime);
+        }
+
         RaycastHit2D hit = Physics2D.CircleCast(transform.position, hookDetectionRadius, transform.position.normalized, 0, hookLayer);     
         if(anim != null)
         {
@@ -231,6 +261,7 @@ public abstract class FishBaseScript : MonoBehaviour
         switch (currentState)
         {
             case FishState.Patrolling:
+                if (alert != null) alert.SetActive(false);
                 if (hit.collider != null && (hit.collider.gameObject.GetComponent<BaitHolder>().currentBait == fishScriptableObj.baitsUsed || hit.collider.gameObject.GetComponent<BaitHolder>().currentBait == BaitType.OmniBait) && !onReelState)
                 {                
                     if (!calledEnterEvent)
@@ -240,9 +271,10 @@ public abstract class FishBaseScript : MonoBehaviour
                         calledExitEvent = false;
                         calledEnterEvent = true;
                     }
+
                     
                 }
-
+              
                 timer += Time.deltaTime;
 
                 if (timer >= changeDirectionCooldown)
@@ -268,7 +300,8 @@ public abstract class FishBaseScript : MonoBehaviour
         
                 break;
             case FishState.Chasing:
-                
+                if (alert != null) alert.SetActive(true);
+
                 if (hit.collider == null || onReelState)
                 {                  
                     if (!calledExitEvent)
@@ -297,6 +330,7 @@ public abstract class FishBaseScript : MonoBehaviour
                 }
                 break;
             case FishState.Caught:
+                if (alert != null) alert.SetActive(false);
                 if (!callCaughtEvent)
                 {
                     onCaught?.Invoke(fishScriptableObj);
@@ -319,8 +353,9 @@ public abstract class FishBaseScript : MonoBehaviour
     protected virtual void OnDestroy()
     {
         FishingRodBaseScript.onReelState -= CheckReelState;
-        FishingRodBaseScript.onFinishCaughtFish -= DestroyFish;
+        FishingRodBaseScript.onFinishCaughtFish -= SaveFish;
         FishingRodBaseScript.onFishEscape -= Escape;
+        WorldTime.onResetDay -= DeleteFish;
     }
 
 

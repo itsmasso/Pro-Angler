@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 0b751ae2798949c4d9c9d44f686b0fc4, type: 3}
   fishIconPopup: {fileID: 9064403380695398467, guid: 444eadae69bc45b47832b8eb3d73dba7, type: 3}
+  icon: {fileID: 21300000, guid: 364467f16a3995a40940de93fb3b6ce5, type: 3}
   fishName: RedSnapper
   speed: 4
-  strength: 10
+  strength: 20
   weight: 10
   sellValue: 30
   staminaRestoreAmount: 15

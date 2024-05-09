@@ -1,38 +1,56 @@
 using System;
+using System.Collections;
+using System.ComponentModel.Design;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class WorldTime : MonoBehaviour
 {
     public static event Action onResetDay;
-
+    public static event Action<bool> onSleepDeprived;
+    private bool checkIfSleepDeprived;
     [Header("Time Properties")]
     private bool isCountDown;
     public float currentTime { private set; get; }
-    private int day;
+    public int day { private set; get; }
     public float totalSecondsInADay;
     private bool isTimerRunning = true;
     private bool canReset;
     //private int lastDisplayedSecond = -1;
     private int intHours;
     //private int minutesIncrement = 0;
+    private bool canTransition;
 
     [Header("Text")]
     [SerializeField] private TMP_Text dayText;
     [SerializeField] private TMP_Text timeText;
     [SerializeField] private Animator iconAnim;
 
-
+    private bool sleeping;
+    private int daysAwake;
     void Start()
     {
+        Time.timeScale = 1;
+        sleeping = false;
+        canTransition = true;
         day = 1;
         intHours = 6;
+        SleepTrigger.onSleep += SkipDay;
         QoutaSystem.onContinueToNextDay += UnpauseTime;
         shoptrigger.onShopEnter += PauseTime;
         ShopDialogue.onExitShop += UnpauseTime;
         canReset = true;
     }
+
+    private void SkipDay()
+    {
+        daysAwake = 0;
+        sleeping = true;
+        currentTime = totalSecondsInADay - 1f;
+    }
+
 
 
     private void PauseTime()
@@ -55,11 +73,26 @@ public class WorldTime : MonoBehaviour
 
         //timeText.text = string.Format("{0:00}:{1:D2} {2}", hours, minutes, hours >= 12f ? "PM" : "AM");
         timeText.text = string.Format("{0:00}:00 {1}", displayHours, (hours < 12 || hours >= 24) ? "AM" : "PM");
+        
 
     }
 
     void Update()
     {
+        if (checkIfSleepDeprived)
+        {
+            if (daysAwake > 1)
+            {
+                onSleepDeprived?.Invoke(true);
+            
+            }
+            else
+            {
+                onSleepDeprived?.Invoke(false);
+            }
+            checkIfSleepDeprived = false;
+        }
+
         if (isTimerRunning)
         {
             if (isCountDown)
@@ -70,13 +103,29 @@ public class WorldTime : MonoBehaviour
             {
                 currentTime += Time.deltaTime;
             }
+            if(canTransition && currentTime >= totalSecondsInADay - 1f)
+            {
+                if (!sleeping)
+                {
+                    TransitionManager.Instance.ApplyCircleTransition();
+
+                }
+                else
+                {
+                    TransitionManager.Instance.ApplySleepTransition();
+                }
+
+                canTransition = false;
+            }
             if (currentTime >= totalSecondsInADay && canReset)
             {
                 currentTime = totalSecondsInADay;
                 isTimerRunning = false;
                 day++;
-
-                onResetDay?.Invoke();
+                daysAwake++;
+                checkIfSleepDeprived = true;
+                canTransition = true;
+                onResetDay?.Invoke();               
                 currentTime = 0;
 
                 //maybe later if on another island, reset by scene reset instead of event
@@ -84,6 +133,7 @@ public class WorldTime : MonoBehaviour
             ScaleTime();
         }
 
+        
         
 
         if (intHours >= 6 && intHours <= 12)
@@ -102,6 +152,7 @@ public class WorldTime : MonoBehaviour
 
     private void OnDestroy()
     {
+        SleepTrigger.onSleep -= SkipDay;
         shoptrigger.onShopEnter -= PauseTime;
         ShopDialogue.onExitShop -= UnpauseTime;
         QoutaSystem.onContinueToNextDay -= UnpauseTime;

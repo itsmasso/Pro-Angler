@@ -19,21 +19,21 @@ public class FishSpawner : MonoBehaviour
     //[SerializeField] private float wayPointSpacing = 15f;
     [SerializeField] private BoxCollider2D boxCollider;
 
-    private float timer;
-    private float checkInterval = 0.1f;
     void Start()
     {
 
         InitialSpawn();
-        WorldTime.onResetDay += ResetSpawns;
+        QoutaSystem.onContinueToNextDay += ResetSpawns;
     }
 
     private void ResetSpawns()
     {
+        /*
         foreach(GameObject obj in currentSpawnedFishes)
         {
             Destroy(obj);
         }
+        */
         InitialSpawn();
 
     }
@@ -111,27 +111,13 @@ public class FishSpawner : MonoBehaviour
 
     private void Update()
     {
-        //disclaimer: if this makes things slow, change it up
-        timer += Time.deltaTime;
-        if(timer >= checkInterval)
-        {
-            //deleting null objects in list after destroying them          
-            if(currentSpawnedFishes.Exists(item => item == null))
-            {
-                currentSpawnedFishes.RemoveAll(item => item == null);
-            }
-            if (currentSpawnedFishes.Count < maxFishCount)
-            {
-                AddFish();
-            }
-            timer = 0;
-        }
+
         
     }
 
     private void OnDestroy()
     {
-        WorldTime.onResetDay -= ResetSpawns;
+        QoutaSystem.onContinueToNextDay -= ResetSpawns;
     }
 
 }

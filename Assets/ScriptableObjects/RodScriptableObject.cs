@@ -12,7 +12,7 @@ public class RodScriptableObject : ScriptableObject
     public float moveSpeed;
     public float rodStrength;
     public float fishingLineLength;
-    public float hookHealth;
+    //public float hookHealth;
 
     public bool canSlow; //has slow ability
     public float percentSlowAmount;

@@ -1,0 +1,696 @@
+fileFormatVersion: 2
+guid: 264d5e9645bbad54c87d865fa24e39ca
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
+    isReadable: 0
+    streamingMipmaps: 0
+    streamingMipmapsPriority: 0
+    vTOnly: 0
+    ignoreMipmapLimit: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    flipbookRows: 0
+    flipbookColumns: 0
+    ignorePngGamma: 0
+    cookieMode: 0
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  previousAsepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  asepriteImporterSettings:
+    fileImportMode: 1
+    importHiddenLayers: 0
+    layerImportMode: 1
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 7
+    customPivotPosition: {x: 0.5, y: 0.5}
+    spritePadding: 0
+    generateModelPrefab: 1
+    generateAnimationClips: 1
+    addSortingGroup: 1
+    addShadowCasters: 0
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  textureAssetName: 
+  singleSpriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 0, y: 0}
+  animatedSpriteImportData:
+  - name: trap_bomb_Frame_0
+    originalName: 
+    pivot: {x: 0.5263158, y: -0.9130435}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 147
+      y: 229
+      width: 19
+      height: 23
+    spriteID: cdf8747ceaa014942ae299af48cc4f97
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 147, y: 229}
+  - name: trap_bomb_Frame_1
+    originalName: 
+    pivot: {x: 0.5294118, y: -0.9583334}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 178
+      y: 35
+      width: 17
+      height: 24
+    spriteID: a67a7f75a1a67fc409bd6e44ca999d0d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 178, y: 35}
+  - name: trap_bomb_Frame_2
+    originalName: 
+    pivot: {x: 0.5, y: -0.84}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 147
+      y: 196
+      width: 18
+      height: 25
+    spriteID: e839f56423cf81141aa10e243c589286
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 147, y: 196}
+  - name: trap_bomb_Frame_3
+    originalName: 
+    pivot: {x: 0.5, y: -0.80769235}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 147
+      y: 35
+      width: 20
+      height: 26
+    spriteID: 0eede7e5c4b733b42a2766ab097a383c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 147, y: 35}
+  - name: trap_bomb_Frame_4
+    originalName: 
+    pivot: {x: 0.45454547, y: -0.7777778}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 38
+      y: 210
+      width: 22
+      height: 27
+    spriteID: ba96b259a708f864983d89e10cf2a268
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 38, y: 210}
+  - name: trap_bomb_Frame_5
+    originalName: 
+    pivot: {x: 0.5263158, y: -1.0500001}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 178
+      y: 67
+      width: 19
+      height: 20
+    spriteID: 342db07e51581f24597651ee1af9e17c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 178, y: 67}
+  - name: trap_bomb_Frame_6
+    originalName: 
+    pivot: {x: 0.5263158, y: -0.875}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 147
+      y: 164
+      width: 19
+      height: 24
+    spriteID: 9707953b47769674086117d236064b76
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 147, y: 164}
+  - name: trap_bomb_Frame_7
+    originalName: 
+    pivot: {x: 0.5263158, y: -0.84}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 147
+      y: 101
+      width: 19
+      height: 25
+    spriteID: 40dfc9d15415527479c50968e3b63f7c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 147, y: 101}
+  - name: trap_bomb_Frame_8
+    originalName: 
+    pivot: {x: 0.5263158, y: -0.9130435}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 178
+      y: 4
+      width: 19
+      height: 23
+    spriteID: b4cf670f7c1a6c942a21f0dc1399ebe5
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 178, y: 4}
+  - name: trap_bomb_Frame_9
+    originalName: 
+    pivot: {x: 0.52380955, y: -0.875}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 147
+      y: 69
+      width: 21
+      height: 24
+    spriteID: 1f887b1b34c8ebe43b7d9a48be96d5c4
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 147, y: 69}
+  - name: trap_bomb_Frame_10
+    originalName: 
+    pivot: {x: 0.52380955, y: -0.9545455}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 147
+      y: 134
+      width: 21
+      height: 22
+    spriteID: 22e50387bc720e145be6211b908d5976
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 147, y: 134}
+  - name: trap_bomb_Frame_11
+    originalName: 
+    pivot: {x: 0.5217391, y: -0.9130435}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 147
+      y: 4
+      width: 23
+      height: 23
+    spriteID: 98d1150f25ebc0c4f94ecfdc22f07d76
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 147, y: 4}
+  - name: trap_bomb_Frame_12
+    originalName: 
+    pivot: {x: 0.5, y: -0.7307693}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 210
+      width: 26
+      height: 26
+    spriteID: b55782a1df32a2b4eacc9ce38e161e04
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 210}
+  - name: trap_bomb_Frame_13
+    originalName: 
+    pivot: {x: 0.5, y: -0.22222222}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 76
+      y: 195
+      width: 46
+      height: 45
+    spriteID: 738bef73c292d2d4dbfa9a14701fabfc
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 76, y: 195}
+  - name: trap_bomb_Frame_14
+    originalName: 
+    pivot: {x: 0.50980395, y: -0.11320755}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 76
+      y: 134
+      width: 51
+      height: 53
+    spriteID: 623bd6db243e99f428f37b020a3cd534
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 76, y: 134}
+  - name: trap_bomb_Frame_15
+    originalName: 
+    pivot: {x: 0.5, y: -0.07017544}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 76
+      y: 69
+      width: 56
+      height: 57
+    spriteID: 02bb71fa8f1dbf44788043e20cc7beb1
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 76, y: 69}
+  - name: trap_bomb_Frame_16
+    originalName: 
+    pivot: {x: 0.5, y: -0.033333335}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 142
+      width: 60
+      height: 60
+    spriteID: 55a22193c9769524a8bdbac12aceb335
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 142}
+  - name: trap_bomb_Frame_17
+    originalName: 
+    pivot: {x: 0.5, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 64
+      height: 64
+    spriteID: 4fb384e9abba3204e86f3c231c59ba9a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 4}
+  - name: trap_bomb_Frame_18
+    originalName: 
+    pivot: {x: 0.49206352, y: -0.0877193}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 76
+      y: 4
+      width: 63
+      height: 57
+    spriteID: 411e165880d40a147886b9156d4d4513
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 76, y: 4}
+  - name: trap_bomb_Frame_19
+    originalName: 
+    pivot: {x: 0.49206352, y: -0.06896552}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 76
+      width: 63
+      height: 58
+    spriteID: 4526066c9dff1e64d9a3b0bcfac2e632
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 76}
+  spriteSheetImportData: []
+  asepriteLayers:
+  - layerIndex: 0
+    guid: 727896386
+    name: trap_bomb
+    layerFlags: 0
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: trap_bomb_Frame_0
+      frameIndex: 0
+      cellRect:
+        x: 22
+        y: 21
+        width: 19
+        height: 23
+      spriteId: cdf8747ceaa014942ae299af48cc4f97
+    - name: trap_bomb_Frame_1
+      frameIndex: 1
+      cellRect:
+        x: 23
+        y: 23
+        width: 17
+        height: 24
+      spriteId: a67a7f75a1a67fc409bd6e44ca999d0d
+    - name: trap_bomb_Frame_2
+      frameIndex: 2
+      cellRect:
+        x: 23
+        y: 21
+        width: 18
+        height: 25
+      spriteId: e839f56423cf81141aa10e243c589286
+    - name: trap_bomb_Frame_3
+      frameIndex: 3
+      cellRect:
+        x: 22
+        y: 21
+        width: 20
+        height: 26
+      spriteId: 0eede7e5c4b733b42a2766ab097a383c
+    - name: trap_bomb_Frame_4
+      frameIndex: 4
+      cellRect:
+        x: 22
+        y: 21
+        width: 22
+        height: 27
+      spriteId: ba96b259a708f864983d89e10cf2a268
+    - name: trap_bomb_Frame_5
+      frameIndex: 5
+      cellRect:
+        x: 22
+        y: 21
+        width: 19
+        height: 20
+      spriteId: 342db07e51581f24597651ee1af9e17c
+    - name: trap_bomb_Frame_6
+      frameIndex: 6
+      cellRect:
+        x: 22
+        y: 21
+        width: 19
+        height: 24
+      spriteId: 9707953b47769674086117d236064b76
+    - name: trap_bomb_Frame_7
+      frameIndex: 7
+      cellRect:
+        x: 22
+        y: 21
+        width: 19
+        height: 25
+      spriteId: 40dfc9d15415527479c50968e3b63f7c
+    - name: trap_bomb_Frame_8
+      frameIndex: 8
+      cellRect:
+        x: 22
+        y: 21
+        width: 19
+        height: 23
+      spriteId: b4cf670f7c1a6c942a21f0dc1399ebe5
+    - name: trap_bomb_Frame_9
+      frameIndex: 9
+      cellRect:
+        x: 21
+        y: 21
+        width: 21
+        height: 24
+      spriteId: 1f887b1b34c8ebe43b7d9a48be96d5c4
+    - name: trap_bomb_Frame_10
+      frameIndex: 10
+      cellRect:
+        x: 21
+        y: 21
+        width: 21
+        height: 22
+      spriteId: 22e50387bc720e145be6211b908d5976
+    - name: trap_bomb_Frame_11
+      frameIndex: 11
+      cellRect:
+        x: 20
+        y: 21
+        width: 23
+        height: 23
+      spriteId: 98d1150f25ebc0c4f94ecfdc22f07d76
+    - name: trap_bomb_Frame_12
+      frameIndex: 12
+      cellRect:
+        x: 19
+        y: 19
+        width: 26
+        height: 26
+      spriteId: b55782a1df32a2b4eacc9ce38e161e04
+    - name: trap_bomb_Frame_13
+      frameIndex: 13
+      cellRect:
+        x: 9
+        y: 10
+        width: 46
+        height: 45
+      spriteId: 738bef73c292d2d4dbfa9a14701fabfc
+    - name: trap_bomb_Frame_14
+      frameIndex: 14
+      cellRect:
+        x: 6
+        y: 6
+        width: 51
+        height: 53
+      spriteId: 623bd6db243e99f428f37b020a3cd534
+    - name: trap_bomb_Frame_15
+      frameIndex: 15
+      cellRect:
+        x: 4
+        y: 4
+        width: 56
+        height: 57
+      spriteId: 02bb71fa8f1dbf44788043e20cc7beb1
+    - name: trap_bomb_Frame_16
+      frameIndex: 16
+      cellRect:
+        x: 2
+        y: 2
+        width: 60
+        height: 60
+      spriteId: 55a22193c9769524a8bdbac12aceb335
+    - name: trap_bomb_Frame_17
+      frameIndex: 17
+      cellRect:
+        x: 0
+        y: 0
+        width: 64
+        height: 64
+      spriteId: 4fb384e9abba3204e86f3c231c59ba9a
+    - name: trap_bomb_Frame_18
+      frameIndex: 18
+      cellRect:
+        x: 1
+        y: 5
+        width: 63
+        height: 57
+      spriteId: 411e165880d40a147886b9156d4d4513
+    - name: trap_bomb_Frame_19
+      frameIndex: 19
+      cellRect:
+        x: 1
+        y: 4
+        width: 63
+        height: 58
+      spriteId: 4526066c9dff1e64d9a3b0bcfac2e632
+    linkedCells: []
+    parentIndex: -1
+  platformSettings: []
+  secondarySpriteTextures: []
+  spritePackingTag: 
+  canvasSize: {x: 64, y: 64}

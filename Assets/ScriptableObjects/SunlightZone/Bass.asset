@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 7b9a61227946e764abfb188f5df93f12, type: 3}
   fishIconPopup: {fileID: 0}
+  icon: {fileID: 21300000, guid: d4eb1ecb65118f940b99cb13016e6b5b, type: 3}
   fishName: Bass
   speed: 4.5
-  strength: 10
+  strength: 20
   weight: 10
   sellValue: 30
   staminaRestoreAmount: 15

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
   m_Name: UnlockVeteranRod
   m_EditorClassIdentifier: 
-  cost: 50
+  cost: 250
   upgradeName: Veteran Rod
   upgradeDescription: 
   upgradeIcon: {fileID: 595560155, guid: ee8d89c12be84d34a9daf94310544f7d, type: 3}

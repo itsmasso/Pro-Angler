@@ -14,11 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rodName: Old Rod
   rodSprite: {fileID: 339270044, guid: 6e656a317d9a09541a1213c0ccaa3428, type: 3}
-  reelSpeed: 7
+  reelSpeed: 4
   moveSpeed: 4
   rodStrength: 5
   fishingLineLength: 75
-  hookHealth: 100
   canSlow: 0
   percentSlowAmount: 0
   canStun: 0

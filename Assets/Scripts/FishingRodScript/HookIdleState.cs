@@ -7,6 +7,7 @@ public class HookIdleState : HookBaseState
 {
     public override void EnterState(FishingRodBaseScript rod)
     {
+      
         rod.hookAloneSprite.enabled = false;
         rod.fishingLineSprite.enabled = true;
         rod.CallStartedFishing(false);
@@ -20,31 +21,34 @@ public class HookIdleState : HookBaseState
 
     public override void UpdateState(FishingRodBaseScript rod)
     {
-        if(Mathf.Abs(rod.playerTransform.position.x - rod.canFishPosition.position.x) <= 0.3f)
+        if(rod.canFishPosition != null)
         {
-            rod.interactButtonUI.SetActive(true);
-            
-            if (rod.pressedInteract)
+            if (Mathf.Abs(rod.playerTransform.position.x - rod.canFishPosition.position.x) <= 0.3f)
             {
-                if (!rod.playerStam.outOfStamina && !rod.isbucketFull)
+                rod.interactButtonUI.SetActive(true);
+
+                if (rod.pressedInteract)
                 {
-                    rod.interactButtonUI.SetActive(false);
-                    rod.SwitchState(rod.hookThrowState);
+                    if (!rod.outOfStamina && !rod.isbucketFull)
+                    {
+                        rod.interactButtonUI.SetActive(false);
+                        rod.SwitchState(rod.hookThrowState);
+                    }
+                    else if (rod.outOfStamina || (rod.outOfStamina && rod.isbucketFull))
+                    {
+                        Debug.Log("Out of stamina!");
+                    }
+                    else
+                    {
+                        Debug.Log("Bucket is full! Please Sell your fish");
+                    }
+
                 }
-                else if(rod.playerStam.outOfStamina || (rod.playerStam.outOfStamina && rod.isbucketFull))
-                {
-                    Debug.Log("Out of stamina!");
-                }
-                else
-                {
-                    Debug.Log("Bucket is full! Please Sell your fish");
-                }
-                
             }
-        }
-        else
-        {
-            rod.interactButtonUI.SetActive(false);
+            else
+            {
+                rod.interactButtonUI.SetActive(false);
+            }
         }
     }
 }

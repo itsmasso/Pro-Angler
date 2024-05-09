@@ -32,6 +32,7 @@ public class HookThrowState : HookBaseState
 
         //setting booleans and setting rigidbody to dynamic
         hookThrown = false;
+        hookRb.velocity = Vector2.zero; //important fixes bug
         hookRb.isKinematic = false;
         canThrow = false;
 
@@ -39,7 +40,6 @@ public class HookThrowState : HookBaseState
         hookRb.gravityScale = 0;
 
         //resetting line renderers
-        velocity = Vector2.zero;
         rod.trajectoryLine.positionCount = 0;
         List<Transform> points = new List<Transform>();
         points.Add(rod.fishingRodPoint);
@@ -96,6 +96,7 @@ public class HookThrowState : HookBaseState
 
                 if (Input.GetMouseButtonUp(0))
                 {
+              
                     hookRb.gravityScale = 1;
                     hookRb.velocity = velocity;
                     rod.trajectoryLine.positionCount = 0;

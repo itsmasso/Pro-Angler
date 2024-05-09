@@ -13,6 +13,8 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public static event Action<bool> onReelState; //event to signal others that fishing rod is currently reeling in 
     public static event Action onFinishCaughtFish;//destroy caught fish objects
     public static event Action onFishEscape;
+    public static event Action<float> onStartDrainingStam;
+    public static event Action onStopDrainingStam;
 
     public static event Action<bool> onFishing; //call whenever you begin or finish fishing
     [Header("Animation")]
@@ -84,7 +86,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     [Header("Player")]
     public Transform playerTransform;
-    public PlayerStamina playerStam;
+    public bool outOfStamina;
     public bool isbucketFull;
 
 
@@ -103,8 +105,8 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         baitHolder.currentBait = BaitType.Worms;
 
         //FishBaseScript.onExitHook += SubtractFollowingFish;
-        WorldTime.onResetDay += DayResetted;
-
+        QoutaSystem.onContinueToNextDay += DayResetted;
+        PlayerStamina.onOutOfStamina += OutOfStam;
         RodSelectionScreen.onChangeRod += ChangeRod;
         FishBaseScript.onCaught += CaughtFish;
         BarFishingMechanics.onCompletedProgress += OnSuccess;
@@ -119,9 +121,32 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         //implement into save system
 
     }
+
+    public void StopDrainingStamEvent()
+    {
+        onStopDrainingStam?.Invoke();
+    }
+
+    public void DrainStaminaEvent(float amount)
+    {
+        onStartDrainingStam?.Invoke(amount);
+    }
+
+    private void OutOfStam(bool _outOfStam)
+    {
+        outOfStamina = _outOfStam;
+    }
+
     private void DayResetted()
     {
-        onFishEscape?.Invoke();
+        //onFishEscape?.Invoke();
+        fishingMechanicsScreen.SetActive(false);
+        trajectoryLine.positionCount = 0;
+        List<Transform> points = new List<Transform>();
+        points.Add(fishingRodPoint);
+        points.Add(fishingLineAttatchmentPoint);
+        SetUpFishingLine(points);
+        SwitchState(hookIdleState);
         hook.transform.position = new Vector2(fishingRodPoint.position.x, fishingRodPoint.position.y - fishingRodPointOffset);
     }
     private void ChangeRod(RodScriptableObject rod)
@@ -179,8 +204,11 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     public void OnMousePosition(InputAction.CallbackContext ctx)
     {
-        mousePosition = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
-       
+        if(Camera.main != null)
+        {
+            mousePosition = Camera.main.ScreenToWorldPoint(ctx.ReadValue<Vector2>());
+        }
+
 
     }
     public void OnHookMove(InputAction.CallbackContext ctx)
@@ -284,7 +312,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         BarFishingMechanics.onFailed -= OnFailure;
         EatOrKeepDialogue.onEatOrKeepOption -= SetOnEatOrKeep;
         BucketScript.onBucketFull -= BucketFull;
-        WorldTime.onResetDay -= DayResetted;
+        QoutaSystem.onContinueToNextDay -= DayResetted;
    
     }
 }

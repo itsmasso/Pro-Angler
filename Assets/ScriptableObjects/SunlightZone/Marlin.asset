@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 6e31c98633fb36a4da60badfa00aa828, type: 3}
   fishIconPopup: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7f17bddf620df4a4a991ad553b3755de, type: 3}
   fishName: Marlin
   speed: 6.5
-  strength: 33
+  strength: 38
   weight: 25
   sellValue: 80
   staminaRestoreAmount: 30

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c45c46c10a36a194095b7192a637c759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  alertPrefab: {fileID: 8197813965805753632, guid: 181b73bda53c5ad4897bb88d308f41ea, type: 3}
   fishRadius: 0.5
   hookDetectionRadius: 3.5
   hookLayer:

@@ -11,12 +11,12 @@ public class HookReelState : HookBaseState
     private GameObject hookObj;
     private float timer;
     private float spawnMechanicInterval = 2f;
-    private bool pointAtMiddle;
+   
 
     public override void EnterState(FishingRodBaseScript rod)
     {
         //Debug.Log("reel state");
-        pointAtMiddle = false;
+        rod.StopDrainingStamEvent();
         rod.CallReelStateEvent(true);
         rod.fishingMechanicsScreen.SetActive(false);
         rod.hookRb.velocity = Vector2.zero;

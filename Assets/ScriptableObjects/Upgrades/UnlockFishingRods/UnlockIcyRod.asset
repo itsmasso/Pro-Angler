@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
   m_Name: UnlockIcyRod
   m_EditorClassIdentifier: 
-  cost: 50
+  cost: 650
   upgradeName: Icy Rod
   upgradeDescription: 
   upgradeIcon: {fileID: 805589744, guid: ee8d89c12be84d34a9daf94310544f7d, type: 3}

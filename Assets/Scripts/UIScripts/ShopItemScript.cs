@@ -24,7 +24,7 @@ public class ShopItemScript : MonoBehaviour
 
     public void ChangeCost(float cost)
     {
-        costText.text = string.Format(cost.ToString()); 
+        costText.text = string.Format("${0}", cost); 
     }
 
     public void UnlockOverlay()

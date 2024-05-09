@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 923e474edde31734395b8cce9a5e1087, type: 3}
   fishIconPopup: {fileID: 0}
+  icon: {fileID: 21300000, guid: d201e4f5f66d0d84c83c626c487a96dd, type: 3}
   fishName: Anchovy
   speed: 4
-  strength: 10
+  strength: 15
   weight: 4
   sellValue: 15
   staminaRestoreAmount: 5

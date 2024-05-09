@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SetupManager : MonoBehaviour
 {
-    private GameObject player;
+    [SerializeField] private GameObject player;
     [SerializeField] private Transform resetPosition;
     [SerializeField] private GameObject interactButtonUI;
     [SerializeField] private Transform canFishPosition;
@@ -12,7 +12,6 @@ public class SetupManager : MonoBehaviour
     void Start()
     {
         WorldTime.onResetDay += ResetPlayerPos;
-        player = DataPersistenceManager.Instance.fisherMan;
         camFollow.target = player.transform;
         player.transform.position = resetPosition.position;
         player.GetComponentInChildren<FishingRodBaseScript>().interactButtonUI = interactButtonUI;

@@ -57,7 +57,7 @@ public class HookMechanicState : HookBaseState
 
     public override void UpdateState(FishingRodBaseScript rod)
     {
-        rod.playerStam.DrainStamina((fishScriptable.strength * rod.staminaDrainScaler) * Time.deltaTime);
+        rod.DrainStaminaEvent(fishScriptable.strength * rod.staminaDrainScaler);
 
         Vector3 direction = rod.fishingLineAttatchmentPoint.position - rod.fishingRodPoint.position;
         Vector2 middlePointPosition = rod.fishingRodPoint.position + direction / 2f;

@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 2a67609fd48a0a34e8e686ab1c921b2f, type: 3}
   fishIconPopup: {fileID: 0}
+  icon: {fileID: 21300000, guid: 384b2a6e4a3fe8449a2ed153ab079ac3, type: 3}
   fishName: Sardine
   speed: 4
-  strength: 10
+  strength: 15
   weight: 4
   sellValue: 15
   staminaRestoreAmount: 15

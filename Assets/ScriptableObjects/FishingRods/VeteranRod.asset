@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6552bfc06fa1714997d734701760f50, type: 3}
   m_Name: VeteranRod
   m_EditorClassIdentifier: 
-  rodName: 
+  rodName: Veteran Rod
   rodSprite: {fileID: -1445264429, guid: 6e656a317d9a09541a1213c0ccaa3428, type: 3}
-  reelSpeed: 0
-  moveSpeed: 0
-  rodStrength: 0
-  fishingLineLength: 0
-  hookHealth: 0
+  reelSpeed: 7
+  moveSpeed: 7
+  rodStrength: 45
+  fishingLineLength: 150
   canSlow: 0
   percentSlowAmount: 0
-  canStun: 0
-  stunDuration: 0
+  canStun: 1
+  stunDuration: 2

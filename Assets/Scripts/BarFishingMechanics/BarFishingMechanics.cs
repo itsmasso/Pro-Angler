@@ -21,7 +21,8 @@ public class BarFishingMechanics : MonoBehaviour
     [SerializeField] private GameObject fishBar;
     [SerializeField] private float fishSpeed;
     [SerializeField] private float fishSpeedScaler;
-    [SerializeField] private GameObject fishIndicator;  
+    [SerializeField] private GameObject fishIndicator;
+
     [SerializeField] private float timeMultiplier; //controls how often fish goes to a new destination. low means more difficult and high means easier
     [SerializeField] private float timeMultiplierScaler;
     private float fishSize;
@@ -55,15 +56,10 @@ public class BarFishingMechanics : MonoBehaviour
     private float failTimer;
 
     [Header("Buff Properties")]
-    //[SerializeField] private float chanceToActivateScaler = 0.5f;
-    //[SerializeField] private float checkBuffInterval;
-    //[SerializeField] private float currentChanceToActivate;
-    //[SerializeField] private float baseChanceToActivate;
     [SerializeField] private float progressStageToActivate;
     [SerializeField] private float buffActivateScaler = 1f;
     [SerializeField] private float chanceToDeactivate;
     [SerializeField] private float buffCooldown;
-    //[SerializeField] private float buffDuration; //make it a range
     private float buffedTimeMultiplier;
     private float buffedSpeed;
     //private float activateTimer;
@@ -151,7 +147,7 @@ public class BarFishingMechanics : MonoBehaviour
             timeMultiplier = (100 - strength) * timeMultiplierScaler;
             maxProgress = strength / 2;
             //baseChanceToActivate = fishSciptableObject.strength * chanceToActivateScaler;
-            progressStageToActivate = Mathf.Clamp((100 - strength) * buffActivateScaler, 20f, 75f);
+            progressStageToActivate = Mathf.Clamp((100 - strength) * buffActivateScaler, 15f, 75f);
             QTEduration = QTEScaler(strength);
             fishSizeMultplier = (100 - strength) * fishSizeScaler;
         }
@@ -172,6 +168,7 @@ public class BarFishingMechanics : MonoBehaviour
         //Setting sizes and positions
         fishSize = fishSizeMultplier;
         fishIndicator.transform.localScale = new Vector2(fishSize, fishIndicator.transform.localScale.y);
+  
         hookSize = hookIndicator.GetComponent<SpriteRenderer>().bounds.size.x;
         leftPivot = fishBar.transform.localPosition.x - fishBar.GetComponent<SpriteRenderer>().bounds.size.x / 2;
         rightPivot = fishBar.transform.localPosition.x + fishBar.GetComponent<SpriteRenderer>().bounds.size.x / 2;
@@ -441,6 +438,7 @@ public class BarFishingMechanics : MonoBehaviour
     
     void Update()
     {
+        
         if(fishScriptableObject.strength >= 50)
         {
             progressDecreaseSpeed = 3 * (fishScriptableObject.strength / 100);
@@ -457,25 +455,9 @@ public class BarFishingMechanics : MonoBehaviour
             {
                 buffIsActive = true;
             }
-
-
-            /* CODE FOR ACTIVATING BUFF BASED ON RANDOM CHANCE
-            currentChanceToActivate = baseChanceToActivate;
-            activateTimer += Time.deltaTime;
-            if(activateTimer >= checkBuffInterval)
-            {
-                float rand = UnityEngine.Random.value;
-                if(rand < currentChanceToActivate)
-                {
-                    buffIsActive = true;
-                }
-
-            }
-            */
         }
         else
         {
-            //activateTimer = 0;
             BuffEvent();
         }
 
@@ -486,11 +468,11 @@ public class BarFishingMechanics : MonoBehaviour
 
         if (buffIsActive)
         {
-            fishIndicator.GetComponent<SpriteRenderer>().color = Color.red;
+            fishIndicator.GetComponent<SpriteRenderer>().color = new Color(1f, 0.5f, 0.5f); // light red
         }
         else
         {
-            fishIndicator.GetComponent<SpriteRenderer>().color = Color.blue;
+            fishIndicator.GetComponent<SpriteRenderer>().color = new Color(0.5f, 0.5f, 1f); //light blue
         }
       
         ProgressBar();

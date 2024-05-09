@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
   m_Name: UnlockAdvancedLure
   m_EditorClassIdentifier: 
-  cost: 50
+  cost: 400
   upgradeName: Advanced Lure
   upgradeDescription: 
   upgradeIcon: {fileID: 1631828955, guid: 27dd9e67bf90dd74db11147784c3bb86, type: 3}

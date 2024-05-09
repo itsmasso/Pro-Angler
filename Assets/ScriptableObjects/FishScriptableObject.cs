@@ -7,6 +7,7 @@ public class FishScriptableObject : ScriptableObject
 {
     public GameObject fishPrefab;
     public GameObject fishIconPopup;
+    public Sprite icon;
     public string fishName;
     public float speed;
     public float strength;

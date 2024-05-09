@@ -71,7 +71,8 @@ public class HookDescendState : HookBaseState
         rod.fishingLineConnectorPoint.position = new Vector2(rod.hook.transform.position.x, rod.waterLinePointY);
 
         RaycastHit2D hit = Physics2D.CircleCast(hookTransform.position, rod.hookRadius, hookTransform.position.normalized, 0, rod.fishLayer);
-        if(hookTransform.position.y <= rod.fishingRodPoint.position.y - rod.rodScriptableObj.fishingLineLength || hit.collider != null)
+        if (hookTransform.position.y <= rod.fishingRodPoint.position.y - rod.rodScriptableObj.fishingLineLength
+            || (hit.collider != null && hit.collider.transform.GetComponent<FishBaseScript>().fishScriptableObj.baitsUsed == rod.baitHolder.currentBait))
         {
             reachedHookLimit = true;
         }

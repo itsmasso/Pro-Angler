@@ -12,14 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6552bfc06fa1714997d734701760f50, type: 3}
   m_Name: ApprenticeRod
   m_EditorClassIdentifier: 
-  rodName: 
+  rodName: Apprentice Rod
   rodSprite: {fileID: 81176493, guid: 6e656a317d9a09541a1213c0ccaa3428, type: 3}
-  reelSpeed: 7
+  reelSpeed: 6
   moveSpeed: 6
   rodStrength: 25
   fishingLineLength: 120
-  hookHealth: 0
   canSlow: 1
-  percentSlowAmount: 35
+  percentSlowAmount: 20
   canStun: 0
   stunDuration: 0

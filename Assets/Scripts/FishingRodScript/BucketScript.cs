@@ -42,7 +42,7 @@ public class BucketScript : MonoBehaviour
 
     private void IncreaseBucketSize(int sizeIncreaseAmount)
     {
-        maxBucketSize = sizeIncreaseAmount;
+        maxBucketSize += sizeIncreaseAmount;
        
 
     }

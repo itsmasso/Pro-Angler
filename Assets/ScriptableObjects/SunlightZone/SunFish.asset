@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 7a37f22927303d743bec1bc35791f79a, type: 3}
   fishIconPopup: {fileID: 0}
+  icon: {fileID: 21300000, guid: 50859bb904b882e42b5af003c8245978, type: 3}
   fishName: Sun Fish
   speed: 5
-  strength: 40
+  strength: 45
   weight: 45
   sellValue: 110
   staminaRestoreAmount: 50

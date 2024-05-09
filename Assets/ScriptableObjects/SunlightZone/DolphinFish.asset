@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 795547356258513691, guid: 29e6a3089ec0b4e44866098933483901, type: 3}
   fishIconPopup: {fileID: 0}
+  icon: {fileID: 21300000, guid: 042adc07847106543ad7581a54c42c48, type: 3}
   fishName: Dolphin Fish
   speed: 11
-  strength: 45
+  strength: 50
   weight: 28
   sellValue: 120
   staminaRestoreAmount: 50

@@ -119,6 +119,7 @@ public abstract class FishBaseScript : MonoBehaviour
         FishingRodBaseScript.onFinishCaughtFish += SaveFish;
         FishingRodBaseScript.onFishEscape += Escape;
         WorldTime.onResetDay += DeleteFish;
+        WorldTime.onTimeChange += OnTimeChange;
         callCaughtEvent = false;
         currentState = FishState.Patrolling;
 
@@ -136,6 +137,10 @@ public abstract class FishBaseScript : MonoBehaviour
     }
     */
 
+    private void OnTimeChange(DayPeriod dayPeriod)
+    {
+        DeleteFish();
+    }
 
     protected void CheckReelState(bool isReelState)
     {
@@ -144,7 +149,20 @@ public abstract class FishBaseScript : MonoBehaviour
 
     protected void DeleteFish()
     {
-        Debug.Log("delete fish");
+        if (isCaught)
+        {
+            Escape();
+            StartCoroutine(DelayedDeletion());
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private IEnumerator DelayedDeletion()
+    {
+        yield return new WaitForSeconds(4f);
         Destroy(gameObject);
     }
 
@@ -324,7 +342,7 @@ public abstract class FishBaseScript : MonoBehaviour
                     RotateSprite();
                 }
                 
-                if(hit.collider != null && Vector2.Distance(transform.position, hit.collider.gameObject.transform.position) <= fishRadius /*&& onReelState*/)
+                if(hit.collider != null && Vector2.Distance(transform.position, hit.collider.gameObject.transform.position) <= fishRadius && !onReelState)
                 {
                     currentState = FishState.Caught;
                 }
@@ -355,6 +373,7 @@ public abstract class FishBaseScript : MonoBehaviour
         FishingRodBaseScript.onReelState -= CheckReelState;
         FishingRodBaseScript.onFinishCaughtFish -= SaveFish;
         FishingRodBaseScript.onFishEscape -= Escape;
+        WorldTime.onTimeChange -= OnTimeChange;
         WorldTime.onResetDay -= DeleteFish;
     }
 

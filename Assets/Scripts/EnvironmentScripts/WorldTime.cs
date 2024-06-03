@@ -1,18 +1,25 @@
 using System;
-using System.Collections;
-using System.ComponentModel.Design;
+
 using TMPro;
-using Unity.VisualScripting;
+
 using UnityEngine;
 
+
+public enum DayPeriod
+{
+    DayTime,
+    NightTime
+}
 
 public class WorldTime : MonoBehaviour
 {
     public static event Action onResetDay;
     public static event Action<bool> onSleepDeprived;
+    public static event Action<DayPeriod> onTimeChange;
+    private bool dayTimeFlag;
+
     private bool checkIfSleepDeprived;
-    [Header("Time Properties")]
-    private bool isCountDown;
+
     public float currentTime { private set; get; }
     public int day { private set; get; }
     public float totalSecondsInADay;
@@ -32,6 +39,7 @@ public class WorldTime : MonoBehaviour
     private int daysAwake;
     void Start()
     {
+        dayTimeFlag = false;
         Time.timeScale = 1;
         sleeping = false;
         canTransition = true;
@@ -95,15 +103,9 @@ public class WorldTime : MonoBehaviour
 
         if (isTimerRunning)
         {
-            if (isCountDown)
-            {
-                currentTime -= Time.deltaTime;
-            }
-            else
-            {
-                currentTime += Time.deltaTime;
-            }
-            if(canTransition && currentTime >= totalSecondsInADay - 1f)
+            currentTime += Time.deltaTime;
+            
+            if (canTransition && currentTime >= totalSecondsInADay - 1f)
             {
                 if (!sleeping)
                 {
@@ -117,15 +119,24 @@ public class WorldTime : MonoBehaviour
 
                 canTransition = false;
             }
+
+            if (currentTime > totalSecondsInADay / 2 && !dayTimeFlag)
+            {
+                onTimeChange?.Invoke(DayPeriod.NightTime);
+                dayTimeFlag = true;
+            }
+
             if (currentTime >= totalSecondsInADay && canReset)
             {
+                onTimeChange?.Invoke(DayPeriod.DayTime);
                 currentTime = totalSecondsInADay;
                 isTimerRunning = false;
                 day++;
                 daysAwake++;
                 checkIfSleepDeprived = true;
                 canTransition = true;
-                onResetDay?.Invoke();               
+                onResetDay?.Invoke();
+                dayTimeFlag = false;
                 currentTime = 0;
 
                 //maybe later if on another island, reset by scene reset instead of event

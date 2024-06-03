@@ -103,7 +103,7 @@ public class CamFollow : MonoBehaviour
 
         Vector3 desiredPosition = new Vector2(clampedX, clampedY);
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
+        transform.position = new Vector3(smoothedPosition.x, smoothedPosition.y, -8f);
     }
 
     private void OnDestroy()

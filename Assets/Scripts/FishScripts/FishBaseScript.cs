@@ -64,6 +64,7 @@ public abstract class FishBaseScript : MonoBehaviour
     private int sellValue;
     private int stamRestored;
     private string fullName;
+    public bool isVisible = true;
 
     private float EvaluateRandomValue(float randomValue, float minValue, float maxValue)
     {
@@ -73,6 +74,7 @@ public abstract class FishBaseScript : MonoBehaviour
 
     protected virtual void Start()
     {
+
         alert = Instantiate(alertPrefab, transform.position, Quaternion.identity);
         alert.transform.SetParent(gameObject.transform);
         float minValue = fishScriptableObj.weight - fishScriptableObj.weight * 0.4f;
@@ -118,7 +120,7 @@ public abstract class FishBaseScript : MonoBehaviour
         FishingRodBaseScript.onReelState += CheckReelState;
         FishingRodBaseScript.onFinishCaughtFish += SaveFish;
         FishingRodBaseScript.onFishEscape += Escape;
-        WorldTime.onResetDay += DeleteFish;
+
         WorldTime.onTimeChange += OnTimeChange;
         callCaughtEvent = false;
         currentState = FishState.Patrolling;
@@ -244,6 +246,7 @@ public abstract class FishBaseScript : MonoBehaviour
     }
 
 
+
     protected virtual void Update()
     {
 
@@ -281,13 +284,16 @@ public abstract class FishBaseScript : MonoBehaviour
             case FishState.Patrolling:
                 if (alert != null) alert.SetActive(false);
                 if (hit.collider != null && (hit.collider.gameObject.GetComponent<BaitHolder>().currentBait == fishScriptableObj.baitsUsed || hit.collider.gameObject.GetComponent<BaitHolder>().currentBait == BaitType.OmniBait) && !onReelState)
-                {                
-                    if (!calledEnterEvent)
+                {
+                    if (isVisible || (!isVisible && hit.collider.gameObject.GetComponent<FishingRodBaseScript>().flashLightUnlocked == true))
                     {
-                        onFollowingHook?.Invoke();
-                        currentState = FishState.Chasing;
-                        calledExitEvent = false;
-                        calledEnterEvent = true;
+                        if (!calledEnterEvent)
+                        {
+                            onFollowingHook?.Invoke();
+                            currentState = FishState.Chasing;
+                            calledExitEvent = false;
+                            calledEnterEvent = true;
+                        }
                     }
 
                     
@@ -333,7 +339,6 @@ public abstract class FishBaseScript : MonoBehaviour
                 else
                 {
                     
-      
                     HandleEnemyOutOfBounds();
                     transform.position = Vector2.MoveTowards(transform.position, hit.collider.gameObject.transform.position, speed * Time.deltaTime);
                     targetDirection = hit.collider.gameObject.transform.position - transform.position;
@@ -374,7 +379,7 @@ public abstract class FishBaseScript : MonoBehaviour
         FishingRodBaseScript.onFinishCaughtFish -= SaveFish;
         FishingRodBaseScript.onFishEscape -= Escape;
         WorldTime.onTimeChange -= OnTimeChange;
-        WorldTime.onResetDay -= DeleteFish;
+
     }
 
 

@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0cd95a19eb7d54887205c475a2939f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalSecondsInADay: 300
+  totalSecondsInADay: 60
   dayText: {fileID: 1434145613}
   timeText: {fileID: 783664256}
   iconAnim: {fileID: 815266367}
@@ -401,8 +401,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -27.164196, y: -0.22520065, z: 0}
-    m_Extent: {x: 136.3516, y: 81.1824, z: 0}
+    m_Center: {x: -27.159996, y: -0.21699905, z: 0}
+    m_Extent: {x: 114.2725, y: 59.0937, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -410,7 +410,7 @@ MonoBehaviour:
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
-  m_ShapeLightFalloffSize: 44.24
+  m_ShapeLightFalloffSize: 22.16
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
   - {x: -119.27944, y: -37.159416, z: 0}

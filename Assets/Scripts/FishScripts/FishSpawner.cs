@@ -18,26 +18,16 @@ public class FishSpawner : MonoBehaviour
     public List<GameObject> currentSpawnedFishes;
     //[SerializeField] private float wayPointSpacing = 15f;
     [SerializeField] private BoxCollider2D boxCollider;
-
+    [SerializeField] private bool enableFishInvis;
     void Start()
     {
-
-        InitialSpawn();
-        QoutaSystem.onContinueToNextDay += ResetSpawns;
+        //QoutaSystem.onContinueToNextDay += ResetSpawns;
     }
 
-    private void ResetSpawns()
+    private void OnEnable()
     {
-        /*
-        foreach(GameObject obj in currentSpawnedFishes)
-        {
-            Destroy(obj);
-        }
-        */
         InitialSpawn();
-
     }
-
 
     private void InitialSpawn()
     {
@@ -58,6 +48,17 @@ public class FishSpawner : MonoBehaviour
         }
     }
 
+    private void ChangeFishVisibility(GameObject newFish)
+    {
+        if (enableFishInvis)
+        {
+            newFish.GetComponent<FishBaseScript>().isVisible = false;
+        }
+        else
+        {
+            newFish.GetComponent<FishBaseScript>().isVisible = true;
+        }
+    }
 
     private void SpawnFish(Vector2 spawnPosition)
     {
@@ -68,6 +69,7 @@ public class FishSpawner : MonoBehaviour
             GameObject newFish = Instantiate(commonFishList[Random.Range(0, commonFishList.Count)].fishPrefab, spawnPosition, Quaternion.identity);
             newFish.GetComponent<FishBaseScript>().minMapBounds = new Vector2(transform.position.x - (boxCollider.size.x / 2) + boxCollider.offset.x, transform.position.y - (boxCollider.size.y / 2) + boxCollider.offset.y);
             newFish.GetComponent<FishBaseScript>().maxMapBounds = new Vector2(transform.position.x + (boxCollider.size.x / 2) + boxCollider.offset.x, transform.position.y + (boxCollider.size.y / 2) + boxCollider.offset.y);
+            ChangeFishVisibility(newFish);
             currentSpawnedFishes.Add(newFish);
 
         }
@@ -77,6 +79,7 @@ public class FishSpawner : MonoBehaviour
             GameObject newFish = Instantiate(uncommonFishList[Random.Range(0, uncommonFishList.Count)].fishPrefab, spawnPosition, Quaternion.identity);
             newFish.GetComponent<FishBaseScript>().minMapBounds = new Vector2(transform.position.x - (boxCollider.size.x / 2) + boxCollider.offset.x, transform.position.y - (boxCollider.size.y / 2) + boxCollider.offset.y);
             newFish.GetComponent<FishBaseScript>().maxMapBounds = new Vector2(transform.position.x + (boxCollider.size.x / 2) + boxCollider.offset.x, transform.position.y + (boxCollider.size.y / 2) + boxCollider.offset.y);
+            ChangeFishVisibility(newFish);
             currentSpawnedFishes.Add(newFish);
 
         }
@@ -86,6 +89,7 @@ public class FishSpawner : MonoBehaviour
             GameObject newFish = Instantiate(rareFishList[Random.Range(0, rareFishList.Count)].fishPrefab, spawnPosition, Quaternion.identity);
             newFish.GetComponent<FishBaseScript>().minMapBounds = new Vector2(transform.position.x - (boxCollider.size.x / 2) + boxCollider.offset.x, transform.position.y - (boxCollider.size.y / 2) + boxCollider.offset.y);
             newFish.GetComponent<FishBaseScript>().maxMapBounds = new Vector2(transform.position.x + (boxCollider.size.x / 2) + boxCollider.offset.x, transform.position.y + (boxCollider.size.y / 2) + boxCollider.offset.y);
+            ChangeFishVisibility(newFish);
             currentSpawnedFishes.Add(newFish);
         }
 
@@ -117,7 +121,7 @@ public class FishSpawner : MonoBehaviour
 
     private void OnDestroy()
     {
-        QoutaSystem.onContinueToNextDay -= ResetSpawns;
+        //QoutaSystem.onContinueToNextDay -= ResetSpawns;
     }
 
 }

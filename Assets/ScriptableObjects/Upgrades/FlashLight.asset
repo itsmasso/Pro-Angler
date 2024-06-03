@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a9048051c7a34b85c91d39034cfcf, type: 3}
   m_Name: FlashLight
   m_EditorClassIdentifier: 
-  quantity: 0
-  cost: 0
-  upgradeName: 
-  upgradeIcon: {fileID: 0}
+  cost: 1
+  upgradeName: Flash Light
+  upgradeDescription: Able to see fishes in the dark
+  upgradeIcon: {fileID: 21300000, guid: f84ea2aada24df84a843f12014595e65, type: 3}
   itemRef: {fileID: 0}
+  applyUpgrade: {fileID: 5781975497274370885, guid: e886a22331c6cec418ab02708093abbe, type: 3}
+  isUnlocked: 1

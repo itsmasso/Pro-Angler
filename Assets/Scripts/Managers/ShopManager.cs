@@ -68,6 +68,7 @@ public class ShopManager : MonoBehaviour
         HandleShopContent(bucketUpgrades, shopContentBucket);
         HandleShopContent(staminaUpgrades, shopContentStamina);
         HandleShopContent(rodUpgrades, shopContentRod);
+        HandleShopContent(modUpgrades, shopContentMods);
 
     }
     public void BuyUpgrade(UpgradeScriptableObj upgrade)
@@ -97,6 +98,7 @@ public class ShopManager : MonoBehaviour
         rodTab.SetActive(true);
         staminaTab.SetActive(false);
         bucketTab.SetActive(false);
+        modsTab.SetActive(false);
     }
     public void OpenBaitTab()
     {
@@ -104,7 +106,7 @@ public class ShopManager : MonoBehaviour
         rodTab.SetActive(false);
         staminaTab.SetActive(false);
         bucketTab.SetActive(false);
-
+        modsTab.SetActive(false);
     }
 
     public void OpenBucketTab()
@@ -113,6 +115,7 @@ public class ShopManager : MonoBehaviour
         rodTab.SetActive(false);
         staminaTab.SetActive(false);
         bucketTab.SetActive(true);
+        modsTab.SetActive(false);
     }
 
     public void OpenStaminaTab()
@@ -121,6 +124,15 @@ public class ShopManager : MonoBehaviour
         rodTab.SetActive(false);
         staminaTab.SetActive(true);
         bucketTab.SetActive(false);
+        modsTab.SetActive(false);
+    }
+    public void OpenModTab()
+    {
+        baitTab.SetActive(false);
+        rodTab.SetActive(false);
+        staminaTab.SetActive(false);
+        bucketTab.SetActive(false);
+        modsTab.SetActive(true);
     }
     public void ToggleShop(object sender, bool canOpen)    
     {

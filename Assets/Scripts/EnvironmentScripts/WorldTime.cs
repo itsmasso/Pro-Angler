@@ -123,6 +123,7 @@ public class WorldTime : MonoBehaviour
             if (currentTime > totalSecondsInADay / 2 && !dayTimeFlag)
             {
                 onTimeChange?.Invoke(DayPeriod.NightTime);
+                TransitionManager.Instance.ApplyNightTimeTransition();
                 dayTimeFlag = true;
             }
 

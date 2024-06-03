@@ -1,10 +1,10 @@
 using System;
-
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.Rendering.DebugUI.Table;
+
 
 
 public abstract class FishingRodBaseScript : MonoBehaviour
@@ -89,6 +89,10 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public bool outOfStamina;
     public bool isbucketFull;
 
+    [Header("Flash Light")]
+    private DayPeriod dayPeriod;
+    public GameObject flashlightLight2D;
+    public bool flashLightUnlocked;
 
     [Header("UI")]
     public Transform canFishPosition;
@@ -114,6 +118,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         EatOrKeepDialogue.onEatOrKeepOption += SetOnEatOrKeep;
         BucketScript.onBucketFull += BucketFull;
         WorldTime.onTimeChange += OnTimeChange;
+        UnlockFlashLightUpgrade.onUnlockFlashLight += OnUnlockFlashLight;
         currentState = hookIdleState;
         currentState.EnterState(this);
         fishingMechanicsScreen.SetActive(false);
@@ -123,9 +128,24 @@ public abstract class FishingRodBaseScript : MonoBehaviour
 
     }
 
-    private void OnTimeChange(DayPeriod dayPeriod)
+    private void OnUnlockFlashLight()
     {
+        flashLightUnlocked = true;
+        //save system?
+    }
+
+    private void OnTimeChange(DayPeriod _dayPeriod)
+    {
+        dayPeriod = _dayPeriod;
         SwitchState(hookReelState);
+        StartCoroutine(RetractHookDelayed());
+        
+        
+    }
+    private IEnumerator RetractHookDelayed()
+    {
+        yield return new WaitForSeconds(0.5f);
+        hook.transform.position = new Vector3(fishingRodPoint.position.x, fishingRodPoint.position.y - fishingRodPointOffset, hook.transform.position.z);
     }
 
     public void StopDrainingStamEvent()
@@ -297,7 +317,16 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     }
     void Update()
     {
-        
+        if (flashLightUnlocked && dayPeriod == DayPeriod.NightTime)
+        {
+            flashlightLight2D.SetActive(true);
+          
+        }
+        else
+        {
+            flashlightLight2D.SetActive(false);
+           
+        }
         currentState.UpdateState(this);
         for(int i = 0; i < points.Count; i++)
         {
@@ -320,6 +349,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         BucketScript.onBucketFull -= BucketFull;
         QoutaSystem.onContinueToNextDay -= DayResetted;
         WorldTime.onTimeChange -= OnTimeChange;
+        UnlockFlashLightUpgrade.onUnlockFlashLight -= OnUnlockFlashLight;
 
     }
 }

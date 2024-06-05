@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -75,6 +75,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     [Header("Map/Environment Properties")]
     public float waterLinePointY;
     public float minXBounds, maxXBounds;
+    public Transform twilightZonePosition;
 
     [Header("State Info")]
     public HookBaseState currentState;
@@ -317,7 +318,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     }
     void Update()
     {
-        if (flashLightUnlocked && dayPeriod == DayPeriod.NightTime)
+        if (flashLightUnlocked && dayPeriod == DayPeriod.NightTime || (hook.transform.position.y <= twilightZonePosition.position.y))
         {
             flashlightLight2D.SetActive(true);
           

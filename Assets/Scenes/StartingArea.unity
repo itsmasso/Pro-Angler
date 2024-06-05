@@ -14928,7 +14928,7 @@ Transform:
   m_GameObject: {fileID: 2126701047}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -32.67, z: 0}
+  m_LocalPosition: {x: 0, y: -34.39, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15229,6 +15229,10 @@ PrefabInstance:
       propertyPath: flashlightSpriteMask
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2151591565708614794, guid: c4bedfd4c6984c14f859bebdaa69afec, type: 3}
+      propertyPath: twilightZonePosition
+      value: 
+      objectReference: {fileID: 2126701048}
     - target: {fileID: 2936062353088820494, guid: c4bedfd4c6984c14f859bebdaa69afec, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

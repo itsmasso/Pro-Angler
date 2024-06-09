@@ -17,8 +17,8 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: cd77c3f623358a14285aeb538f4ad451, type: 3}
   fishName: Viper Fish
   speed: 5
-  strength: 49
+  strength: 52
   weight: 35
-  sellValue: 95
+  sellValue: 100
   staminaRestoreAmount: 45
-  baitsUsed: 1
+  baitsUsed: 3

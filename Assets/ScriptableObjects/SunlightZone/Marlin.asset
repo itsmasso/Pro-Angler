@@ -21,4 +21,4 @@ MonoBehaviour:
   weight: 25
   sellValue: 80
   staminaRestoreAmount: 30
-  baitsUsed: 1
+  baitsUsed: 2

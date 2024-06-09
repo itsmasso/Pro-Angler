@@ -31,17 +31,6 @@ public class TransitionManager : Singleton<TransitionManager>
  
     }
 
-    public void ApplyDayTimeTransition()
-    {
-        transitionScreen.SetActive(true);
-        anim.Play("DayTimeAnimation", -1, 0);
-    }
-
-    public void ApplyNightTimeTransition()
-    {
-        transitionScreen.SetActive(true);
-        anim.Play("NightTimeAnimation", -1, 0);
-    }
 
     private void Update()
     {

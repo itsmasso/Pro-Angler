@@ -65,6 +65,7 @@ public abstract class FishBaseScript : MonoBehaviour
     private int stamRestored;
     private string fullName;
     public bool isVisible = true;
+    [SerializeField] private float fadeDuration = 2.5f;
 
     private float EvaluateRandomValue(float randomValue, float minValue, float maxValue)
     {
@@ -141,7 +142,10 @@ public abstract class FishBaseScript : MonoBehaviour
 
     private void OnTimeChange(DayPeriod dayPeriod)
     {
-        DeleteFish();
+        if (!isCaught)
+        {
+            DeleteFish();
+        }
     }
 
     protected void CheckReelState(bool isReelState)
@@ -151,20 +155,24 @@ public abstract class FishBaseScript : MonoBehaviour
 
     protected void DeleteFish()
     {
-        if (isCaught)
-        {
-            Escape();
-            StartCoroutine(DelayedDeletion());
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        StartCoroutine(FadeFishAndDestroy());
     }
 
-    private IEnumerator DelayedDeletion()
+    private IEnumerator FadeFishAndDestroy()
     {
-        yield return new WaitForSeconds(4f);
+        Color startColor = sprite.color;
+        Color targetColor = startColor;
+        targetColor.a = 0f;
+        float timer = 0f;
+        while(timer < fadeDuration)
+        {
+            timer += Time.deltaTime;
+            Color currentColor = Color.Lerp(startColor, targetColor, timer / fadeDuration);
+            sprite.color = currentColor;
+            yield return null;
+        }
+
+        sprite.color = targetColor;
         Destroy(gameObject);
     }
 
@@ -361,7 +369,10 @@ public abstract class FishBaseScript : MonoBehaviour
                 }
                 isCaught = true;
                 
-                transform.position = hit.collider.gameObject.transform.position;
+                if(hit.collider != null)
+                {
+                    transform.position = hit.collider.gameObject.transform.position;
+                }
                 break;
             default:
                 break;

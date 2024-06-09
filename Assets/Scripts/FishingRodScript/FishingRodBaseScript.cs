@@ -118,7 +118,6 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         BarFishingMechanics.onFailed += OnFailure;
         EatOrKeepDialogue.onEatOrKeepOption += SetOnEatOrKeep;
         BucketScript.onBucketFull += BucketFull;
-        WorldTime.onTimeChange += OnTimeChange;
         UnlockFlashLightUpgrade.onUnlockFlashLight += OnUnlockFlashLight;
         currentState = hookIdleState;
         currentState.EnterState(this);
@@ -135,19 +134,6 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         //save system?
     }
 
-    private void OnTimeChange(DayPeriod _dayPeriod)
-    {
-        dayPeriod = _dayPeriod;
-        SwitchState(hookReelState);
-        StartCoroutine(RetractHookDelayed());
-        
-        
-    }
-    private IEnumerator RetractHookDelayed()
-    {
-        yield return new WaitForSeconds(0.5f);
-        hook.transform.position = new Vector3(fishingRodPoint.position.x, fishingRodPoint.position.y - fishingRodPointOffset, hook.transform.position.z);
-    }
 
     public void StopDrainingStamEvent()
     {
@@ -349,7 +335,6 @@ public abstract class FishingRodBaseScript : MonoBehaviour
         EatOrKeepDialogue.onEatOrKeepOption -= SetOnEatOrKeep;
         BucketScript.onBucketFull -= BucketFull;
         QoutaSystem.onContinueToNextDay -= DayResetted;
-        WorldTime.onTimeChange -= OnTimeChange;
         UnlockFlashLightUpgrade.onUnlockFlashLight -= OnUnlockFlashLight;
 
     }

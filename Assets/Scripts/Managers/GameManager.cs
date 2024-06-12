@@ -75,8 +75,8 @@ public class GameManager : PersistentSingleton<GameManager>
 
     private void StartingArea()
     {
-        //AudioManager.Instance.StopMusic("MenuMusic");
-        AudioManager.Instance.PlayMusic("Level1Music", true);
+        AudioManager.Instance.StopMusic("MenuMusic");
+        AudioManager.Instance.PlayAtmosphere("BeachAtmosphere", true);
         LoadScene("StartingArea");
         SceneManager.LoadSceneAsync("PersistScene", LoadSceneMode.Additive);
 

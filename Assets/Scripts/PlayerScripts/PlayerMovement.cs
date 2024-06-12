@@ -52,7 +52,6 @@ public abstract class PlayerMovement : MonoBehaviour
     protected virtual void Update()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
-    
 
     }
 

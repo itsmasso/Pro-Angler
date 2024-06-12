@@ -15,10 +15,15 @@ public class PlayerFishingMovement : PlayerMovement
     [SerializeField] protected Animator hookAnim;
 
     protected bool canMove;
+    protected bool isWalking;
+
+    [SerializeField] protected Transform groundTypeCheck;
+    [SerializeField] protected string[] groundTypeLayerArr;
     protected override void Start()
     {
         base.Start();
         canMove = true;
+        isWalking = false;
         WorldTime.onResetDay += DisableMovement;
         QoutaSystem.onContinueToNextDay += EnableMovement;
         ScreenManager.onScreenOpened += CanMove;
@@ -82,11 +87,53 @@ public class PlayerFishingMovement : PlayerMovement
         }
 
     }
+
+    protected void PlayWalkingSFX(string name)
+    {
+
+        if (velocity != Vector2.zero && !isWalking)
+        {
+            AudioManager.Instance.PlaySFX(name, true);
+            isWalking = true;
+
+        }
+        else if (isWalking && velocity == Vector2.zero)
+        {
+            AudioManager.Instance.StopSFX(name);
+            isWalking = false;
+        }
+    }
+
+    protected void DetermineGroundType()
+    {
+        int excludedLayer = LayerMask.NameToLayer("Player");
+        int layerMask = ~(1 << excludedLayer);
+        Collider2D collider = Physics2D.OverlapCircle(groundTypeCheck.position, 0.1f, layerMask);
+        string layerName = LayerMask.LayerToName(collider.gameObject.layer);
+    
+        switch (layerName)
+        {
+            case "Sand":
+                PlayWalkingSFX("WalkingOnSandSFX");
+                break;
+            case "Wood":
+                PlayWalkingSFX("WalkingOnWoodSFX");
+                break;
+            default:
+                break;
+
+        }
+        
+    }
     protected override void Update()
     {
         base.Update();
         FlipSprite();
+        DetermineGroundType();
+        
+
     }
+
 
     private void OnDestroy()
     {

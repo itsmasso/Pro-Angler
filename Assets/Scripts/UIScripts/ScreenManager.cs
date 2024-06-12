@@ -13,6 +13,7 @@ public class ScreenManager : MonoBehaviour
     {
         canOpen = true;
         FishingRodBaseScript.onFishing += IsFishing;
+        WorldTime.onResetDay += CloseAllScreens;
     }
     private void IsFishing(bool isFishing)
     {
@@ -48,9 +49,18 @@ public class ScreenManager : MonoBehaviour
         
     }
 
+    private void CloseAllScreens()
+    {
+        foreach (GameObject screen in screenArr)
+        {
+            screen.SetActive(false);
+        }
+    }
+
     private void OnDestroy()
     {
         FishingRodBaseScript.onFishing -= IsFishing;
+        WorldTime.onResetDay -= CloseAllScreens;
     }
 
 

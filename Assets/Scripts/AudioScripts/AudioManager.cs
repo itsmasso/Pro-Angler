@@ -5,8 +5,8 @@ using System;
 
 public class AudioManager : PersistentSingleton<AudioManager>
 {
-    public Sound[] musicSounds, sfxSounds;
-    public AudioSource musicSource, sfxSource;
+    public Sound[] musicSounds, sfxSounds, atmosphereSounds;
+    public AudioSource musicSource, sfxSource, atmosphereSource;
     public bool musicMuted, sfxMuted;
 
     private void Start()
@@ -44,7 +44,27 @@ public class AudioManager : PersistentSingleton<AudioManager>
         }
     }
     //TODO add function that loops through all sources and mutes all except chosen one
-    public void PlaySFX(string name)
+    public void PlaySFX(string name, bool enableLoop)
+    {
+        Sound sound = Array.Find(sfxSounds, x => x.name == name);
+        if (sound == null)
+        {
+            Debug.LogError("Sound Not Found!");
+        }
+        else if(!enableLoop)
+        {
+            sfxSource.PlayOneShot(sound.clip);
+
+        }
+        else
+        {
+            sfxSource.clip = sound.clip;
+            sfxSource.loop = enableLoop;
+            sfxSource.Play();
+        }
+    }
+
+    public void StopSFX(string name)
     {
         Sound sound = Array.Find(sfxSounds, x => x.name == name);
         if (sound == null)
@@ -53,7 +73,37 @@ public class AudioManager : PersistentSingleton<AudioManager>
         }
         else
         {
-            sfxSource.PlayOneShot(sound.clip);
+            sfxSource.clip = sound.clip;
+            sfxSource.Stop();
+        }
+    }
+
+    public void PlayAtmosphere(string name, bool enableLoop)
+    {
+        Sound sound = Array.Find(atmosphereSounds, x => x.name == name);
+        if (sound == null)
+        {
+            Debug.LogError("Sound Not Found!");
+        }
+        else
+        {
+            atmosphereSource.clip = sound.clip;
+            atmosphereSource.loop = enableLoop;
+            atmosphereSource.Play();
+        }
+    }
+
+    public void StopAtmosphere(string name)
+    {
+        Sound sound = Array.Find(atmosphereSounds, x => x.name == name);
+        if (sound == null)
+        {
+            Debug.LogError("Sound Not Found!");
+        }
+        else
+        {
+            atmosphereSource.clip = sound.clip;
+            atmosphereSource.Stop();
         }
     }
 
@@ -67,6 +117,10 @@ public class AudioManager : PersistentSingleton<AudioManager>
     {
         sfxSource.mute = !sfxSource.mute;
         sfxMuted = !sfxMuted;
+
+        atmosphereSource.mute = !sfxSource.mute;
+
+
     }
 
     public void MusicVolume(float volume)
@@ -77,5 +131,6 @@ public class AudioManager : PersistentSingleton<AudioManager>
     public void SFXVolume(float volume)
     {
         sfxSource.volume = volume;
+        atmosphereSource.volume = volume;
     }
 }

@@ -829,6 +829,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1296835395}
   m_CullTransparentMesh: 1
+--- !u!1 &1432275606 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3341839021505019888, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+  m_PrefabInstance: {fileID: 1863946059}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1432275607 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2226095689595906076, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
@@ -1192,9 +1197,17 @@ PrefabInstance:
       propertyPath: m_TargetGraphic
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2863479127643984307, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: screenArr.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863479127643984307, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: screenArr.Array.data[2]
+      value: 
+      objectReference: {fileID: 1432275606}
     - target: {fileID: 3341839021505019888, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3498826514164672563, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

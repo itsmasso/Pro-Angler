@@ -149,7 +149,7 @@ AudioSource:
   m_GameObject: {fileID: 31492952}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 138278498108792466, guid: 4ebc2177b53602948b1ba4cd30a05fdb, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -277,7 +277,7 @@ AudioSource:
   m_GameObject: {fileID: 111167929}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 8487569628111367477, guid: 4ebc2177b53602948b1ba4cd30a05fdb, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -379,6 +379,134 @@ Transform:
   m_Children: []
   m_Father: {fileID: 418999157}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &256372693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 256372694}
+  - component: {fileID: 256372695}
+  m_Layer: 0
+  m_Name: AtmosphereSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &256372694
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256372693}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 418999157}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &256372695
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256372693}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -151473142695508994, guid: 4ebc2177b53602948b1ba4cd30a05fdb, type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &285160995
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,9 +675,21 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 03b7895673681ae41b0c9dcecdfa8239, type: 3}
   - name: Level1Music
     clip: {fileID: 8300000, guid: 34cbdf1abccd84246a497929a13ef668, type: 3}
-  sfxSounds: []
+  sfxSounds:
+  - name: ClosingBookSFX
+    clip: {fileID: 8300000, guid: 2df302a8ad783a944845702acd80f4f6, type: 3}
+  - name: OpeningBookSFX
+    clip: {fileID: 8300000, guid: d9a4328c2ca6a52408a159d605cc8347, type: 3}
+  - name: WalkingOnSandSFX
+    clip: {fileID: 8300000, guid: 470acbfdd363dd6468efa8637a8ae2a7, type: 3}
+  - name: WalkingOnWoodSFX
+    clip: {fileID: 8300000, guid: e06f38ec7631a5444b35379505492464, type: 3}
+  atmosphereSounds:
+  - name: BeachAtmosphere
+    clip: {fileID: 8300000, guid: 85740d5c5edaa6b47a638695419349a6, type: 3}
   musicSource: {fileID: 31492953}
   sfxSource: {fileID: 111167930}
+  atmosphereSource: {fileID: 256372695}
   musicMuted: 0
   sfxMuted: 0
 --- !u!4 &418999157
@@ -567,6 +707,7 @@ Transform:
   m_Children:
   - {fileID: 31492954}
   - {fileID: 111167931}
+  - {fileID: 256372694}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &513283185

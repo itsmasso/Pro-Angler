@@ -63,6 +63,11 @@ public class NoteBookScreen : MonoBehaviour
         if (!notebookParent.activeSelf)
         {
             OpenFishPage();
+            AudioManager.Instance.PlaySFX("OpeningBookSFX", false);
+        }
+        else
+        {
+            AudioManager.Instance.PlaySFX("ClosingBookSFX", false);
         }
     }
     void Update()

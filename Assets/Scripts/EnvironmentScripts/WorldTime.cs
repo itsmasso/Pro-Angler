@@ -123,13 +123,15 @@ public class WorldTime : MonoBehaviour
             if (currentTime > totalSecondsInADay / 2 && !dayTimeFlag)
             {
                 onTimeChange?.Invoke(DayPeriod.NightTime);
-           
+                AudioManager.Instance.PlayAtmosphere(AudioManager.Instance.nightTimeAtmosphereSource, "NightAtmosphere", true);
                 dayTimeFlag = true;
             }
 
             if (currentTime >= totalSecondsInADay && canReset)
             {
-                AudioManager.Instance.StopLoopedSFX(AudioManager.Instance.reelingSFXSource, "ReelingSFX"); //stop reeling sound from being played continously if day resets while reeling
+                AudioManager.Instance.StopAudioSource(AudioManager.Instance.nightTimeAtmosphereSource);
+                AudioManager.Instance.StopAudioSource(AudioManager.Instance.reelingSFXSource); //stop reeling sound from being played continously if day resets while reeling
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "PaperSFX", false); //when summary pops up
                 onTimeChange?.Invoke(DayPeriod.DayTime);
                 currentTime = totalSecondsInADay;
                 isTimerRunning = false;

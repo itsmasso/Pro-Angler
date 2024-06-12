@@ -7,7 +7,7 @@ using static Unity.VisualScripting.Member;
 public class AudioManager : PersistentSingleton<AudioManager>
 {
     public Sound[] musicSounds, sfxSounds, atmosphereSounds;
-    public AudioSource musicSource, sfxSource, atmosphereSource, walkingSFXSource, reelingSFXSource;
+    public AudioSource musicSource, sfxSource, beachAtmosphereSource, nightTimeAtmosphereSource, walkingSFXSource, reelingSFXSource;
     public bool musicMuted, sfxMuted;
 
     private void Start()
@@ -32,21 +32,8 @@ public class AudioManager : PersistentSingleton<AudioManager>
         }
     }
 
-    public void StopMusic(string name)
-    {
-        Sound sound = Array.Find(musicSounds, x => x.name == name);
-        if (sound == null)
-        {
-            Debug.LogError("Sound Not Found!");
-        }
-        else
-        {
-            musicSource.clip = sound.clip;
-            musicSource.Stop();
-        }
-    }
     //TODO add function that loops through all sources and mutes all except chosen one
-    public void PlaySFX(string name, bool enableLoop)
+    public void PlaySFX(AudioSource source, string name, bool enableLoop)
     {
         Sound sound = Array.Find(sfxSounds, x => x.name == name);
         if (sound == null)
@@ -55,49 +42,20 @@ public class AudioManager : PersistentSingleton<AudioManager>
         }
         else if(!enableLoop)
         {
-            sfxSource.PlayOneShot(sound.clip);
+            source.PlayOneShot(sound.clip);
 
         }
         else
         {
-            sfxSource.clip = sound.clip;
-            sfxSource.loop = enableLoop;
-            sfxSource.Play();
+            source.clip = sound.clip;
+            source.loop = enableLoop;
+            source.Play();
         }
     }
 
-    public void PlayAtmosphere(string name, bool enableLoop)
+    public void PlayAtmosphere(AudioSource source, string name, bool enableLoop)
     {
         Sound sound = Array.Find(atmosphereSounds, x => x.name == name);
-        if (sound == null)
-        {
-            Debug.LogError("Sound Not Found!");
-        }
-        else
-        {
-            atmosphereSource.clip = sound.clip;
-            atmosphereSource.loop = enableLoop;
-            atmosphereSource.Play();
-        }
-    }
-
-    public void StopAtmosphere(string name)
-    {
-        Sound sound = Array.Find(atmosphereSounds, x => x.name == name);
-        if (sound == null)
-        {
-            Debug.LogError("Sound Not Found!");
-        }
-        else
-        {
-            atmosphereSource.clip = sound.clip;
-            atmosphereSource.Stop();
-        }
-    }
-
-    public void PlayLoopedSFX(AudioSource source, string name)
-    {
-        Sound sound = Array.Find(sfxSounds, x => x.name == name);
         if (sound == null)
         {
             Debug.LogError("Sound Not Found!");
@@ -105,24 +63,15 @@ public class AudioManager : PersistentSingleton<AudioManager>
         else
         {
             source.clip = sound.clip;
-            source.loop = true;
+            source.loop = enableLoop;
             source.Play();
         }
     }
 
 
-    public void StopLoopedSFX(AudioSource source, string name)
+    public void StopAudioSource(AudioSource source)
     {
-        Sound sound = Array.Find(sfxSounds, x => x.name == name);
-        if (sound == null)
-        {
-            Debug.LogError("Sound Not Found!");
-        }
-        else
-        {
-            source.clip = sound.clip;
-            source.Stop();
-        }
+        source.Stop();
     }
 
    
@@ -139,7 +88,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
         sfxSource.mute = !sfxSource.mute;
         sfxMuted = !sfxMuted;
 
-        atmosphereSource.mute = !sfxSource.mute;
+        beachAtmosphereSource.mute = !sfxSource.mute;
         walkingSFXSource.mute = !sfxSource.mute;
 
     }
@@ -152,7 +101,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
     public void SFXVolume(float volume)
     {
         sfxSource.volume = volume;
-        atmosphereSource.volume = volume;
+        beachAtmosphereSource.volume = volume;
         walkingSFXSource.volume = volume;
     }
 }

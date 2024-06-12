@@ -33,6 +33,7 @@ public class QoutaSystem : MonoBehaviour
     void Start()
     {
         profitSummary.SetActive(false);
+        
     }
 
     private void IncreaseQouta()
@@ -50,6 +51,8 @@ public class QoutaSystem : MonoBehaviour
 
     public void Continue()
     {
+        AudioManager.Instance.PlayAtmosphere(AudioManager.Instance.beachAtmosphereSource, "BeachAtmosphere", true);
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "ChoosingSFX", false);
         onContinueToNextDay?.Invoke();
         profitMadeToday = 0;
         profitSummary.SetActive(false);

@@ -7,7 +7,7 @@ public class HookIdleState : HookBaseState
 {
     public override void EnterState(FishingRodBaseScript rod)
     {
-        AudioManager.Instance.StopLoopedSFX(AudioManager.Instance.reelingSFXSource, "ReelingSFX");
+        AudioManager.Instance.StopAudioSource(AudioManager.Instance.reelingSFXSource);
         rod.hookAloneSprite.enabled = false;
         rod.fishingLineSprite.enabled = true;
         rod.CallStartedFishing(false);

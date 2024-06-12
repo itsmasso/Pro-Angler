@@ -49,7 +49,7 @@ public class EatOrKeepDialogue : DialogueBox
     {
         if (onChoosenScreen && ctx.performed && currentChooseIndex == 1)
         {
-            AudioManager.Instance.PlaySFX("ChoosingSFX", false);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "ChoosingSFX", false);
             chooseIndicator.anchoredPosition = new Vector2(chooseIndicator.anchoredPosition.x, chooseIndicator.anchoredPosition.y + indicatorMoveAmount);
             currentChooseIndex--;
         }
@@ -58,7 +58,7 @@ public class EatOrKeepDialogue : DialogueBox
     {
         if (onChoosenScreen && ctx.performed && currentChooseIndex == 0)
         {
-            AudioManager.Instance.PlaySFX("ChoosingSFX", false);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "ChoosingSFX", false);
             chooseIndicator.anchoredPosition = new Vector2(chooseIndicator.anchoredPosition.x, chooseIndicator.anchoredPosition.y - indicatorMoveAmount);
             currentChooseIndex++;
         }
@@ -68,7 +68,7 @@ public class EatOrKeepDialogue : DialogueBox
     {
         if(!onChoosenScreen && ctx.performed)
         {
-            AudioManager.Instance.PlaySFX("NextDialogueSFX", false);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "NextDialogueSFX", false);
             if (dialogueText.text == lines[index])
             {
                 NextLine();
@@ -82,7 +82,7 @@ public class EatOrKeepDialogue : DialogueBox
         }
         else if(onChoosenScreen && ctx.performed)
         {
-            AudioManager.Instance.PlaySFX("NextDialogueSFX", false);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "NextDialogueSFX", false);
             chosenOption = true;
         }
     }

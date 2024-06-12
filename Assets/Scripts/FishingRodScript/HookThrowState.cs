@@ -72,7 +72,7 @@ public class HookThrowState : HookBaseState
                 if (Input.GetMouseButtonDown(0))
                 {
                     //setting trajectory line back to 2 to make it visible
-                    AudioManager.Instance.PlaySFX("StretchSFX", false);
+                    AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "StretchSFX", false);
                     rod.trajectoryLine.positionCount = 2;
                     startMousePos = rod.mousePosition;
                 }
@@ -97,7 +97,7 @@ public class HookThrowState : HookBaseState
 
                 if (Input.GetMouseButtonUp(0))
                 {
-                    AudioManager.Instance.PlaySFX("CastingRodSFX", false);                   
+                    AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "CastingRodSFX", false);                   
                     hookRb.gravityScale = 1;
                     hookRb.velocity = velocity;
                     rod.trajectoryLine.positionCount = 0;
@@ -122,7 +122,7 @@ public class HookThrowState : HookBaseState
         if (rod.hook.transform.position.y < waterLinePointY)
         {
             velocity = Vector2.zero; //causing bug?
-            AudioManager.Instance.PlaySFX("SplashSFX", false);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "SplashSFX", false);
             rod.SwitchState(rod.hookDescendState);
         }
     }

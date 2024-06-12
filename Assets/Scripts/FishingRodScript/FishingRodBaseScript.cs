@@ -323,6 +323,7 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     protected void FixedUpdate()
     {
         currentState.FixedUpdateState(this);
+
     }
 
     protected void OnDestroy()

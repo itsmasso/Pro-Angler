@@ -13,8 +13,7 @@ public class Level1Trigger : MonoBehaviour
         {
             TransitionManager.Instance.ApplyCircleTransition();
             StartCoroutine(Transition(collision));
-            //Trigger fade effect
-            //delay > circle fade > tp while black > unfade
+        
         }
     }
 

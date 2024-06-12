@@ -93,13 +93,13 @@ public class PlayerFishingMovement : PlayerMovement
 
         if (velocity != Vector2.zero && !isWalking)
         {
-            AudioManager.Instance.PlaySFX(name, true);
+            AudioManager.Instance.PlayLoopedSFX(AudioManager.Instance.walkingSFXSource, name);
             isWalking = true;
 
         }
         else if (isWalking && velocity == Vector2.zero)
         {
-            AudioManager.Instance.StopSFX(name);
+            AudioManager.Instance.StopLoopedSFX(AudioManager.Instance.walkingSFXSource, name);
             isWalking = false;
         }
     }

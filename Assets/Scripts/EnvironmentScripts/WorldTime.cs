@@ -129,6 +129,7 @@ public class WorldTime : MonoBehaviour
 
             if (currentTime >= totalSecondsInADay && canReset)
             {
+                AudioManager.Instance.StopLoopedSFX(AudioManager.Instance.reelingSFXSource, "ReelingSFX"); //stop reeling sound from being played continously if day resets while reeling
                 onTimeChange?.Invoke(DayPeriod.DayTime);
                 currentTime = totalSecondsInADay;
                 isTimerRunning = false;

@@ -53,7 +53,7 @@ public class shoptrigger : MonoBehaviour
     {
         if(isHoveringDoor && pressedButton)
         {
-
+            AudioManager.Instance.PlaySFX("OpeningShopDoorSFX", false);
             onShopEnter?.Invoke();
             shopUI.SetActive(true);          
             pressedButton = false;

@@ -54,8 +54,10 @@ public class HookReelState : HookBaseState
         {
             if (rod.fishCaught)
             {
+                AudioManager.Instance.StopLoopedSFX(AudioManager.Instance.reelingSFXSource, "ReelingSFX");
                 //deleting fish object
                 rod.CallOnFinishCaughtFishEvent();
+
             }
             if (!rod.onEatOrKeep)
             {

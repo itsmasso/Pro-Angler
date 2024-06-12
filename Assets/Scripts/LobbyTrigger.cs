@@ -15,9 +15,7 @@ public class LobbyTrigger : MonoBehaviour
         {
             TransitionManager.Instance.ApplyCircleTransition();
             StartCoroutine(Transition(collision));
-            //Trigger fade effect
-            // Trigger fade effect
-            //delay > circle fade > tp while black > unfade
+
         }
     }
 

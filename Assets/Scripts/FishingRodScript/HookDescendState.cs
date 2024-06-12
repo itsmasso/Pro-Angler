@@ -15,6 +15,7 @@ public class HookDescendState : HookBaseState
     private float timer;
     public override void EnterState(FishingRodBaseScript rod)
     {
+        AudioManager.Instance.PlayLoopedSFX(AudioManager.Instance.reelingSFXSource, "ReelingSFX");
         timer = 0;
         reachedHookLimit = false;
         currentDescendSpeed = rod.descendSpeed;

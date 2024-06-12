@@ -45,6 +45,7 @@ public class ShopDialogue : DialogueBox
     {
         if (onChoosenScreen && ctx.performed && currentChooseIndex != 0)
         {
+            AudioManager.Instance.PlaySFX("ChoosingSFX", false);
             chooseIndicator.anchoredPosition = new Vector2(chooseIndicator.anchoredPosition.x, chooseIndicator.anchoredPosition.y + indicatorMoveAmount);
             currentChooseIndex--;
         }
@@ -53,6 +54,7 @@ public class ShopDialogue : DialogueBox
     {
         if (onChoosenScreen && ctx.performed && currentChooseIndex != 2)
         {
+            AudioManager.Instance.PlaySFX("ChoosingSFX", false);
             chooseIndicator.anchoredPosition = new Vector2(chooseIndicator.anchoredPosition.x, chooseIndicator.anchoredPosition.y - indicatorMoveAmount);
             currentChooseIndex++;
         }
@@ -62,6 +64,7 @@ public class ShopDialogue : DialogueBox
     {
         if (!onChoosenScreen && ctx.performed)
         {
+            AudioManager.Instance.PlaySFX("NextDialogueSFX", false);
             if (dialogueText.text == lines[index])
             {
                 NextLine();
@@ -75,6 +78,7 @@ public class ShopDialogue : DialogueBox
         }
         else if (onChoosenScreen && ctx.performed)
         {
+            AudioManager.Instance.PlaySFX("NextDialogueSFX", false);
             chosenOption = true;
         }
     }

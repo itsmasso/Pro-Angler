@@ -7,42 +7,42 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField]
-    private GameObject menu, settings, startGame, backButton;
+    private GameObject menu, settings, startGame;
 
-
-    [SerializeField]
-    private Button continueGameButton;
+    [SerializeField] private Slider musicSlider, sfxSlider;
 
     //private int sceneToStart; if adding more levels which require new scenes
 
     void Start()
     {
 
-
+        musicSlider.value = AudioManager.Instance.musicSource.volume;
+        sfxSlider.value = AudioManager.Instance.sfxSource.volume;
         menu.SetActive(true);
         settings.SetActive(false);
         startGame.SetActive(false);
-        backButton.SetActive(false);
+ 
     }
 
     public void OnMainMenu()
     {
         menu.SetActive(true);
-        backButton.SetActive(false);
+
     }
 
     public void OnSettingsMenu()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "NextDialogueSFX", false);
         menu.SetActive(false);
         settings.SetActive(true);
-        backButton.SetActive(true);
+
     }
 
     public void OnStartGame()
     {
         //TEMP
         //menu.SetActive(false);
-    
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "NextDialogueSFX", false);
         GameManager.Instance.UpdateScene(2); //loading starting area scene
 
         //startGame.SetActive(true);
@@ -62,15 +62,29 @@ public class MainMenu : MonoBehaviour
 
     }
 
-    public void OnBack()
+    public void ChangeMusicVolume()
     {
+        AudioManager.Instance.MusicVolume(musicSlider.value);
+
+    }
+
+    public void ChangeSFXVolume()
+    {
+        AudioManager.Instance.SFXVolume(sfxSlider.value);
+    }
+
+    public void ConfirmVolumeChanges()
+    {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "NextDialogueSFX", false);
         OnMainMenu();
         settings.SetActive(false);
         startGame.SetActive(false);
     }
 
+
     public void OnQuitGame()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "NextDialogueSFX", false);
         Application.Quit();
     }
 

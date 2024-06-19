@@ -109,12 +109,14 @@ public class ShopDialogue : DialogueBox
         {
             if (chosenOption && currentChooseIndex == 0)
             {
+                //open shop window to buy upgrades
                 onOpenShopWindow?.Invoke(this, true);
                 gameObject.SetActive(false);
 
             }
             else if (chosenOption && currentChooseIndex == 1)
             {
+                //sell current fish in bucket              
                 onSellFishOption?.Invoke();
                 chosenOption = false;
 
@@ -122,6 +124,7 @@ public class ShopDialogue : DialogueBox
             }
             else if (chosenOption && currentChooseIndex == 2)
             {
+                //exit shop
                 shopParent.SetActive(false);
                 onExitShop?.Invoke();
 

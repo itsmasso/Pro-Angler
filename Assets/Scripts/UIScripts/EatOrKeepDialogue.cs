@@ -117,6 +117,7 @@ public class EatOrKeepDialogue : DialogueBox
             if(chosenOption && currentChooseIndex == 0)
             {
                 //if choose eat
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "EatingSFX", false);
                 onEatFish?.Invoke(fishInfo.stamRestored);
                 onEatOrKeepOption?.Invoke(false);
                 gameObject.SetActive(false);
@@ -125,6 +126,7 @@ public class EatOrKeepDialogue : DialogueBox
             else if (chosenOption && currentChooseIndex == 1)
             {
                 //if choose sell
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "BucketSFX", false);
                 onKeepFish?.Invoke(fishInfo);
                 onEatOrKeepOption?.Invoke(false);
                 gameObject.SetActive(false);

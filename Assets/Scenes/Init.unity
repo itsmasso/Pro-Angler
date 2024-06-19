@@ -826,6 +826,14 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 71940e3b9ce1e404a9abc5f08f90bb51, type: 3}
   - name: ReelingSFX
     clip: {fileID: 8300000, guid: 3ba0e70020f28c945bc6fd515f2840d5, type: 3}
+  - name: PaperSFX
+    clip: {fileID: 8300000, guid: 109c42ffb2f2b894aa9fe05b8adabf52, type: 3}
+  - name: SellSFX
+    clip: {fileID: 8300000, guid: be1ee97e2f80ebb44b7254e09af50047, type: 3}
+  - name: EatingSFX
+    clip: {fileID: 8300000, guid: 86fabfbf302dcf14da118493e7699198, type: 3}
+  - name: BucketSFX
+    clip: {fileID: 8300000, guid: c342abab535dd6c428fead6fbd4e99cd, type: 3}
   atmosphereSounds:
   - name: BeachAtmosphere
     clip: {fileID: 8300000, guid: 85740d5c5edaa6b47a638695419349a6, type: 3}
@@ -833,7 +841,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 0d95741dc8755604383bf48c6c82fab6, type: 3}
   musicSource: {fileID: 31492953}
   sfxSource: {fileID: 111167930}
-  beachAtmosphereSource: {fileID: 0}
+  beachAtmosphereSource: {fileID: 256372695}
   nightTimeAtmosphereSource: {fileID: 929179050}
   walkingSFXSource: {fileID: 376626780}
   reelingSFXSource: {fileID: 1820206283}

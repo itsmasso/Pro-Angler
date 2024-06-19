@@ -75,6 +75,7 @@ public class ShopManager : MonoBehaviour
     {
         if (!upgrade.isUnlocked)
         {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "ChoosingSFX", false);
             onBuyUpgrade?.Invoke(upgrade);
         }
 
@@ -94,6 +95,7 @@ public class ShopManager : MonoBehaviour
 
     public void OpenRodTab()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "ChoosingSFX", false);
         baitTab.SetActive(false);
         rodTab.SetActive(true);
         staminaTab.SetActive(false);
@@ -102,6 +104,7 @@ public class ShopManager : MonoBehaviour
     }
     public void OpenBaitTab()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "ChoosingSFX", false);
         baitTab.SetActive(true);
         rodTab.SetActive(false);
         staminaTab.SetActive(false);
@@ -111,6 +114,7 @@ public class ShopManager : MonoBehaviour
 
     public void OpenBucketTab()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "ChoosingSFX", false);
         baitTab.SetActive(false);
         rodTab.SetActive(false);
         staminaTab.SetActive(false);
@@ -120,6 +124,7 @@ public class ShopManager : MonoBehaviour
 
     public void OpenStaminaTab()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "ChoosingSFX", false);
         baitTab.SetActive(false);
         rodTab.SetActive(false);
         staminaTab.SetActive(true);
@@ -128,6 +133,7 @@ public class ShopManager : MonoBehaviour
     }
     public void OpenModTab()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "ChoosingSFX", false);
         baitTab.SetActive(false);
         rodTab.SetActive(false);
         staminaTab.SetActive(false);
@@ -143,6 +149,7 @@ public class ShopManager : MonoBehaviour
 
     public void CloseShopWindow()
     {
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "NextDialogueSFX", false);
         shopDialogue.SetActive(true);
         shopWindow.SetActive(false);
     }

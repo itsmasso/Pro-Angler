@@ -30,7 +30,9 @@ public class PlayerFishingMovement : PlayerMovement
         positiveReflect = new Vector2(Mathf.Abs(transform.localScale.x), transform.localScale.y);
         negativeReflect = new Vector2(-Mathf.Abs(transform.localScale.x), transform.localScale.y);
         FishingRodBaseScript.onFishing += CanMove;
+        PauseMenu.onPaused += CanMove;
     }
+
 
     protected void DisableMovement()
     {

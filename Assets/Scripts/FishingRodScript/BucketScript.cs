@@ -70,10 +70,13 @@ public class BucketScript : MonoBehaviour
 
     public void SellFish()
     {
-        onSellFish?.Invoke(bucketTotalValue);
-        
-        bucketTotalValue = 0;
-        currentFishWeight = 0;
+        if(currentFishWeight > 0)
+        {
+            onSellFish?.Invoke(bucketTotalValue);
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "SellSFX", false);
+            bucketTotalValue = 0;
+            currentFishWeight = 0;
+        }
 
         if (currentFishWeight >= maxBucketSize)
         {

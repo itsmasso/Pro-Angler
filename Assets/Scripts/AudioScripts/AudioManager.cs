@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using static Unity.VisualScripting.Member;
+using UnityEngine.Rendering;
 
 public class AudioManager : PersistentSingleton<AudioManager>
 {
@@ -89,6 +90,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
         sfxMuted = !sfxMuted;
 
         beachAtmosphereSource.mute = !sfxSource.mute;
+        nightTimeAtmosphereSource.mute = !sfxSource.mute;
         walkingSFXSource.mute = !sfxSource.mute;
 
     }
@@ -102,6 +104,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
     {
         sfxSource.volume = volume;
         beachAtmosphereSource.volume = volume;
+        nightTimeAtmosphereSource.volume = volume;
         walkingSFXSource.volume = volume;
     }
 }

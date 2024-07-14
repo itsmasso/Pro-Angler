@@ -99,11 +99,12 @@ public abstract class FishingRodBaseScript : MonoBehaviour
     public Transform canFishPosition;
     public bool pressedInteract;
     public GameObject interactButtonUI;
+    public GameObject throwButtonUI;
     public bool onEatOrKeep;
     void Start()
     {
         //SetUpFishingLine(points);
-       
+        throwButtonUI.SetActive(false);
         baitHolder = hook.GetComponent<BaitHolder>();
         //save system
         currentAnim.runtimeAnimatorController = oldRodAnim;

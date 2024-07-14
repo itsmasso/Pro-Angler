@@ -97,7 +97,8 @@ public class HookThrowState : HookBaseState
 
                 if (Input.GetMouseButtonUp(0))
                 {
-                    AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "CastingRodSFX", false);                   
+                    AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "CastingRodSFX", false);    
+                    rod.throwButtonUI.SetActive(false);               
                     hookRb.gravityScale = 1;
                     hookRb.velocity = velocity;
                     rod.trajectoryLine.positionCount = 0;

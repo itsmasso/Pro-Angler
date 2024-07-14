@@ -29,8 +29,10 @@ public class HookIdleState : HookBaseState
 
                 if (rod.pressedInteract)
                 {
+                    
                     if (!rod.outOfStamina && !rod.isbucketFull)
                     {
+                        rod.throwButtonUI.SetActive(true);
                         rod.interactButtonUI.SetActive(false);
                         rod.SwitchState(rod.hookThrowState);
                     }

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField]
-    private GameObject menu, settings, startGame;
+    private GameObject menu, settings;
 
     [SerializeField] private Slider musicSlider, sfxSlider;
 
@@ -20,7 +20,7 @@ public class MainMenu : MonoBehaviour
         sfxSlider.value = AudioManager.Instance.sfxSource.volume;
         menu.SetActive(true);
         settings.SetActive(false);
-        startGame.SetActive(false);
+     
  
     }
 
@@ -78,7 +78,7 @@ public class MainMenu : MonoBehaviour
         AudioManager.Instance.PlaySFX(AudioManager.Instance.sfxSource, "NextDialogueSFX", false);
         OnMainMenu();
         settings.SetActive(false);
-        startGame.SetActive(false);
+      
     }
 
 

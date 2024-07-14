@@ -401,8 +401,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -27.15905, y: -0.21025085, z: 0}
-    m_Extent: {x: 114.282646, y: 59.09945, z: 0}
+    m_Center: {x: -27.162949, y: -0.2154007, z: 0}
+    m_Extent: {x: 114.27115, y: 59.0975, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -629,7 +629,7 @@ PrefabInstance:
       objectReference: {fileID: 417505926}
     - target: {fileID: 3598968570097287860, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -9.999985
+      value: -10.000015
       objectReference: {fileID: 0}
     - target: {fileID: 3730889019337500199, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
       propertyPath: uiPanels.Array.size
@@ -749,11 +749,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5644846706004067348, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -2.5923996
+      value: -2.5924072
       objectReference: {fileID: 0}
     - target: {fileID: 5644846706004067348, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 4.624098
+      value: 4.6240997
       objectReference: {fileID: 0}
     - target: {fileID: 5847453961880351180, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
       propertyPath: m_AnchorMax.y
@@ -790,6 +790,38 @@ PrefabInstance:
     - target: {fileID: 6065564272034877950, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -4.700012
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328494897181105461, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328494897181105461, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328494897181105461, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328494897181105461, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328494897181105461, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -377.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328494897181105461, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -240.0333
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328494897181105461, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 22.768
+      objectReference: {fileID: 0}
+    - target: {fileID: 6328494897181105461, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -23.0743
       objectReference: {fileID: 0}
     - target: {fileID: 6438253360738550825, guid: faaeb31c422784643b9c605c7233ba08, type: 3}
       propertyPath: worldTimer
